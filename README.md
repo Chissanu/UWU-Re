@@ -7,7 +7,7 @@ Our machine will be a drink dispenser based on gravity. This means there we won'
 
 ![alt text](https://github.com/Chissanu/UWU-Re/blob/main/pictures/machine_sketch.jpg)
 
-As seen in the picture above, the bottles are installed vertically so that the content inside is at the bottleneck. In addition, the push valve is installed at the tip of the bottle for a precise 5 oz (~ 148 milliliters) and will be pushed by a motor installed on a slider (pink part) in which the slider will also be controlled by a stepper motor at the right side of the machine. Think of this as the machine moving only at the direction x axis and z axis.
+As seen in the picture above, the bottles are installed vertically so that the content inside is at the bottleneck. In addition, the push valve is installed at the tip of the bottle for a precise 5 oz (~ 148 milliliters) and will be pushed by a motor installed on a slider (pink part) in which the slider will also be controlled by a stepper motor at the right side of the machine. Think of this as the machine moving only at the direction x axis and z axis. The blue part is the LCD screen installed for the raspberry pi 4 for Tkinter for user interface. All the electronic component is installed at the side of the machine to prevent damage to the circuitries from leakage. 
 
 ## Colaborators    
 Chalatsorn Tantiyamas 64011361  
