@@ -4,6 +4,7 @@ UWU-Re is a cocktail machine which mix 6 different drinks. The drink can be orde
 The 3d parts are provided in the provided folder.
 ## The Model
 Our machine will be a drink dispenser based on gravity. This means there we won't need any pump to dispense drinks. We will instead use valves to get the amount of liquid needed as seen in the picture
+![alt text](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
 ## Colaborators    
 Chalatsorn Tantiyamas 64011361  
 Chissanu Kittipakorn 64011728  
