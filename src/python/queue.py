@@ -10,6 +10,9 @@ class queue:
         self.queue.pop(0)
         return value
 
+    def get_data(self):
+        return self.queue
+
     def get_rear(self):
         return self.queue[-1]
 
