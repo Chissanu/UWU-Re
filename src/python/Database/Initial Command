@@ -6,3 +6,7 @@ psql -U postgres
 
 # Log in as admin to UWURe DB
 psql -U admin -d uwure
+
+
+# Admin login password
+uwure
