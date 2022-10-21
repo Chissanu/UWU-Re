@@ -1,12 +1,18 @@
-# To create drink_tables table in Postgres
-create table drink_tables(drinkName VARCHAR(255),drinkID uuid NOT NULL DEFAULT uuid_generate_v4(),drinkList INT[6]);
-
-# Log in as Postgres
-psql -U postgres
-
 # Log in as admin to UWURe DB
 psql -U admin -d uwure
 
-
 # Admin login password
 uwure
+
+# To check table lists
+\dt
+
+# To drop tables
+drop table <tableName>;
+
+# To drop database
+drop database <databaseName>;
+
+# To create drink_tables table in Postgres
+# drinkName | drinkID(Auto generated) | drinkList
+create table drink_tables(drinkName VARCHAR(255),drinkID BIGSERIAL PRIMARY KEY,drinkList INT[6]);

@@ -45,5 +45,5 @@ def main():
    insertDrink(val)
    print(drinkList)
    
-#main()
-getDrink()
+main()
+#getDrink()
