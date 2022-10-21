@@ -18,8 +18,12 @@ def quit(e):
     global root
     root.destroy()
     
-def changeScreen(oldFrame):
+def changeScreen(oldFrame,screen):
     oldFrame.pack_forget()
+    if screen == "select":
+        selectScreen()
+    
+def selectScreen():
     newFrame = tk.Frame(root, width=SCREEN_WIDTH, height=SCREEN_HEIGHT,bg='red')
     newFrame.pack(fill='both',expand=True)
 
@@ -32,7 +36,7 @@ def mainScreen():
     name = tk.Label(mainFrame,text="UWU:RE",font=("Ariel",70),bg='light blue').pack(pady=50)
 
     #Make Drink Button
-    makeDrinkBtn = tk.Button(mainFrame,font=("Ariel",20),text="Make Drink",command=  lambda : changeScreen(mainFrame)).pack(padx=150,pady=150,anchor='w')
+    makeDrinkBtn = tk.Button(mainFrame,font=("Ariel",20),text="Make Drink",command=  lambda : changeScreen(mainFrame,"select")).pack(padx=150,pady=150,anchor='w')
 
 mainScreen()
 root.mainloop()

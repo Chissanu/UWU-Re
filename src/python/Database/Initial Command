@@ -14,5 +14,5 @@ drop table <tableName>;
 drop database <databaseName>;
 
 # To create drink_tables table in Postgres
-# drinkName | drinkID(Auto generated) | drinkList
-create table drink_tables(drinkName VARCHAR(255),drinkID BIGSERIAL PRIMARY KEY,drinkList INT[6]);
+# drinkName | drinkID(Auto generated) | ingredientList | drinkList
+create table drink_tables(drinkName VARCHAR(255),drinkID BIGSERIAL PRIMARY KEY,ingredientList VARCHAR[6],drinkList INT[6]);
