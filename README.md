@@ -18,6 +18,9 @@ As seen in the picture above, the bottles are installed vertically so that the c
 ### Back view
 ![alt text](https://github.com/Chissanu/UWU-Re/blob/main/pictures/3d3.png)
 
+## How it works
+Our software will have 2 interfaces which is a UI in Tkinter (A python interface) which will be shown on the screen from the machine and a website which the user can order their drinks using their phones. Both of the interface will send input to a python program to fetch the array of recipe from the database stored in a JSON file. After the python program fetch the recipe, the recipe is then sent to Arduiono to dispense the drink
+
 ## Colaborators    
 Chalatsorn Tantiyamas 64011361  
 Chissanu Kittipakorn 64011728  
