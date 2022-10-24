@@ -1,6 +1,5 @@
 from cgitb import text
 import tkinter as tk
-from turtle import width
 import customtkinter as ctk
 
 ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
@@ -51,7 +50,7 @@ class App(ctk.CTk):
         ======================================
         """
         #Frame Creation
-        self.test = ctk.CTkFrame(self,width=WIDTH,height=HEIGHT,fg_color="red")
+        self.test = ctk.CTkFrame(self,width=WIDTH,height=HEIGHT,fg_color="red",corner_radius=0)
         
         """
         ======================================
