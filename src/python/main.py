@@ -14,7 +14,7 @@ class App(ctk.CTk):
         self.geometry(f"{WIDTH}x{HEIGHT}")
         self.bind('<Escape>',lambda e: quit(e))
         self.config(bg="#6482EB")
-        self.resizable(False, False) 
+        self.attributes('-fullscreen',True)
         
         """
         ======================================
@@ -26,23 +26,49 @@ class App(ctk.CTk):
         self.mainCanvas = ctk.CTkCanvas(self.mainFrame,width=WIDTH,height=HEIGHT,bg="#6482EB",highlightthickness=0)
         
         #Logo Label
-        self.nameLabel1 = ctk.CTkLabel(self.mainCanvas,text="UwU:",text_font=("Inter",130))
-        self.nameLabel1.place(x=200,y=123)
-        self.nameLabel2 = ctk.CTkLabel(self.mainCanvas,text="Re",text_font=("Inter",130),text_color="black")
-        self.nameLabel2.place(x=620,y=123)
+        self.nameLabel1 = ctk.CTkLabel(self.mainCanvas,text="UwU:",text_font=("Inter",180),text_color="white")
+        self.nameLabel1.place(x=550,y=350)
+        self.nameLabel2 = ctk.CTkLabel(self.mainCanvas,text="Re",text_font=("Inter",180),text_color="black")
+        self.nameLabel2.place(x=1180,y=350)
         self.nameLine = self.mainCanvas.create_line(200,315,840,315, fill="white", width=10)
         
         #Buttons
-        self.browseBtn = ctk.CTkButton(self.mainCanvas,width=248,
-                                       height=70,
-                                       text="Browse",
-                                       text_font=("Inter",30, 'bold'),
-                                       text_color="black",
-                                       corner_radius=30,
-                                       hover_color=("#2F8C3D"),
-                                       fg_color="#4BD960",
-                                       command=lambda :self.change_frame(self.mainFrame,"browse"))
-        self.browseBtn.place(x=98,y=380)
+        self.browseBtn = ctk.CTkButton(self.mainCanvas,
+                                    width=500,
+                                    height=140,
+                                    text="Browse",
+                                    text_font=("Inter",50, 'bold'),
+                                    text_color="black",
+                                    corner_radius=30,
+                                    hover_color=("#2F8C3D"),
+                                    fg_color="#4BD960",
+                                    command=lambda :self.change_frame(self.mainFrame,"browse"))
+        self.browseBtn.place(x=100,y=700)
+
+        self.createBtn = ctk.CTkButton(self.mainCanvas,
+                                    width=500,
+                                    height=140,
+                                    text="Create",
+                                    text_font=("Inter",50, 'bold'),
+                                    text_color="black",
+                                    corner_radius=30,
+                                    hover_color=("#79A439"),
+                                    fg_color="#A1D94B",
+                                    command=lambda :self.change_frame(self.mainFrame,"browse"))
+        self.createBtn.place(x=700,y=700)
+
+
+        self.settingBtn = ctk.CTkButton(self.mainCanvas,
+                                    width=500,
+                                    height=140,
+                                    text="Setting",
+                                    text_font=("Inter",50, 'bold'),
+                                    text_color="black",
+                                    corner_radius=30,
+                                    hover_color=("#ACACAC"),
+                                    fg_color="#E5E5E5",
+                                    command=lambda :self.change_frame(self.mainFrame,"browse"))
+        self.settingBtn.place(x=1300,y=700)
         
         """
         ======================================
