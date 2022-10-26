@@ -4,6 +4,9 @@ import customtkinter as ctk
 ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 ctk.set_default_color_theme("dark-blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
+#Color Pallete
+BLUEBG = "#859FFD"
+
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
@@ -21,8 +24,8 @@ class App(ctk.CTk):
         ======================================
         """
         #Frame & Canvas creation
-        self.mainFrame = ctk.CTkFrame(self,width=WIDTH,height=HEIGHT,fg_color="#6482EB")
-        self.mainCanvas = ctk.CTkCanvas(self.mainFrame,width=WIDTH,height=HEIGHT,bg="#6482EB",highlightthickness=0)
+        self.mainFrame = ctk.CTkFrame(self,width=WIDTH,height=HEIGHT,fg_color=BLUEBG)
+        self.mainCanvas = ctk.CTkCanvas(self.mainFrame,width=WIDTH,height=HEIGHT,bg=BLUEBG,highlightthickness=0)
         
         #Logo Label
         self.nameLabel1 = ctk.CTkLabel(self.mainCanvas,text="UwU:",text_font=("Inter",180),text_color="white")
@@ -56,7 +59,6 @@ class App(ctk.CTk):
                                     command=lambda :self.change_frame(self.mainFrame,"browse"))
         self.createBtn.place(x=700,y=700)
 
-
         self.settingBtn = ctk.CTkButton(self.mainCanvas,
                                     width=500,
                                     height=140,
@@ -75,7 +77,7 @@ class App(ctk.CTk):
         ======================================
         """
         #Frame Creation
-        self.test = ctk.CTkFrame(self,width=WIDTH,height=HEIGHT,fg_color="red",corner_radius=0)
+        self.browseFrame = ctk.CTkFrame(self,width=WIDTH,height=HEIGHT,fg_color=BLUEBG,corner_radius=0)
         
         """
         ======================================
@@ -89,7 +91,7 @@ class App(ctk.CTk):
     def change_frame(self,oldFrame,newFrame):
         oldFrame.pack_forget()
         if newFrame == "browse":
-            self.test.pack()
+            self.browseFrame.pack()
         print(newFrame)
 
     def button_callback(self):
