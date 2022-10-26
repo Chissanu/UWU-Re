@@ -82,7 +82,7 @@ class App(ctk.CTk):
         self.browseCanvas = ctk.CTkCanvas(self.browseFrame,width=WIDTH,height=HEIGHT,bg=BLUE_BG,highlightthickness=0)
         
         #All Background  
-        self.browseCanvas.create_rectangle(125,300,1700,800,fill=ALL_BG,outline="")
+        self.browseCanvas.create_rectangle(100,340,1600,800,fill=ALL_BG,outline="")
         
         #Buttons  
         self.browseAllBtn = ctk.CTkButton(self.browseCanvas,
@@ -96,7 +96,7 @@ class App(ctk.CTk):
                                     hover_color=("#ACACAC"),
                                     fg_color="#FFF89A",
                                     command=lambda :self.change_frame(self.mainFrame,"browse"))
-        self.browseAllBtn.place(x=100,y=200)
+        self.browseAllBtn.place(x=150,y=200)
         
         self.browseFavBtn = ctk.CTkButton(self.browseCanvas,
                                     width=500,
@@ -108,7 +108,7 @@ class App(ctk.CTk):
                                     hover_color=("#ACACAC"),
                                     fg_color="#E5E5E5",
                                     command=lambda :self.change_frame(self.mainFrame,"browse"))
-        self.browseFavBtn.place(x=599,y=200)
+        self.browseFavBtn.place(x=899,y=200)
         
         self.browseRandBtn = ctk.CTkButton(self.browseCanvas,
                                     width=500,
@@ -120,7 +120,7 @@ class App(ctk.CTk):
                                     hover_color=("#ACACAC"),
                                     fg_color="#E5E5E5",
                                     command=lambda :self.change_frame(self.mainFrame,"browse"))
-        self.browseRandBtn.place(x=1100,y=200)
+        self.browseRandBtn.place(x=1300,y=200)
         
         
         """
