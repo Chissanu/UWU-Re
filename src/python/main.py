@@ -1,4 +1,3 @@
-from cgitb import text
 import tkinter as tk
 import customtkinter as ctk
 
@@ -8,8 +7,8 @@ ctk.set_default_color_theme("dark-blue")  # Themes: "blue" (standard), "green", 
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
-        WIDTH = 1024
-        HEIGHT = 600
+        WIDTH = 1920
+        HEIGHT = 1080
         self.title("UWU:Reborn from Ashes")
         self.geometry(f"{WIDTH}x{HEIGHT}")
         self.bind('<Escape>',lambda e: quit(e))
