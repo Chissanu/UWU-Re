@@ -5,7 +5,8 @@ ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 ctk.set_default_color_theme("dark-blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
 #Color Pallete
-BLUEBG = "#859FFD"
+BLUE_BG = "#859FFD"
+ALL_BG = "#FFF89A"
 
 class App(ctk.CTk):
     def __init__(self):
@@ -24,8 +25,8 @@ class App(ctk.CTk):
         ======================================
         """
         #Frame & Canvas creation
-        self.mainFrame = ctk.CTkFrame(self,width=WIDTH,height=HEIGHT,fg_color=BLUEBG)
-        self.mainCanvas = ctk.CTkCanvas(self.mainFrame,width=WIDTH,height=HEIGHT,bg=BLUEBG,highlightthickness=0)
+        self.mainFrame = ctk.CTkFrame(self,width=WIDTH,height=HEIGHT,fg_color=BLUE_BG)
+        self.mainCanvas = ctk.CTkCanvas(self.mainFrame,width=WIDTH,height=HEIGHT,bg=BLUE_BG,highlightthickness=0)
         
         #Logo Label
         self.nameLabel1 = ctk.CTkLabel(self.mainCanvas,text="UwU:",text_font=("Inter",180),text_color="white")
@@ -73,11 +74,54 @@ class App(ctk.CTk):
         
         """
         ======================================
-                    Browse FRAME
+                    All FRAME
         ======================================
         """
         #Frame Creation
-        self.browseFrame = ctk.CTkFrame(self,width=WIDTH,height=HEIGHT,fg_color=BLUEBG,corner_radius=0)
+        self.browseFrame = ctk.CTkFrame(self,width=WIDTH,height=HEIGHT,fg_color=BLUE_BG,corner_radius=0)
+        self.browseCanvas = ctk.CTkCanvas(self.browseFrame,width=WIDTH,height=HEIGHT,bg=BLUE_BG,highlightthickness=0)
+        
+        #All Background  
+        self.browseCanvas.create_rectangle(125,300,1700,800,fill=ALL_BG,outline="")
+        
+        #Buttons  
+        self.browseAllBtn = ctk.CTkButton(self.browseCanvas,
+                                    width=500,
+                                    height=140,
+                                    text="All",
+                                    text_font=("Inter",50, 'bold'),
+                                    text_color="black",
+                                    corner_radius=0,
+                                    borderwidth=0,
+                                    hover_color=("#ACACAC"),
+                                    fg_color="#FFF89A",
+                                    command=lambda :self.change_frame(self.mainFrame,"browse"))
+        self.browseAllBtn.place(x=100,y=200)
+        
+        self.browseFavBtn = ctk.CTkButton(self.browseCanvas,
+                                    width=500,
+                                    height=140,
+                                    text="Favorite",
+                                    text_font=("Inter",50, 'bold'),
+                                    text_color="black",
+                                    corner_radius=30,
+                                    hover_color=("#ACACAC"),
+                                    fg_color="#E5E5E5",
+                                    command=lambda :self.change_frame(self.mainFrame,"browse"))
+        self.browseFavBtn.place(x=599,y=200)
+        
+        self.browseRandBtn = ctk.CTkButton(self.browseCanvas,
+                                    width=500,
+                                    height=140,
+                                    text="Random",
+                                    text_font=("Inter",50, 'bold'),
+                                    text_color="black",
+                                    corner_radius=30,
+                                    hover_color=("#ACACAC"),
+                                    fg_color="#E5E5E5",
+                                    command=lambda :self.change_frame(self.mainFrame,"browse"))
+        self.browseRandBtn.place(x=1100,y=200)
+        
         
         """
         ======================================
@@ -91,7 +135,8 @@ class App(ctk.CTk):
     def change_frame(self,oldFrame,newFrame):
         oldFrame.pack_forget()
         if newFrame == "browse":
-            self.browseFrame.pack()
+            self.browseCanvas.pack(fill="both", expand=1)
+            self.browseFrame.pack(fill="both", expand=1)
         print(newFrame)
 
     def button_callback(self):
