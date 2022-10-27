@@ -85,7 +85,7 @@ class App(ctk.CTk):
         self.browseCanvas = ctk.CTkCanvas(self.browseFrame,width=WIDTH,height=HEIGHT,bg=BLUE_BG,highlightthickness=0)
         
         #All Background  
-        self.browseCanvas.create_rectangle(100,340,1600,800,fill=ALL_BG,outline="")
+        self.browseCanvas.create_rectangle(100,340,1550,1000,fill=ALL_BG,outline="")
         
         #Profile IMG
         image1 = Image.open("C:\\Users\\Chissanu Laptop\\Desktop\\UWU-Re\\src\\python\\profile.png")
@@ -110,7 +110,7 @@ class App(ctk.CTk):
                                     hover_color=("#ACACAC"),
                                     fg_color="#FFF89A",
                                     command=lambda :self.change_frame(self.mainFrame,"browse"))
-        self.browseAllBtn.place(x=150,y=200)
+        self.browseAllBtn.place(x=100,y=200)
         
         self.browseFavBtn = ctk.CTkButton(self.browseCanvas,
                                     width=500,
@@ -122,7 +122,7 @@ class App(ctk.CTk):
                                     hover_color=("#ACACAC"),
                                     fg_color="#E5E5E5",
                                     command=lambda :self.change_frame(self.mainFrame,"browse"))
-        self.browseFavBtn.place(x=899,y=200)
+        self.browseFavBtn.place(x=550,y=200)
         
         self.browseRandBtn = ctk.CTkButton(self.browseCanvas,
                                     width=500,
@@ -134,7 +134,7 @@ class App(ctk.CTk):
                                     hover_color=("#ACACAC"),
                                     fg_color="#E5E5E5",
                                     command=lambda :self.change_frame(self.mainFrame,"browse"))
-        self.browseRandBtn.place(x=1300,y=200)
+        self.browseRandBtn.place(x=1050,y=200)
         
         
         """
