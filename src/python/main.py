@@ -1,5 +1,8 @@
 import tkinter as tk
 import customtkinter as ctk
+import os
+from pathlib import Path
+from PIL import ImageTk, Image
 
 ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 ctk.set_default_color_theme("dark-blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -83,6 +86,17 @@ class App(ctk.CTk):
         
         #All Background  
         self.browseCanvas.create_rectangle(100,340,1600,800,fill=ALL_BG,outline="")
+        
+        #Profile IMG
+        image1 = Image.open("C:\\Users\\Chissanu Laptop\\Desktop\\UWU-Re\\src\\python\\profile.png")
+        test = ImageTk.PhotoImage(image1)
+
+        label1 = tk.Label(image=test)
+        label1.image = test
+
+        # Position image
+        label1.place(x=100, y=100)
+
         
         #Buttons  
         self.browseAllBtn = ctk.CTkButton(self.browseCanvas,
