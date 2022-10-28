@@ -1,4 +1,5 @@
 import myQueue
+#from wsgiref.types import InputStream
 
 dummyData = [{"drinkName": "CustomDrink1",
               "drinkID": 1,
@@ -31,10 +32,10 @@ dummyData = [{"drinkName": "CustomDrink1",
               "drinkOrder": [20,123,12,45,23,44]
               },]
               
+drinkQue = myQueue.queue()
+drinkDataInput = dummyData[0]
+for i in drinkDataInput["drinkOrder"]:
+    drinkQue.enqueue(i)
 
-
-print(dummyData)
-# requestInput = int(input("enter mode: "))
-# if requestInput == 1:
-#     drinkInput = input("enter drink: ")
+print(drinkQue.get_data())
     
