@@ -7,20 +7,33 @@ from PIL import ImageTk, Image
 ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 ctk.set_default_color_theme("dark-blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
+#Path list
+#C:\Users\@USER\Documents\UWU-Re
+MAIN_DIR = str(os.path.normpath(os.getcwd() + os.sep))
+
 #Color Pallete
 BLUE_BG = "#859FFD"
 ALL_BG = "#FFF89A"
+FAV_BG = "#FFB2A6"
+RAND_BG = "#9ADCFF"
 
 class App(ctk.CTk):
+    # def __init__(self,name,coin):
     def __init__(self):
         super().__init__()
         WIDTH = 1920
         HEIGHT = 1080
+        global img,img1
         self.title("UWU:Reborn from Ashes")
         self.geometry(f"{WIDTH}x{HEIGHT}")
         self.bind('<Escape>',lambda e: quit(e))
         self.config(bg="#6482EB")
         self.attributes('-fullscreen',True)
+        self.profileIconPath = str(os.path.normpath(os.getcwd() + os.sep)) + "\\src\\assets\\profilePic.png"
+        # self.profileName = name
+        # self.coin = coin
+        self.profileName = "Chissanu"
+        self.coin = 1000
         
         """
         ======================================
@@ -84,19 +97,14 @@ class App(ctk.CTk):
         self.browseFrame = ctk.CTkFrame(self,width=WIDTH,height=HEIGHT,fg_color=BLUE_BG,corner_radius=0)
         self.browseCanvas = ctk.CTkCanvas(self.browseFrame,width=WIDTH,height=HEIGHT,bg=BLUE_BG,highlightthickness=0)
         
+        #Profile
+        img1 = ImageTk.PhotoImage(Image.open(self.profileIconPath).resize((110,110)))
+        self.browseCanvas.create_image(1790,20,anchor=tk.NW,image=img1)
+        self.browseCanvas.create_text(1650, 50, text=self.profileName, fill="black", font=('Inter 30 bold'))
+        self.browseCanvas.create_text(1700, 100, text=self.coin, fill="black", font=('Inter 30 bold'))
+        
         #All Background  
         self.browseCanvas.create_rectangle(100,340,1550,1000,fill=ALL_BG,outline="")
-        
-        #Profile IMG
-        image1 = Image.open("C:\\Users\\Chissanu Laptop\\Desktop\\UWU-Re\\src\\python\\profile.png")
-        test = ImageTk.PhotoImage(image1)
-
-        label1 = tk.Label(image=test)
-        label1.image = test
-
-        # Position image
-        label1.place(x=100, y=100)
-
         
         #Buttons  
         self.browseAllBtn = ctk.CTkButton(self.browseCanvas,
@@ -108,7 +116,7 @@ class App(ctk.CTk):
                                     corner_radius=0,
                                     borderwidth=0,
                                     hover_color=("#ACACAC"),
-                                    fg_color="#FFF89A",
+                                    fg_color=ALL_BG,
                                     command=lambda :self.change_frame(self.mainFrame,"browse"))
         self.browseAllBtn.place(x=100,y=200)
         
@@ -118,10 +126,10 @@ class App(ctk.CTk):
                                     text="Favorite",
                                     text_font=("Inter",50, 'bold'),
                                     text_color="black",
-                                    corner_radius=30,
+                                    corner_radius=0,
                                     hover_color=("#ACACAC"),
-                                    fg_color="#E5E5E5",
-                                    command=lambda :self.change_frame(self.mainFrame,"browse"))
+                                    fg_color=FAV_BG,
+                                    command=lambda :self.change_frame(self.browseFrame,"favorite"))
         self.browseFavBtn.place(x=550,y=200)
         
         self.browseRandBtn = ctk.CTkButton(self.browseCanvas,
@@ -130,11 +138,125 @@ class App(ctk.CTk):
                                     text="Random",
                                     text_font=("Inter",50, 'bold'),
                                     text_color="black",
-                                    corner_radius=30,
+                                    corner_radius=0,
                                     hover_color=("#ACACAC"),
-                                    fg_color="#E5E5E5",
+                                    fg_color=RAND_BG,
+                                    command=lambda :self.change_frame(self.mainFrame,"random"))
+        self.browseRandBtn.place(x=1050,y=200)
+        
+        """
+        ======================================
+                    Favorite Frames
+        ======================================
+        """
+        #Frame Creation
+        self.favoriteFrame = ctk.CTkFrame(self,width=WIDTH,height=HEIGHT,fg_color=BLUE_BG,corner_radius=0)
+        self.favoriteCanvas = ctk.CTkCanvas(self.favoriteFrame,width=WIDTH,height=HEIGHT,bg=BLUE_BG,highlightthickness=0)
+        
+        #Profile
+        img = ImageTk.PhotoImage(Image.open(self.profileIconPath).resize((110,110)))
+        self.favoriteCanvas.create_image(1790,20,anchor=tk.NW,image=img)
+        self.favoriteCanvas.create_text(1650, 50, text=self.profileName, fill="black", font=('Inter 30 bold'))
+        self.favoriteCanvas.create_text(1700, 100, text=self.coin, fill="black", font=('Inter 30 bold'))
+        
+                #All Background  
+        self.favoriteCanvas.create_rectangle(100,340,1550,1000,fill=FAV_BG,outline="")
+        
+        #Buttons  
+        self.browseAllBtn = ctk.CTkButton(self.favoriteCanvas,
+                                    width=500,
+                                    height=140,
+                                    text="All",
+                                    text_font=("Inter",50, 'bold'),
+                                    text_color="black",
+                                    corner_radius=0,
+                                    borderwidth=0,
+                                    hover_color=("#ACACAC"),
+                                    fg_color=ALL_BG,
+                                    command=lambda :self.change_frame(self.favoriteFrame,"browse"))
+        self.browseAllBtn.place(x=100,y=200)
+        
+        self.browseFavBtn = ctk.CTkButton(self.favoriteCanvas,
+                                    width=500,
+                                    height=140,
+                                    text="Favorite",
+                                    text_font=("Inter",50, 'bold'),
+                                    text_color="black",
+                                    corner_radius=0,
+                                    hover_color=("#ACACAC"),
+                                    fg_color=FAV_BG,
+                                    command=lambda :self.change_frame(self.favoriteFrame,"favorite"))
+        self.browseFavBtn.place(x=550,y=200)
+        
+        self.browseRandBtn = ctk.CTkButton(self.favoriteCanvas,
+                                    width=500,
+                                    height=140,
+                                    text="Random",
+                                    text_font=("Inter",50, 'bold'),
+                                    text_color="black",
+                                    corner_radius=0,
+                                    hover_color=("#ACACAC"),
+                                    fg_color=RAND_BG,
+                                    command=lambda :self.change_frame(self.favoriteFrame,"random"))
+        self.browseRandBtn.place(x=1050,y=200)
+        
+        
+        """
+        ======================================
+                    Random Frames
+        ======================================
+        """
+        #Frame Creation
+        self.randomFrame = ctk.CTkFrame(self,width=WIDTH,height=HEIGHT,fg_color=BLUE_BG,corner_radius=0)
+        self.randomCanvas = ctk.CTkCanvas(self.randomFrame,width=WIDTH,height=HEIGHT,bg=BLUE_BG,highlightthickness=0)
+        
+        #Profile
+        img = ImageTk.PhotoImage(Image.open(self.profileIconPath).resize((110,110)))
+        self.randomCanvas.create_image(1790,20,anchor=tk.NW,image=img)
+        self.randomCanvas.create_text(1650, 50, text=self.profileName, fill="black", font=('Inter 30 bold'))
+        self.randomCanvas.create_text(1700, 100, text=self.coin, fill="black", font=('Inter 30 bold'))
+        
+                #All Background  
+        self.randomCanvas.create_rectangle(100,340,1550,1000,fill=RAND_BG,outline="")
+        
+        #Buttons  
+        self.browseAllBtn = ctk.CTkButton(self.randomCanvas,
+                                    width=500,
+                                    height=140,
+                                    text="All",
+                                    text_font=("Inter",50, 'bold'),
+                                    text_color="black",
+                                    corner_radius=0,
+                                    borderwidth=0,
+                                    hover_color=("#ACACAC"),
+                                    fg_color=ALL_BG,
+                                    command=lambda :self.change_frame(self.randomFrame,"browse"))
+        self.browseAllBtn.place(x=100,y=200)
+        
+        self.browseFavBtn = ctk.CTkButton(self.randomCanvas,
+                                    width=500,
+                                    height=140,
+                                    text="Favorite",
+                                    text_font=("Inter",50, 'bold'),
+                                    text_color="black",
+                                    corner_radius=0,
+                                    hover_color=("#ACACAC"),
+                                    fg_color=FAV_BG,
+                                    command=lambda :self.change_frame(self.randomFrame,"favorite"))
+        self.browseFavBtn.place(x=550,y=200)
+        
+        self.browseRandBtn = ctk.CTkButton(self.randomCanvas,
+                                    width=500,
+                                    height=140,
+                                    text="Random",
+                                    text_font=("Inter",50, 'bold'),
+                                    text_color="black",
+                                    corner_radius=0,
+                                    hover_color=("#ACACAC"),
+                                    fg_color=RAND_BG,
                                     command=lambda :self.change_frame(self.mainFrame,"browse"))
         self.browseRandBtn.place(x=1050,y=200)
+        
         
         
         """
@@ -145,12 +267,19 @@ class App(ctk.CTk):
         #Pack Frame & Canvas
         self.mainCanvas.pack(fill="both", expand=1)
         self.mainFrame.pack(fill="both", expand=1)
+        
     
     def change_frame(self,oldFrame,newFrame):
         oldFrame.pack_forget()
         if newFrame == "browse":
-            self.browseCanvas.pack(fill="both", expand=1)
             self.browseFrame.pack(fill="both", expand=1)
+            self.browseCanvas.pack(fill="both", expand=1)
+        elif newFrame == "favorite":
+            self.favoriteFrame.pack(fill="both", expand=1)
+            self.favoriteCanvas.pack(fill="both", expand=1)
+        elif newFrame == "random":
+            self.randomFrame.pack(fill="both", expand=1)
+            self.randomCanvas.pack(fill="both", expand=1)
         print(newFrame)
 
     def button_callback(self):
@@ -159,7 +288,6 @@ class App(ctk.CTk):
     def quit(self,e):
         self.destroy()
 
-if __name__ == "__main__":
-    app = App()
-    app.mainloop()
 
+app = App()
+app.mainloop()
