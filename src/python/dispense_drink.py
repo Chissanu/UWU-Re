@@ -1,5 +1,6 @@
 import myQueue
 import serial
+import time
 #from wsgiref.types import InputStream
 
 dummyData = [{"drinkName": "CustomDrink1",
@@ -50,11 +51,14 @@ class dispenseDrink:
     
     def dispense(self):
         while self.drinkQue.is_empty():
+            data = None
             self.arduino.write(self.drinkQue.dequeue())
+            time.sleep(0.05)
+            while data == None:
+                data = self.arduino.readline()
+            print(data)
 
-
-
-drinkDataInput = dummyData[0]
-
-#print(drinkQue.get_data())
+drink = dispenseDrink
+drink.queue(dummyData[0])
+drink.dispense()
     
