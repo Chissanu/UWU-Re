@@ -18,3 +18,6 @@ class queue:
 
     def get_front(self):
         return self.queue[0]
+    
+    def is_empty(self):
+        return len(self.queue) == 0

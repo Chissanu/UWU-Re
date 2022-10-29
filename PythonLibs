@@ -2,3 +2,4 @@ psycopg2
 tk
 customtkinter
 pillow
+serial

@@ -1,4 +1,5 @@
 import myQueue
+import serial
 #from wsgiref.types import InputStream
 
 dummyData = [{"drinkName": "CustomDrink1",
@@ -37,11 +38,23 @@ dummyData = [{"drinkName": "CustomDrink1",
               "drinkOrder": [20,123,12,45,23,44],
               "timesPressed": [1,2,1,3,4,3]
               },]
-              
-drinkQue = myQueue.queue()
-drinkDataInput = dummyData[0]
-for i in range(len(drinkDataInput["drinkOrder"])):
-    drinkQue.enqueue([drinkDataInput["drinkOrder"][i], drinkDataInput["timesPressed"][i]])
 
-print(drinkQue.get_data())
+class dispenseDrink:
+    def __init__(self):
+        arduino = serial.Serial(port='COM4', baudrate=9600, timeout=.1)
+        drinkQue = myQueue.queue()
+    
+    def queue(self, drinkDataInput):
+        for i in range(len(drinkDataInput["drinkOrder"])):
+            self.drinkQue.enqueue([drinkDataInput["drinkOrder"][i], drinkDataInput["timesPressed"][i]])
+    
+    def dispense(self):
+        while self.drinkQue.is_empty():
+            self.arduino.write(self.drinkQue.dequeue())
+
+
+
+drinkDataInput = dummyData[0]
+
+#print(drinkQue.get_data())
     
