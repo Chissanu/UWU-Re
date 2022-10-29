@@ -42,23 +42,24 @@ dummyData = [{"drinkName": "CustomDrink1",
 
 class dispenseDrink:
     def __init__(self):
-        arduino = serial.Serial(port='COM4', baudrate=9600, timeout=.1)
-        drinkQue = myQueue.queue()
+        self.arduino = serial.Serial(port='COM3', baudrate=9600, timeout=.1)
+        time.sleep(1)
+        self.drinkQue = myQueue.queue()
     
-    def queue(self, drinkDataInput):
+    def queueD(self, drinkDataInput):
         for i in range(len(drinkDataInput["drinkOrder"])):
             self.drinkQue.enqueue([drinkDataInput["drinkOrder"][i], drinkDataInput["timesPressed"][i]])
     
     def dispense(self):
-        while self.drinkQue.is_empty():
+        while self.drinkQue.is_empty() == False:
             data = None
             self.arduino.write(self.drinkQue.dequeue())
             time.sleep(0.05)
-            while data == None:
+            while data != "hello":
                 data = self.arduino.readline()
             print(data)
 
-drink = dispenseDrink
-drink.queue(dummyData[0])
+drink = dispenseDrink()
+drink.queueD(dummyData[0])
 drink.dispense()
     
