@@ -23,7 +23,8 @@ class App(ctk.CTk):
         super().__init__()
         WIDTH = 1920
         HEIGHT = 1080
-        global img,img1
+        global profile
+        profile = []
         self.title("UWU:Reborn from Ashes")
         self.geometry(f"{WIDTH}x{HEIGHT}")
         self.bind('<Escape>',lambda e: quit(e))
@@ -98,8 +99,9 @@ class App(ctk.CTk):
         self.browseCanvas = ctk.CTkCanvas(self.browseFrame,width=WIDTH,height=HEIGHT,bg=BLUE_BG,highlightthickness=0)
         
         #Profile
-        img1 = ImageTk.PhotoImage(Image.open(self.profileIconPath).resize((110,110)))
-        self.browseCanvas.create_image(1790,20,anchor=tk.NW,image=img1)
+        img = ImageTk.PhotoImage(Image.open(self.profileIconPath).resize((110,110)))
+        profile.append(img)
+        self.browseCanvas.create_image(1790,20,anchor=tk.NW,image=img)
         self.browseCanvas.create_text(1650, 50, text=self.profileName, fill="black", font=('Inter 30 bold'))
         self.browseCanvas.create_text(1700, 100, text=self.coin, fill="black", font=('Inter 30 bold'))
         
@@ -115,7 +117,7 @@ class App(ctk.CTk):
                                     text_color="black",
                                     corner_radius=0,
                                     borderwidth=0,
-                                    hover_color=("#ACACAC"),
+                                    hover_color=ALL_BG,
                                     fg_color=ALL_BG,
                                     command=lambda :self.change_frame(self.mainFrame,"browse"))
         self.browseAllBtn.place(x=100,y=200)
@@ -127,7 +129,7 @@ class App(ctk.CTk):
                                     text_font=("Inter",50, 'bold'),
                                     text_color="black",
                                     corner_radius=0,
-                                    hover_color=("#ACACAC"),
+                                    hover_color=("#D3968D"),
                                     fg_color=FAV_BG,
                                     command=lambda :self.change_frame(self.browseFrame,"favorite"))
         self.browseFavBtn.place(x=550,y=200)
@@ -139,7 +141,7 @@ class App(ctk.CTk):
                                     text_font=("Inter",50, 'bold'),
                                     text_color="black",
                                     corner_radius=0,
-                                    hover_color=("#ACACAC"),
+                                    hover_color=("#88B5CD"),
                                     fg_color=RAND_BG,
                                     command=lambda :self.change_frame(self.mainFrame,"random"))
         self.browseRandBtn.place(x=1050,y=200)
@@ -155,6 +157,7 @@ class App(ctk.CTk):
         
         #Profile
         img = ImageTk.PhotoImage(Image.open(self.profileIconPath).resize((110,110)))
+        profile.append(img)
         self.favoriteCanvas.create_image(1790,20,anchor=tk.NW,image=img)
         self.favoriteCanvas.create_text(1650, 50, text=self.profileName, fill="black", font=('Inter 30 bold'))
         self.favoriteCanvas.create_text(1700, 100, text=self.coin, fill="black", font=('Inter 30 bold'))
@@ -171,7 +174,7 @@ class App(ctk.CTk):
                                     text_color="black",
                                     corner_radius=0,
                                     borderwidth=0,
-                                    hover_color=("#ACACAC"),
+                                    hover_color=("#EDE790"),
                                     fg_color=ALL_BG,
                                     command=lambda :self.change_frame(self.favoriteFrame,"browse"))
         self.browseAllBtn.place(x=100,y=200)
@@ -183,7 +186,7 @@ class App(ctk.CTk):
                                     text_font=("Inter",50, 'bold'),
                                     text_color="black",
                                     corner_radius=0,
-                                    hover_color=("#ACACAC"),
+                                    hover_color=FAV_BG,
                                     fg_color=FAV_BG,
                                     command=lambda :self.change_frame(self.favoriteFrame,"favorite"))
         self.browseFavBtn.place(x=550,y=200)
@@ -195,7 +198,7 @@ class App(ctk.CTk):
                                     text_font=("Inter",50, 'bold'),
                                     text_color="black",
                                     corner_radius=0,
-                                    hover_color=("#ACACAC"),
+                                    hover_color=("#88B5CD"),
                                     fg_color=RAND_BG,
                                     command=lambda :self.change_frame(self.favoriteFrame,"random"))
         self.browseRandBtn.place(x=1050,y=200)
@@ -212,6 +215,7 @@ class App(ctk.CTk):
         
         #Profile
         img = ImageTk.PhotoImage(Image.open(self.profileIconPath).resize((110,110)))
+        profile.append(img)
         self.randomCanvas.create_image(1790,20,anchor=tk.NW,image=img)
         self.randomCanvas.create_text(1650, 50, text=self.profileName, fill="black", font=('Inter 30 bold'))
         self.randomCanvas.create_text(1700, 100, text=self.coin, fill="black", font=('Inter 30 bold'))
@@ -228,7 +232,7 @@ class App(ctk.CTk):
                                     text_color="black",
                                     corner_radius=0,
                                     borderwidth=0,
-                                    hover_color=("#ACACAC"),
+                                    hover_color=("#EDE790"),
                                     fg_color=ALL_BG,
                                     command=lambda :self.change_frame(self.randomFrame,"browse"))
         self.browseAllBtn.place(x=100,y=200)
@@ -240,7 +244,7 @@ class App(ctk.CTk):
                                     text_font=("Inter",50, 'bold'),
                                     text_color="black",
                                     corner_radius=0,
-                                    hover_color=("#ACACAC"),
+                                    hover_color=("#D3968D"),
                                     fg_color=FAV_BG,
                                     command=lambda :self.change_frame(self.randomFrame,"favorite"))
         self.browseFavBtn.place(x=550,y=200)
@@ -252,12 +256,10 @@ class App(ctk.CTk):
                                     text_font=("Inter",50, 'bold'),
                                     text_color="black",
                                     corner_radius=0,
-                                    hover_color=("#ACACAC"),
+                                    hover_color=RAND_BG,
                                     fg_color=RAND_BG,
                                     command=lambda :self.change_frame(self.mainFrame,"browse"))
         self.browseRandBtn.place(x=1050,y=200)
-        
-        
         
         """
         ======================================
