@@ -3,6 +3,7 @@ import customtkinter as ctk
 import os
 from pathlib import Path
 from PIL import ImageTk, Image
+from CustomWidget import itemBox
 
 ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 ctk.set_default_color_theme("dark-blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -34,7 +35,7 @@ class App(ctk.CTk):
         # self.profileName = name
         # self.coin = coin
         self.profileName = "Chissanu"
-        self.coin = 1000
+        self.coin = "Coins:" + str(1000)
         
         """
         ======================================
@@ -88,7 +89,7 @@ class App(ctk.CTk):
                                     fg_color="#E5E5E5",
                                     command=lambda :self.change_frame(self.mainFrame,"browse"))
         self.settingBtn.place(x=1300,y=700)
-        
+              
         """
         ======================================
                     All FRAME
@@ -102,11 +103,38 @@ class App(ctk.CTk):
         img = ImageTk.PhotoImage(Image.open(self.profileIconPath).resize((110,110)))
         profile.append(img)
         self.browseCanvas.create_image(1790,20,anchor=tk.NW,image=img)
-        self.browseCanvas.create_text(1650, 50, text=self.profileName, fill="black", font=('Inter 30 bold'))
-        self.browseCanvas.create_text(1700, 100, text=self.coin, fill="black", font=('Inter 30 bold'))
+        self.browseCanvas.create_text(1750, 50, text=self.profileName, fill="black",anchor='e', font=('Inter 30 bold'))
+        self.browseCanvas.create_text(1750, 100, text=self.coin, fill="black",anchor='e', font=('Inter 30 bold'))
         
-        #All Background  
-        self.browseCanvas.create_rectangle(100,340,1550,1000,fill=ALL_BG,outline="")
+        #Item List Frame
+        self.browseItemFrame = ctk.CTkFrame(self.browseCanvas,width=1450,height=700,fg_color=ALL_BG,highlightthickness=0)
+        self.browseItemFrame.place(relx=0.052,rely=0.3)
+        
+        #Search bar
+        entry = ctk.CTkEntry(master=self.browseItemFrame,
+                               placeholder_text="Search",
+                               width=300,
+                               height=40,
+                               fg_color="white",
+                               text_color="black",
+                               border_width=2,
+                               text_font=("inter", 15),
+                               corner_radius=10)
+        
+        entry.place(relx=0.05, rely=0.05)
+        
+        # for i in range(2):
+        #     x = 0.05
+        #     y = 0.15
+        #     item1 = ctk.CTkCanvas(self.browseItemFrame,width=305,height=118,bg="#FF8787",highlightthickness=0)
+            
+        #     item1Name = ctk.CTkLabel(item1,text="Hello",text_color="black",text_font=("inter",15))
+        #     item1Name.place(x=-50,y=0)
+            
+        #     #Pack item frame
+        #     item1.place(relx=x + 0.05,rely=y+0.05)
+        
+        
         
         #Buttons  
         self.browseAllBtn = ctk.CTkButton(self.browseCanvas,
@@ -159,10 +187,10 @@ class App(ctk.CTk):
         img = ImageTk.PhotoImage(Image.open(self.profileIconPath).resize((110,110)))
         profile.append(img)
         self.favoriteCanvas.create_image(1790,20,anchor=tk.NW,image=img)
-        self.favoriteCanvas.create_text(1650, 50, text=self.profileName, fill="black", font=('Inter 30 bold'))
-        self.favoriteCanvas.create_text(1700, 100, text=self.coin, fill="black", font=('Inter 30 bold'))
+        self.favoriteCanvas.create_text(1750, 50, text=self.profileName, fill="black",anchor='e', font=('Inter 30 bold'))
+        self.favoriteCanvas.create_text(1750, 100, text=self.coin, fill="black",anchor='e', font=('Inter 30 bold'))
         
-                #All Background  
+        #All Background  
         self.favoriteCanvas.create_rectangle(100,340,1550,1000,fill=FAV_BG,outline="")
         
         #Buttons  
@@ -217,8 +245,8 @@ class App(ctk.CTk):
         img = ImageTk.PhotoImage(Image.open(self.profileIconPath).resize((110,110)))
         profile.append(img)
         self.randomCanvas.create_image(1790,20,anchor=tk.NW,image=img)
-        self.randomCanvas.create_text(1650, 50, text=self.profileName, fill="black", font=('Inter 30 bold'))
-        self.randomCanvas.create_text(1700, 100, text=self.coin, fill="black", font=('Inter 30 bold'))
+        self.randomCanvas.create_text(1750, 50, text=self.profileName, fill="black",anchor='e', font=('Inter 30 bold'))
+        self.randomCanvas.create_text(1750, 100, text=self.coin, fill="black",anchor='e', font=('Inter 30 bold'))
         
                 #All Background  
         self.randomCanvas.create_rectangle(100,340,1550,1000,fill=RAND_BG,outline="")
