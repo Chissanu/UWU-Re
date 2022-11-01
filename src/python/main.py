@@ -3,7 +3,6 @@ import customtkinter as ctk
 import os
 from pathlib import Path
 from PIL import ImageTk, Image
-from CustomWidget import itemBox
 
 ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 ctk.set_default_color_theme("dark-blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -30,8 +29,8 @@ class App(ctk.CTk):
         self.geometry(f"{WIDTH}x{HEIGHT}")
         self.bind('<Escape>',lambda e: quit(e))
         self.config(bg="#6482EB")
-        self.attributes('-fullscreen',True)
-        self.profileIconPath = str(os.path.normpath(os.getcwd() + os.sep)) + "\\src\\assets\\profilePic.png"
+        #self.attributes('-fullscreen',True)
+        self.profileIconPath = str(os.path.normpath(os.getcwd() + os.sep)) + "/src/assets/profilePic.png"
         # self.profileName = name
         # self.coin = coin
         self.profileName = "Chissanu"
