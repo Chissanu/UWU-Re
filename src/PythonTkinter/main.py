@@ -30,7 +30,7 @@ class App(ctk.CTk):
         self.bind('<Escape>',lambda e: quit(e))
         self.config(bg="#6482EB")
         #self.attributes('-fullscreen',True)
-        self.profileIconPath = str(os.path.normpath(os.getcwd() + os.sep)) + "/src/assets/profilePic.png"
+        self.profileIconPath = str(os.path.normpath(os.getcwd() + os.sep)) + "/src/PyThonTkinter/assets/profilePic.png"
         # self.profileName = name
         # self.coin = coin
         self.profileName = "Chissanu"
