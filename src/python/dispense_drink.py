@@ -41,19 +41,21 @@ class dispenseDrink:
         self.drinkQue = myQueue.queue()
     
     def queueD(self, drinkDataInput):
-        for i in range(len(drinkDataInput["drinkOrder"])):
-            self.drinkQue.enqueue([drinkDataInput["drinkOrder"][i], drinkDataInput["timesPressed"][i]])
+        for i in range(len(drinkDataInput["drinkList"])):
+            self.drinkQue.enqueue([drinkDataInput["drinkList"][i], drinkDataInput["timesPressed"][i]])
     
     def dispense(self):
-        while self.drinkQue.is_empty() == False:
-            data = None
-            self.arduino.write(self.drinkQue.dequeue())
-            time.sleep(0.05)
-            while data != "hello":
-                data = self.arduino.readline()
-            print(data)
+        #data = None
+        #self.arduino.write(self.drinkQue.dequeue())
+        a = "hello"
+        self.arduino.write(bytes(a, 'utf-8'))
+        time.sleep(0.05)
+            #while data != "hello":
+                #data = self.arduino.readline()
+           # print(data)
 
 drink = dispenseDrink()
 drink.queueD(dummyData[0])
-drink.dispense()
+while True:
+    drink.dispense()
     
