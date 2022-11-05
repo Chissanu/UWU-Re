@@ -1,3 +1,1 @@
-- Fix bug where the profile icon is missiing when changing frame
-    - Suggestion
-    - Move profile pictures and info into frame for reusability
+- Fix bug where the profile icon is missiing when changing frame **FIXED**
