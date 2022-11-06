@@ -24,3 +24,8 @@ yarn-error.log*
 
 __pycache__
 testApp.py
+/.expo
+web
+cache
+/.expo-shared
+/node_modules

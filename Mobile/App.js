@@ -1,21 +1,47 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Button, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <Text>Hello World</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.UwU}>
+        UwU:
+        <Text style={styles.Re}>Re</Text>
+      </Text>
+      <Button style = {styles.browseBtn} title="Browse" onPress={() => console.log("Button 1 is pressed")}></Button>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#859FFD',
     alignItems: 'center',
-    justifyContent: 'center',
   },
+  UwU: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 100,
+    fontFamily: 'inter',
+    position: 'absolute',
+    top:'15%',
+  },
+  Re: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 100,
+    fontFamily: 'inter',
+    top: '0%',
+  },
+  lineStyle:{
+    borderWidth: 0.5,
+    borderColor:'black',
+    margin:100,
+  },
+  browseBtn: {
+    backgroundColor:'green',
+    width: 200,
+    height: 800,
+  }
 });
