@@ -1,17 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Button, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
 export default function App() {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.UwU}>
         UwU:
         <Text style={styles.Re}>Re</Text>
       </Text>
-      <Text style>Hello</Text>
-      <StatusBar style="auto" />
-    </View>
-
+      <Button style = {styles.browseBtn} title="Browse" onPress={() => console.log("Button 1 is pressed")}></Button>
+    </SafeAreaView>
   );
 }
 
@@ -40,5 +38,10 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor:'black',
     margin:100,
+  },
+  browseBtn: {
+    backgroundColor:'green',
+    width: 200,
+    height: 800,
   }
 });
