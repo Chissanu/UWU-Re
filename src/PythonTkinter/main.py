@@ -3,6 +3,7 @@ import customtkinter as ctk
 import os
 from pathlib import Path
 from PIL import ImageTk, Image
+from Classes.DrinkFrame import DrinkFrame
 
 ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 ctk.set_default_color_theme("dark-blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -29,7 +30,7 @@ class App(ctk.CTk):
         self.geometry(f"{WIDTH}x{HEIGHT}")
         self.bind('<Escape>',lambda e: quit(e))
         self.config(bg="#6482EB")
-        #self.attributes('-fullscreen',True)
+        self.attributes('-fullscreen',True)
         self.profileIconPath = str(os.path.normpath(os.getcwd() + os.sep)) + "/src/PyThonTkinter/assets/profilePic.png"
         # self.profileName = name
         # self.coin = coin
@@ -122,6 +123,51 @@ class App(ctk.CTk):
         
         entry.place(relx=0.05, rely=0.05)
         
+        
+        self.browseCanvas.create_rectangle(100,340,1550,1000,fill=ALL_BG,outline="")
+        dummyData = [{"drinkName": "CustomDrink1",
+              "drinkID": 1,
+              "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
+              "timesPressed": [1,2,1,3,4,3]
+              },
+             {"drinkName": "CustomDrink2",
+              "drinkID": 2,
+              "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
+              "timesPressed": [1,2,1,3,4,3]
+              },
+             {"drinkName": "CustomDrink3",
+              "drinkID": 3,
+              "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
+              "timesPressed": [1,2,1,3,4,3]
+              },
+             {"drinkName": "CustomDrink4",
+              "drinkID": 4,
+              "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
+              "timesPressed": [1,2,1,3,4,3]
+              },
+             {"drinkName": "CustomDrink5",
+              "drinkID": 5,
+              "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
+              "timesPressed": [1,2,1,3,4,3]
+              },
+             {"drinkName": "CustomDrink6",
+              "drinkID": 6, 
+              "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
+              "timesPressed": [1,2,1,3,4,3]
+              },
+             {"drinkName": "CustomDrink7",
+              "drinkID": 7,
+              "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
+              "timesPressed": [1,2,1,3,4,3]
+              },]
+        x = 50
+        y = 100
+        for drink in dummyData:
+            frame = DrinkFrame(self.browseItemFrame,drink)
+            frame.place(x=x,y=y)
+            y += 200
+            #frame.pack()
+            
         # for i in range(2):
         #     x = 0.05
         #     y = 0.15
@@ -247,7 +293,7 @@ class App(ctk.CTk):
         self.randomCanvas.create_text(1750, 50, text=self.profileName, fill="black",anchor='e', font=('Inter 30 bold'))
         self.randomCanvas.create_text(1750, 100, text=self.coin, fill="black",anchor='e', font=('Inter 30 bold'))
         
-                #All Background  
+        #All Background  
         self.randomCanvas.create_rectangle(100,340,1550,1000,fill=RAND_BG,outline="")
         
         #Buttons  
