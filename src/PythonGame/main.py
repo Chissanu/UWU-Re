@@ -1,7 +1,7 @@
 import pygame
 import os
 from Classes import Button
-# from Classes import Player
+from Classes import Character
 
 pygame.init()
 
@@ -42,16 +42,18 @@ def draw_window(display, background):
     display.blit(background,(0,0))
 
 
-#=====INITIALIZE======
+#Create player
+player = Character.Character('Player', WIDTH/2, HEIGHT/2 + 100, 3, 5, screen)
 
-#User Events
-# player = Player()
+
+#=====INITIALIZE======
 
 running = True
 while running:
 
     clock.tick(FPS)
 
+    #Home
     if start_game == False:
         screen.fill(GREEN)
         # draw_window(screen, bg_img)
@@ -61,7 +63,11 @@ while running:
             running = False
     else:
         draw_window(screen, bg_img)
+        player.draw()
 
+        player.move(moving_left, moving_right)
+
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
                 running = False
@@ -69,6 +75,20 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 running = False
+            if event.key == pygame.K_a:
+                moving_left = True
+            if event.key == pygame.K_d:
+                moving_right = True
+
+        #keyboard button released
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_a:
+                moving_left = False
+            if event.key == pygame.K_d:
+                moving_right = False
+                
                 
     pygame.display.update()
+
+pygame.quit()
     
