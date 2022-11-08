@@ -33,20 +33,29 @@ void setup(){
 }
 
 void loop(){
-  
+  while (Serial.available()){
+    String input = Serial.readString();
+    Serial.print(input.length());
+    //calibrate(input);
+  }
 }
 
 void calibrate(char axis){
+  Serial.println(axis);
   
   // Calibrate X-axis
-  if(axis == "x"){
+  if(strcmp(axis, "c1")){
+    Serial.println("Hello");
     int total_x_steps = 0;
     
     // Start from 0
     x_min_stop = digitalRead(x_min);
     digitalWrite(x_dir, HIGH); //set to clockwise
-    while(x_min_stop != True){
+    while(x_min_stop != true){
       digitalWrite(x_step, HIGH);
+      delay(500);
+      digitalWrite(x_step, LOW);
+      delay(500);
       x_min_stop = digitalRead(x_min);
     }
     digitalWrite(x_step, LOW);
@@ -54,10 +63,14 @@ void calibrate(char axis){
     //Count Steps
     x_max_stop = digitalRead(x_max);
     digitalWrite(x_dir, LOW); // set to clockwise
-    while (x_max_stop != True){
+    while (x_max_stop != true){
       digitalWrite(x_step, HIGH);
-      total_x_steps = total_x_steps + 1
+      delay(500);
+      digitalWrite(x_step, LOW);
+      delay(500);
+      total_x_steps = total_x_steps + 1; //adding the total steps
       x_max_stop = digitalRead(x_max);
-    }  
+    }
+    digitalWrite(x_step, LOW);
   }
 }
