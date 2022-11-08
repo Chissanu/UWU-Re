@@ -15,6 +15,9 @@ start_game = False
 clock = pygame.time.Clock()
 FPS = 60
 
+#define game variables
+
+
 #define player action variables
 moving_left = False
 moving_right = False
@@ -79,6 +82,8 @@ while running:
                 moving_left = True
             if event.key == pygame.K_d:
                 moving_right = True
+            if event.key == pygame.K_w and player.alive:
+                player.jump = True
 
         #keyboard button released
         if event.type == pygame.KEYUP:
