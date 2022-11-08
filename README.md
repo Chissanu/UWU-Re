@@ -21,6 +21,12 @@ As seen in the picture above, the bottles are installed vertically so that the c
 ## How it works
 Our software will have 2 interfaces which is a UI in Tkinter (A python interface) which will be shown on the screen from the machine and a website which the user can order their drinks using their phones. Both of the interface will send input to a python program to fetch the array of recipe from the database stored in a JSON file. After the python program fetch the recipe, the recipe is then sent to Arduiono to dispense the drink
 
+## X axis
+The x axis consist of a NEMA stpeer motor which will be attach to a timing belt. 
+
+## Z axis
+The Z axis consists of a NEMA stepper motor which will turn a screw rod. The screwrod is attatched to a screwhead which will move the head up if the stepper motor spins clockwise and will move down if moves counter clockwise. The reason we use this method instead of using a timing belt is because it is installed vertically and required force to push the dispenser. This means there should not be any lose parts.
+
 ## Colaborators    
 Chalatsorn Tantiyamas 64011361  
 Chissanu Kittipakorn 64011728  
