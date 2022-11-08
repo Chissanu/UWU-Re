@@ -2,7 +2,7 @@ import pygame, sys, os, random
 from pygame.locals import *
 
 CURRENT_PATH = os.getcwd()
-PLAYER_PATH = CURRENT_PATH + "\\src\\PythonGame\\Assets\\Character_img\\Player_Standing.png"
+PLAYER_PATH = CURRENT_PATH + "\\src\\PythonGame\\Assets\\Character_img\\Player\\Standing.png"
 
 
 #class for all character
@@ -13,6 +13,9 @@ class Character(pygame.sprite.Sprite):
         self.direction = 1 #1 is 'right', 0 is 'left'
         self.step_count = 0
         self.speed = speed
+        self.vel_y = 0
+        self.jump = False
+        self.in_air = True
         self.flip = False
         img = pygame.image.load(PLAYER_PATH)
         self.image = pygame.transform.scale(img, (int(img.get_width() * scale), int(img.get_height() * scale)))
@@ -34,6 +37,13 @@ class Character(pygame.sprite.Sprite):
             dx = self.speed
             self.flip = False
             self.direction = 1
+
+		#jump
+        if self.jump == True and self.in_air == False:
+            self.vel_y = -11
+            self.jump = False
+            self.in_air = True
+        
 
 
         #update rectangle position
