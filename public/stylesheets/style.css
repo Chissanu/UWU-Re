@@ -1,8 +1,15 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    background-color: rgb(173, 173, 236);
 }
 
 a {
-  color: #00B7FF;
+    color: #00B7FF;
+}
+
+@media screen and (max-width: 1000px) {
+    body {
+        background: #859FFD
+    }
 }
