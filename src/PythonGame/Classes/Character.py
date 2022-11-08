@@ -2,7 +2,7 @@ import pygame, sys, os, random
 from pygame.locals import *
 
 CURRENT_PATH = os.getcwd()
-PLAYER_PATH = CURRENT_PATH + "\\src\\PythonGame\\Assets\\Character_img\\Player_Standing.png"
+PLAYER_PATH = CURRENT_PATH + "\\src\\PythonGame\\Assets\\Character_img\\Player\\Standing.png"
 
 
 #class for all character
