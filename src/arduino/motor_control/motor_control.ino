@@ -42,19 +42,73 @@ void loop(){
     input.trim();
     if (input.substring(0, 1) == "c"){
       Serial.println("Calibrate");
-      calibrate(input.substring(1), , x_stepper, z_stepper);
+      calibrate(input.substring(1), x_stepper, z_stepper);
     }
   }
 }
 
-void calibrate(String axis, Stepper x_stepper, Stepper z_stepper){
+int calibrate(String axis, Stepper x_stepper, Stepper z_stepper){
   // calibrate both sides
+  int xMaxSteps = 0;
+  int zMaxSteps = 0;
   if (axis == "1"){
     Serial.println("Calibrating Both Axis");
 
     // x - axis
-    while (digitalRead())
-    x_stepper.step(1); // set direction
+    x_min = digitalRead(xMinPin);
+    while (x_min != 1){
+      x_stepper.step(-1); // go left until the endstop is pressed
+      x_min = digitalRead(xMinPin);
+    }
+    x_max = digitalRead(xMaxPin);
+    while (x_max != 1){
+      x_stepper.step(1);
+      xMaxSteps += 1;
+    }
+    x_stepper.step(xMaxSteps); // to not push button
     
+        // z - axis
+    z_min = digitalRead(zMinPin);
+    while (z_min != 1){
+      z_stepper.step(-1); // go left until the endstop is pressed
+      z_min = digitalRead(zMinPin);
+    }
+    z_max = digitalRead(zMaxPin);
+    while (z_max != 1){
+      z_stepper.step(1);
+      zMaxSteps += 1;
+    }
+    z_stepper.step(zMaxSteps); // to not push button
+    
+  } else if (axis == "2"){
+    Serial.println("Calibrating X Axis");
+    
+    // x - axis
+    x_min = digitalRead(xMinPin);
+    while (x_min != 1){
+      x_stepper.step(-1); // go left until the endstop is pressed
+      x_min = digitalRead(xMinPin);
+    }
+    x_max = digitalRead(xMaxPin);
+    while (x_max != 1){
+      x_stepper.step(1);
+      xMaxSteps += 1;
+    }
+    x_stepper.step(-xMaxSteps); // to not push button
+    
+  } else if (axis = "3"){
+    Serial.println("Calibrating Z Axis");
+    // z - axis
+    z_min = digitalRead(zMinPin);
+    while (z_min != 1){
+      z_stepper.step(-1); // go left until the endstop is pressed
+      z_min = digitalRead(zMinPin);
+    }
+    z_max = digitalRead(zMaxPin);
+    while (z_max != 1){
+      z_stepper.step(1);
+      zMaxSteps += 1;
+    }
+    z_stepper.step(-zMaxSteps); // to not push button
   }
 }
