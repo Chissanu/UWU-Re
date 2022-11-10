@@ -4,13 +4,15 @@ from pygame.locals import *
 CURRENT_PATH = os.getcwd()
 PLAYER_PATH = CURRENT_PATH + "\\src\\PythonGame\\Assets\\Character_img\\Player\\Standing.png"
 
+#define game variables
+GRAVITY = 0.75
 
 #class for all character
 class Character(pygame.sprite.Sprite):
     def __init__(self, type, x, y, scale, speed, screen):
         super().__init__()
         self.char_type = type
-        self.direction = 1 #1 is 'right', 0 is 'left'
+        self.direction = 1 
         self.step_count = 0
         self.speed = speed
         self.vel_y = 0
@@ -27,6 +29,7 @@ class Character(pygame.sprite.Sprite):
         #reset movement variables
         dx = 0
         dy = 0
+        # print(self.vel_y)
 
         #assign movement variables if moving left or right
         if moving_left:
@@ -43,12 +46,23 @@ class Character(pygame.sprite.Sprite):
             self.vel_y = -11
             self.jump = False
             self.in_air = True
-        
+
+		#apply gravity
+        self.vel_y += GRAVITY
+        dy += self.vel_y
+
+        #check collision with floor
+        print(self.rect.bottom)
+        if self.rect.bottom + dy > 600:
+            dy = 600 - self.rect.bottom
+            self.in_air = False
+            # print(dy)
 
 
         #update rectangle position
         self.rect.x += dx
         self.rect.y += dy
+        # print(self.rect.y)
 
 
     def draw(self):
