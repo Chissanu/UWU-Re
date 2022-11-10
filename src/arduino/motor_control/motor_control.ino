@@ -12,10 +12,10 @@ const int z_min = 18;
 const int z_max = 19;
 
 // end stop
-bool x_min_stop = false;
-bool x_max_stop = false;
-bool z_min_stop = false;
-bool z_max_stop = false;
+int x_min_stop = 0;
+int x_max_stop = 0;
+int z_min_stop = 0;
+int z_max_stop = 0;
 
 //setup pinmode and stuff
 void setup(){
@@ -40,7 +40,7 @@ void loop(){
   }
 }
 
-void calibrate(char axis){
+void calibrate(char axis, int ){
   Serial.println(axis);
   
   // Calibrate X-axis
@@ -72,5 +72,7 @@ void calibrate(char axis){
       x_max_stop = digitalRead(x_max);
     }
     digitalWrite(x_step, LOW);
+
+    //
   }
 }
