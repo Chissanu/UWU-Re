@@ -84,6 +84,7 @@ while running:
                 moving_right = True
             if event.key == pygame.K_w and player.alive:
                 player.jump = True
+                print("jump")
 
         #keyboard button released
         if event.type == pygame.KEYUP:

@@ -169,8 +169,8 @@ class App(ctk.CTk):
             y += 150
             #frame.pack()
         
-        self.myscrollbar = tk.Scrollbar(self.browseFrame,orient="vertical",command=self.browseItemFrame.yview)
-        self.myscrollbar.pack(side=tk.BOTTOM,fill=tk.Y)
+        # self.myscrollbar = tk.Scrollbar(self.browseFrame,orient="vertical",command=self.browseItemFrame.yview)
+        # self.myscrollbar.pack(side=tk.BOTTOM,fill=tk.Y)
             
         # for i in range(2):
         #     x = 0.05
