@@ -1,5 +1,11 @@
+Python:
 psycopg2
 tk
 customtkinter
 pillow
 serial
+
+
+NPM:
+Nodemon
+PG
