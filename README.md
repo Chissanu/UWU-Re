@@ -2,6 +2,13 @@
 UWU-Re is a cocktail machine which mix 6 different drinks. The drink can be ordered using your mobile phones using webapp. This machine is a our year 2 semester 1 project which is made for 2 subjects, CPS (Cyber - Physical System) and PCA (Principal of Computation and Application).
 ## List Of Materials
 The 3d parts are provided in the provided folder. The 3d printer used is creality ender 3 without any upgrades. You can print the component using the printer itself out of the box. The settings for the 3d printer will also be provided in the folder
+### Material used
+- Arduino Mega 2560
+- NEMA 17HS4401 Stepper Motor x2
+- L298N Stepper Motor Driver x2
+- T8 screwrod
+- Steel rod x2
+- 20 x 60 V-slot
 ## The Model
 Our machine will be a drink dispenser based on gravity. This means there we won't need any pump to dispense drinks. We will instead use valves to get the amount of liquid needed as seen in the picture
 
@@ -20,6 +27,9 @@ As seen in the picture above, the bottles are installed vertically so that the c
 
 ## How it works
 Our software will have 2 interfaces which is a UI in Tkinter (A python interface) which will be shown on the screen from the machine and a website which the user can order their drinks using their phones. Both of the interface will send input to a python program to fetch the array of recipe from the database stored in a JSON file. After the python program fetch the recipe, the recipe is then sent to Arduiono to dispense the drink
+
+## Hardware
+
 
 ## X axis
 The x axis consist of a NEMA stpeer motor which will be attach to a timing belt. 
