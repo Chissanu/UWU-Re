@@ -3,7 +3,9 @@ import customtkinter as ctk
 import os
 from pathlib import Path
 from PIL import ImageTk, Image
+from Classes.VerticalScrolledFrame import VerticalScrolledFrame
 from Classes.DrinkFrame import DrinkFrame
+
 
 ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 ctk.set_default_color_theme("dark-blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -17,6 +19,42 @@ BLUE_BG = "#859FFD"
 ALL_BG = "#FFF89A"
 FAV_BG = "#FFB2A6"
 RAND_BG = "#9ADCFF"
+
+dummyData = [{"drinkName": "CustomDrink1",
+        "drinkID": 1,
+        "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
+        "timesPressed": [1,2,1,3,4,3]
+        },
+        {"drinkName": "CustomDrink2",
+        "drinkID": 2,
+        "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
+        "timesPressed": [1,2,1,3,4,3]
+        },
+        {"drinkName": "CustomDrink3",
+        "drinkID": 3,
+        "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
+        "timesPressed": [1,2,1,3,4,3]
+        },
+        {"drinkName": "CustomDrink4",
+        "drinkID": 4,
+        "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
+        "timesPressed": [1,2,1,3,4,3]
+        },
+        {"drinkName": "CustomDrink5",
+        "drinkID": 5,
+        "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
+        "timesPressed": [1,2,1,3,4,3]
+        },
+        {"drinkName": "CustomDrink6",
+        "drinkID": 6, 
+        "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
+        "timesPressed": [1,2,1,3,4,3]
+        },
+        {"drinkName": "CustomDrink7",
+        "drinkID": 7,
+        "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
+        "timesPressed": [1,2,1,3,4,3]
+        },]
 
 class App(ctk.CTk):
     # def __init__(self,name,coin):
@@ -107,8 +145,17 @@ class App(ctk.CTk):
         self.browseCanvas.create_text(1750, 100, text=self.coin, fill="black",anchor='e', font=('Inter 30 bold'))
         
         #Item List Frame
-        self.browseItemFrame = ctk.CTkFrame(self.browseCanvas,width=1450,height=700,fg_color=ALL_BG,highlightthickness=0)
-        self.browseItemFrame.place(relx=0.052,rely=0.3)
+        self.browseItemFrame = ctk.CTkFrame(self.browseCanvas,width=1250,height=900,fg_color=ALL_BG,highlightthickness=0)
+        self.browseItemFrame.place(x=50,y=80)
+        
+        #Item List Canvas
+        # self.browseItemCanvas = ctk.CTkCanvas(self.browseItemFrame)
+        # self.browseItemCanvas.pack(side=tk.left,fill=tk.both,ex)
+        # https://www.youtube.com/watch?v=0WafQCaok6g
+        
+        #All Frame Label
+        allLab = ctk.CTkLabel(self.browseItemFrame,text="All",text_font=("Inter",40),text_color="black")
+        allLab.place(x=-10,y=30)
         
         #Search bar
         entry = ctk.CTkEntry(master=self.browseItemFrame,
@@ -121,222 +168,18 @@ class App(ctk.CTk):
                                text_font=("inter", 15),
                                corner_radius=10)
         
-        entry.place(relx=0.05, rely=0.05)
+        entry.place(x=30, y=100)
         
-        
-        self.browseCanvas.create_rectangle(100,340,1550,1000,fill=ALL_BG,outline="")
-        dummyData = [{"drinkName": "CustomDrink1",
-              "drinkID": 1,
-              "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
-              "timesPressed": [1,2,1,3,4,3]
-              },
-             {"drinkName": "CustomDrink2",
-              "drinkID": 2,
-              "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
-              "timesPressed": [1,2,1,3,4,3]
-              },
-             {"drinkName": "CustomDrink3",
-              "drinkID": 3,
-              "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
-              "timesPressed": [1,2,1,3,4,3]
-              },
-             {"drinkName": "CustomDrink4",
-              "drinkID": 4,
-              "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
-              "timesPressed": [1,2,1,3,4,3]
-              },
-             {"drinkName": "CustomDrink5",
-              "drinkID": 5,
-              "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
-              "timesPressed": [1,2,1,3,4,3]
-              },
-             {"drinkName": "CustomDrink6",
-              "drinkID": 6, 
-              "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
-              "timesPressed": [1,2,1,3,4,3]
-              },
-             {"drinkName": "CustomDrink7",
-              "drinkID": 7,
-              "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
-              "timesPressed": [1,2,1,3,4,3]
-              },]
-        x = 50
-        y = 100
-        for drink in dummyData:
-            #frame = DrinkFrame(self.browseItemFrame,drink)
-            frame = DrinkFrame(self.browseCanvas,drink)
-            frame.place(x=x,y=y)
-            y += 150
-            #frame.pack()
-        
-        # self.myscrollbar = tk.Scrollbar(self.browseFrame,orient="vertical",command=self.browseItemFrame.yview)
-        # self.myscrollbar.pack(side=tk.BOTTOM,fill=tk.Y)
-            
-        # for i in range(2):
-        #     x = 0.05
-        #     y = 0.15
-        #     item1 = ctk.CTkCanvas(self.browseItemFrame,width=305,height=118,bg="#FF8787",highlightthickness=0)
-            
-        #     item1Name = ctk.CTkLabel(item1,text="Hello",text_color="black",text_font=("inter",15))
-        #     item1Name.place(x=-50,y=0)
-            
-        #     #Pack item frame
-        #     item1.place(relx=x + 0.05,rely=y+0.05)
-        
-        
-        
-        #Buttons  
-        self.browseAllBtn = ctk.CTkButton(self.browseCanvas,
-                                    width=500,
-                                    height=140,
-                                    text="All",
-                                    text_font=("Inter",50, 'bold'),
-                                    text_color="black",
-                                    corner_radius=0,
-                                    borderwidth=0,
-                                    hover_color=ALL_BG,
-                                    fg_color=ALL_BG,
-                                    command=lambda :self.change_frame(self.mainFrame,"browse"))
-        self.browseAllBtn.place(x=100,y=200)
-        
-        self.browseFavBtn = ctk.CTkButton(self.browseCanvas,
-                                    width=500,
-                                    height=140,
-                                    text="Favorite",
-                                    text_font=("Inter",50, 'bold'),
-                                    text_color="black",
-                                    corner_radius=0,
-                                    hover_color=("#D3968D"),
-                                    fg_color=FAV_BG,
-                                    command=lambda :self.change_frame(self.browseFrame,"favorite"))
-        self.browseFavBtn.place(x=550,y=200)
-        
-        self.browseRandBtn = ctk.CTkButton(self.browseCanvas,
-                                    width=500,
-                                    height=140,
-                                    text="Random",
-                                    text_font=("Inter",50, 'bold'),
-                                    text_color="black",
-                                    corner_radius=0,
-                                    hover_color=("#88B5CD"),
-                                    fg_color=RAND_BG,
-                                    command=lambda :self.change_frame(self.mainFrame,"random"))
-        self.browseRandBtn.place(x=1050,y=200)
-        
-        """
-        ======================================
-                    Favorite Frames
-        ======================================
-        """
-        #Frame Creation
-        self.favoriteFrame = ctk.CTkFrame(self,width=WIDTH,height=HEIGHT,fg_color=BLUE_BG,corner_radius=0)
-        self.favoriteCanvas = ctk.CTkCanvas(self.favoriteFrame,width=WIDTH,height=HEIGHT,bg=BLUE_BG,highlightthickness=0)
-        
-        #Profile
-        img = ImageTk.PhotoImage(Image.open(self.profileIconPath).resize((110,110)))
-        profile.append(img)
-        self.favoriteCanvas.create_image(1790,20,anchor=tk.NW,image=img)
-        self.favoriteCanvas.create_text(1750, 50, text=self.profileName, fill="black",anchor='e', font=('Inter 30 bold'))
-        self.favoriteCanvas.create_text(1750, 100, text=self.coin, fill="black",anchor='e', font=('Inter 30 bold'))
-        
-        #All Background  
-        self.favoriteCanvas.create_rectangle(100,340,1550,1000,fill=FAV_BG,outline="")
-        
-        #Buttons  
-        self.browseAllBtn = ctk.CTkButton(self.favoriteCanvas,
-                                    width=500,
-                                    height=140,
-                                    text="All",
-                                    text_font=("Inter",50, 'bold'),
-                                    text_color="black",
-                                    corner_radius=0,
-                                    borderwidth=0,
-                                    hover_color=("#EDE790"),
-                                    fg_color=ALL_BG,
-                                    command=lambda :self.change_frame(self.favoriteFrame,"browse"))
-        self.browseAllBtn.place(x=100,y=200)
-        
-        self.browseFavBtn = ctk.CTkButton(self.favoriteCanvas,
-                                    width=500,
-                                    height=140,
-                                    text="Favorite",
-                                    text_font=("Inter",50, 'bold'),
-                                    text_color="black",
-                                    corner_radius=0,
-                                    hover_color=FAV_BG,
-                                    fg_color=FAV_BG,
-                                    command=lambda :self.change_frame(self.favoriteFrame,"favorite"))
-        self.browseFavBtn.place(x=550,y=200)
-        
-        self.browseRandBtn = ctk.CTkButton(self.favoriteCanvas,
-                                    width=500,
-                                    height=140,
-                                    text="Random",
-                                    text_font=("Inter",50, 'bold'),
-                                    text_color="black",
-                                    corner_radius=0,
-                                    hover_color=("#88B5CD"),
-                                    fg_color=RAND_BG,
-                                    command=lambda :self.change_frame(self.favoriteFrame,"random"))
-        self.browseRandBtn.place(x=1050,y=200)
-        
-        
-        """
-        ======================================
-                    Random Frames
-        ======================================
-        """
-        #Frame Creation
-        self.randomFrame = ctk.CTkFrame(self,width=WIDTH,height=HEIGHT,fg_color=BLUE_BG,corner_radius=0)
-        self.randomCanvas = ctk.CTkCanvas(self.randomFrame,width=WIDTH,height=HEIGHT,bg=BLUE_BG,highlightthickness=0)
-        
-        #Profile
-        img = ImageTk.PhotoImage(Image.open(self.profileIconPath).resize((110,110)))
-        profile.append(img)
-        self.randomCanvas.create_image(1790,20,anchor=tk.NW,image=img)
-        self.randomCanvas.create_text(1750, 50, text=self.profileName, fill="black",anchor='e', font=('Inter 30 bold'))
-        self.randomCanvas.create_text(1750, 100, text=self.coin, fill="black",anchor='e', font=('Inter 30 bold'))
-        
-        #All Background  
-        self.randomCanvas.create_rectangle(100,340,1550,1000,fill=RAND_BG,outline="")
-        
-        #Buttons  
-        self.browseAllBtn = ctk.CTkButton(self.randomCanvas,
-                                    width=500,
-                                    height=140,
-                                    text="All",
-                                    text_font=("Inter",50, 'bold'),
-                                    text_color="black",
-                                    corner_radius=0,
-                                    borderwidth=0,
-                                    hover_color=("#EDE790"),
-                                    fg_color=ALL_BG,
-                                    command=lambda :self.change_frame(self.randomFrame,"browse"))
-        self.browseAllBtn.place(x=100,y=200)
-        
-        self.browseFavBtn = ctk.CTkButton(self.randomCanvas,
-                                    width=500,
-                                    height=140,
-                                    text="Favorite",
-                                    text_font=("Inter",50, 'bold'),
-                                    text_color="black",
-                                    corner_radius=0,
-                                    hover_color=("#D3968D"),
-                                    fg_color=FAV_BG,
-                                    command=lambda :self.change_frame(self.randomFrame,"favorite"))
-        self.browseFavBtn.place(x=550,y=200)
-        
-        self.browseRandBtn = ctk.CTkButton(self.randomCanvas,
-                                    width=500,
-                                    height=140,
-                                    text="Random",
-                                    text_font=("Inter",50, 'bold'),
-                                    text_color="black",
-                                    corner_radius=0,
-                                    hover_color=RAND_BG,
-                                    fg_color=RAND_BG,
-                                    command=lambda :self.change_frame(self.mainFrame,"browse"))
-        self.browseRandBtn.place(x=1050,y=200)
+        #Scrollbar
+        scrollBar = tk.Scrollbar(self.browseItemFrame,)
+    
+        # x = 50
+        # y = 100
+        # for drink in dummyData:
+        #     #frame = DrinkFrame(self.browseItemFrame,drink)
+        #     frame = DrinkFrame(self.browseItemFrame,drink)
+        #     frame.place(x=x,y=y)
+        #     y += 150
         
         """
         ======================================
