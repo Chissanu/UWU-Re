@@ -9,6 +9,8 @@ The 3d parts are provided in the provided folder. The 3d printer used is crealit
 - T8 screwrod
 - Steel rod x2
 - 20 x 60 V-slot
+- Breadboard
+- 12V 5A Switching Power Supply
 ## The Model
 Our machine will be a drink dispenser based on gravity. This means there we won't need any pump to dispense drinks. We will instead use valves to get the amount of liquid needed as seen in the picture
 
