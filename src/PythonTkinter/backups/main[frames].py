@@ -143,60 +143,49 @@ class App(ctk.CTk):
         self.browseCanvas.create_text(1750, 100, text=self.coin, fill="black",anchor='e', font=('Inter 30 bold'))
         
         #Item List Frame
-        self.browseItemFrame = ctk.CTkFrame(self.browseFrame,width=1450,height=700,fg_color=ALL_BG,highlightthickness=0,corner_radius=0)
-        self.browseItemFrame.place(relx=0.052,rely=0.31)
+        self.browseItemFrame = ctk.CTkFrame(self.browseCanvas,width=1450,height=700,fg_color=ALL_BG,highlightthickness=0)
+        self.browseItemFrame.place(relx=0.052,rely=0.3)
         
-        # #Item list Canvas
-        self.browseItemCanvas = ctk.CTkCanvas(self.browseItemFrame,width=1450,height=700,bg=ALL_BG,highlightthickness=0)
-        self.browseItemCanvas.pack(side=tk.LEFT,fill=tk.BOTH,expand=1)
+        #Search bar
+        entry = ctk.CTkEntry(master=self.browseItemFrame,
+                               placeholder_text="Search",
+                               width=300,
+                               height=40,
+                               fg_color="white",
+                               text_color="black",
+                               border_width=2,
+                               text_font=("inter", 15),
+                               corner_radius=10)
         
-        #Canvas scrollbar
-        my_scrollbar = tk.Scrollbar(self.browseItemFrame,orient=tk.VERTICAL,width=30,command=self.browseItemCanvas.yview)
-        my_scrollbar.pack(side=tk.RIGHT,fill=tk.Y)
+        entry.place(relx=0.05, rely=0.05)
         
-        #Config Item list Canvas
-        self.browseItemCanvas.configure(yscrollcommand=my_scrollbar.set)
-        self.browseItemCanvas.bind('<Configure>',lambda e: self.browseItemCanvas.configure(scrollregion=self.browseItemCanvas.bbox("all")))
         
-        item_frame = tk.Frame(self.browseItemCanvas)
-        self.browseItemCanvas.create_window((0,0),window=item_frame)
-        
+        self.browseCanvas.create_rectangle(100,340,1550,1000,fill=ALL_BG,outline="")
         x = 50
         y = 100
         for drink in dummyData:
             #frame = DrinkFrame(self.browseItemFrame,drink)
-            frame = DrinkFrame(item_frame,drink)
-            frame.grid()
+            frame = DrinkFrame(self.browseCanvas,drink)
+            frame.place(x=x,y=y)
             y += 150
             #frame.pack()
+        
+        self.myscrollbar = tk.Scrollbar(self.browseFrame,orient="vertical",command=self.browseItemFrame.yview)
+        self.myscrollbar.pack(side=tk.BOTTOM,fill=tk.Y)
             
-        # for thing in range(100):
-        #     tk.Button(item_frame,text=f"Button {thing}").grid(row=thing)
+        # for i in range(2):
+        #     x = 0.05
+        #     y = 0.15
+        #     item1 = ctk.CTkCanvas(self.browseItemFrame,width=305,height=118,bg="#FF8787",highlightthickness=0)
             
-        # #Search bar
-        # entry = ctk.CTkEntry(master=self.browseItemFrame,
-        #                        placeholder_text="Search",
-        #                        width=300,
-        #                        height=40,
-        #                        fg_color="white",
-        #                        text_color="black",
-        #                        border_width=2,
-        #                        text_font=("inter", 15),
-        #                        corner_radius=10)
-        
-        # entry.place(relx=0.05, rely=0.05)
+        #     item1Name = ctk.CTkLabel(item1,text="Hello",text_color="black",text_font=("inter",15))
+        #     item1Name.place(x=-50,y=0)
+            
+        #     #Pack item frame
+        #     item1.place(relx=x + 0.05,rely=y+0.05)
         
         
-        # self.browseCanvas.create_rectangle(100,340,1550,1000,fill=ALL_BG,outline="")
-        # x = 50
-        # y = 100
-        # for drink in dummyData:
-        #     #frame = DrinkFrame(self.browseItemFrame,drink)
-        #     frame = DrinkFrame(self.browseCanvas,drink)
-        #     frame.place(x=x,y=y)
-        #     y += 150
-        #     #frame.pack()
-  
+        
         #Buttons  
         self.browseAllBtn = ctk.CTkButton(self.browseCanvas,
                                     width=500,
