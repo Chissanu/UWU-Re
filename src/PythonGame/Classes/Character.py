@@ -2,7 +2,6 @@ import pygame, sys, os, random
 from pygame.locals import *
 
 CURRENT_PATH = os.getcwd()
-PLAYER_PATH = CURRENT_PATH + "\\src\\PythonGame\\Assets\\Character_img\\Player\\Standing.png"
 
 #define game variables
 GRAVITY = 0.75
@@ -25,8 +24,8 @@ class Character(pygame.sprite.Sprite):
         self.update_time = pygame.time.get_ticks()
 
         #load all images for the players
-        animation_types = ['Idle', 'Run', 'Jump']
-        ANIMATION_PATH = 'C:\\Users\\ASUS\\Desktop\\UWU-Re\\src\\PythonGame\\Assets\\Character_img'
+        animation_types = ['Idle', 'Run', 'Jump', 'Attack']
+        ANIMATION_PATH = CURRENT_PATH + '\\src\\PythonGame\\Assets\\Character_img'
         for animation in animation_types:
             #reset temporary list of images
             temp_list = []

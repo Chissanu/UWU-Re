@@ -21,6 +21,7 @@ FPS = 60
 #define player action variables
 moving_left = False
 moving_right = False
+attack = False
 
 #define colors
 GREEN = (124,252,0)
@@ -77,6 +78,8 @@ while running:
                 player.update_action(2)#2: jump
             elif moving_left or moving_right:
                 player.update_action(1)#1: run
+            elif attack == True:
+                player.update_action(3)
             else:
                 player.update_action(0)#0: idle
             player.move(moving_left, moving_right)
@@ -95,6 +98,8 @@ while running:
                 moving_right = True
             if event.key == pygame.K_w and player.alive:
                 player.jump = True
+            if event.key == pygame.K_SPACE:
+                attack = True
 
         #keyboard button released
         if event.type == pygame.KEYUP:
@@ -102,6 +107,8 @@ while running:
                 moving_left = False
             if event.key == pygame.K_d:
                 moving_right = False
+            if event.key == pygame.K_SPACE:
+                attack = False
                 
                 
     pygame.display.update()
