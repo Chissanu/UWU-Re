@@ -46,7 +46,7 @@ def draw_window(display, background):
 
 
 #Create player
-player = Character.Character('Player', WIDTH/2, HEIGHT/2 + 100, 3, 5, screen)
+player = Character.Character('Player', WIDTH/2, HEIGHT/2 + 100, 0.5, 5, screen)
 
 
 #=====INITIALIZE======
@@ -59,16 +59,27 @@ while running:
     #Home
     if start_game == False:
         screen.fill(GREEN)
-        # draw_window(screen, bg_img)
         if start_button.draw(screen):
             start_game = True
         if exit_button.draw(screen):
             running = False
     else:
         draw_window(screen, bg_img)
+
+        player.update_animation()
         player.draw()
 
         player.move(moving_left, moving_right)
+
+    	#update player actions
+        if player.alive:
+            if player.in_air:
+                player.update_action(2)#2: jump
+            elif moving_left or moving_right:
+                player.update_action(1)#1: run
+            else:
+                player.update_action(0)#0: idle
+            player.move(moving_left, moving_right)
 
     
     for event in pygame.event.get():
@@ -84,7 +95,6 @@ while running:
                 moving_right = True
             if event.key == pygame.K_w and player.alive:
                 player.jump = True
-                print("jump")
 
         #keyboard button released
         if event.type == pygame.KEYUP:
