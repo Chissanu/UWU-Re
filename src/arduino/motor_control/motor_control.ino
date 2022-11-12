@@ -30,8 +30,8 @@ void setup(){
   Serial.println("ready");
 
   // set speed of stepper motor
-  x_stepper.setSpeed(60);
-  z_stepper.setSpeed(60);
+  x_stepper.setSpeed(100);
+  z_stepper.setSpeed(100);
 
   // set mode of endstop
   pinMode(xMinPin, INPUT);
@@ -46,7 +46,7 @@ void loop(){
     input.trim();
     if (input.substring(0, 1) == "c"){
       Serial.println("Calibrating...");
-      x_max_steps = calibrate("x", x_stepper, z_stepper);
+      //x_max_steps = calibrate("x", x_stepper, z_stepper);
       z_max_steps = calibrate("z", x_stepper, z_stepper);
     }
   }
@@ -78,16 +78,23 @@ int calibrate(String axis, Stepper x_stepper, Stepper z_stepper){
     Serial.println("Calibrating Z Axis");
     // z - axis
     z_min = digitalRead(zMinPin);
-    while (z_min != 1){
-      z_stepper.step(-1); // go left until the endstop is pressed
+    while (z_min != 0){
+      z_stepper.step(1); // go left until the endstop is pressed
       z_min = digitalRead(zMinPin);
     }
+    z_stepper.step(0);
+    delay(5000);
     z_max = digitalRead(zMaxPin);
-    while (z_max != 1){
-      z_stepper.step(1);
+    while (z_max != 0){
+      z_stepper.step(-1);
       zMaxSteps += 1;
+      z_max = digitalRead(zMaxPin);
     }
-    z_stepper.step(-zMaxSteps); // to not push button
+    z_stepper.step(0);
+    delay(5000);
+    z_stepper.step(zMaxSteps); // to not push button
+    Serial.println("z calibration complete");
+    Serial.println(zMaxSteps);
     return zMaxSteps;
   }
 }
