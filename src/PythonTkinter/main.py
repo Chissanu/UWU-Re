@@ -1,6 +1,7 @@
 import tkinter as tk
 import customtkinter as ctk
 import os
+import json
 from pathlib import Path
 from PIL import ImageTk, Image
 from Classes.VerticalScrolledFrame import VerticalScrolledFrame
@@ -74,6 +75,7 @@ class App(ctk.CTk):
         # self.coin = coin
         self.profileName = "Chissanu"
         self.coin = "Coins:" + str(1000)
+        self.drinkList = {}
         
         """
         ======================================
@@ -209,7 +211,19 @@ class App(ctk.CTk):
     
     def quit(self,e):
         self.destroy()
+    
+    def genDrink(self):
+        for i in range(2):
+            name = input("Drink name? >")
+            ml = int(input("Drink ML? >"))
+            self.drinkList[name] = ml
+        print(self.drinkList)
+        json_object = json.dumps(self.drinkList, indent=4)
+        with open("./src/PythonTkinter/Database/drinkList.json", "w") as outfile:
+            outfile.write(json_object)
+        
 
 
 app = App()
+app.genDrink()
 app.mainloop()

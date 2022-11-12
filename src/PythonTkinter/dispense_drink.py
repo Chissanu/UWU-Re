@@ -1,6 +1,7 @@
 import myQueue
 import serial
 import time
+import json
 #from wsgiref.types import InputStream
 
 dummyData = [{"drinkName": "CustomDrink1",
@@ -54,8 +55,33 @@ class dispenseDrink:
                 #data = self.arduino.readline()
            # print(data)
 
-drink = dispenseDrink()
-drink.queueD(dummyData[0])
-while True:
-    drink.dispense()
+# drink = dispenseDrink()
+# drink.queueD(dummyData[0])
+
+
+def sortDrink():
+    f = open ('./src/PythonTkinter/Database/drinkList.json', "r")
+    drinkOrder = json.loads(f.read())
+    drinks = []
+    sortedDrink = []
+    
+    #Insert json drink to dict
+    for drink in drinkOrder.keys():
+        drinkDict = {}
+        drinkDict["name"] = drink
+        drinkDict["amountLeft"] = drinkOrder[drink]
+        drinks.append(drinkDict)
+    
+    for drink in drinks:
+        for data in dummyData:
+            if data["drinkName"] == drink["name"]:
+                sortedDrink.append(data)
+                break
+    
+    for val in sortedDrink:
+        print(val["drinkName"])
+    
+sortDrink()
+# while True:
+#     drink.dispense()
     
