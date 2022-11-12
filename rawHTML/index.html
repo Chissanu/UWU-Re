@@ -35,6 +35,19 @@
                     <h2 id="subtext" style="top: 350px;">Ingredient6</h2>
                     <button id="order">Order</button>
                 </div>
+
+                <div class="item" style="top:1200px;">
+                    <h1 id="name">Name</h1>
+                    <h1 id="name" style="left: 590px;">THB 55.00</h1>
+                    <h2 id="subtext">Created by: None</h2>
+                    <h2 id="subtext" style="top: 100px;">Ingredient1</h2>
+                    <h2 id="subtext" style="top: 150px;">Ingredient2</h2>
+                    <h2 id="subtext" style="top: 200px;">Ingredient3</h2>
+                    <h2 id="subtext" style="top: 250px;">Ingredient4</h2>
+                    <h2 id="subtext" style="top: 300px;">Ingredient5</h2>
+                    <h2 id="subtext" style="top: 350px;">Ingredient6</h2>
+                    <button id="order">Order</button>
+                </div>
             </div>
         </div>
     </body>
@@ -62,6 +75,8 @@
             bottom: 5%;
             background: #DDD4A2;
             border-radius: 10px;
+            overflow: hidden;
+            overflow-y: scroll;
         }
         .item {
             position: absolute;
@@ -139,16 +154,17 @@
 </style>
 
 <script>
-    var alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o",
-        "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
-    ];
-
-    var target = document.getElementById('inner-rec');
-    for (var i = 0; i < 2; i++) {
-        // var newLink = document.createElement('div');
-        // newLink.innerHTML = alphabet[i];
-        // target.appendChild(newLink);
+    const element = document.getElementById('inner-rec');
+    var toAdd = document.createDocumentFragment();
+    for (var i = 0; i < 11; i++) {
+        var newDiv = document.createElement('div');
+        newDiv.id = 'r' + i;
+        newDiv.className = 'item';
+        toAdd.appendChild(newDiv);
     }
+    // https://stackoverflow.com/questions/11398522/create-a-div-using-loop
+
+    document.appendChild(toAdd);
     // var container = document.getElementById("main-rec");
     // container.innerHTML = htmlElements;
 </script>

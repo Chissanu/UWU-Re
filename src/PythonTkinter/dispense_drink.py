@@ -58,7 +58,6 @@ class dispenseDrink:
 # drink = dispenseDrink()
 # drink.queueD(dummyData[0])
 
-
 def sortDrink():
     f = open ('./src/PythonTkinter/Database/drinkList.json', "r")
     drinkOrder = json.loads(f.read())
