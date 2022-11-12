@@ -24,12 +24,12 @@ app.get('/', function(req, res, next) {
 });
 
 app.get('/browse', function(req, res, next) {
-    res.render('browse', { title: 'Express' });
+    res.render('browse', { drinks: drinkList });
 });
 
 app.get('/favorite', function(req, res, next) {
     console.log(drinkList);
-    res.render('favorite', { drinks: drinkList });
+    res.render('favorite', { drinksName: drinkList.drinkname });
 });
 
 const setDrinkList = (rows) => {
