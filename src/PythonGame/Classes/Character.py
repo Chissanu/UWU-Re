@@ -59,7 +59,7 @@ class Character(pygame.sprite.Sprite):
 
 		#jump
         if self.jump == True and self.in_air == False:
-            self.vel_y = -20
+            self.vel_y = -15
             self.jump = False
             self.in_air = True
 
@@ -70,8 +70,8 @@ class Character(pygame.sprite.Sprite):
         dy += self.vel_y
 
         #check collision with floor
-        if self.rect.bottom + dy > 880:
-            dy = 880 - self.rect.bottom
+        if self.rect.bottom + dy > 940:
+            dy = 940 - self.rect.bottom
             self.in_air = False
 
 

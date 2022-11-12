@@ -30,8 +30,11 @@ GREEN = (124,252,0)
 CURRENT_PATH = os.getcwd()
 #background
 BG_PATH = CURRENT_PATH + "\\src\\PythonGame\\Assets\\Background"
-bg_img = pygame.image.load(BG_PATH + "\\grass.jpg")
+bg_img = pygame.image.load(BG_PATH + "\\paper.jpg")
 bg_img = pygame.transform.scale(bg_img,SIZE)
+scale = 2
+floor_img = pygame.image.load(BG_PATH + "\\ruler20.png")
+floor_img = pygame.transform.scale(floor_img, (int(floor_img.get_width() * scale), int(floor_img.get_height() * scale)))
 #button images
 BTN_PATH = CURRENT_PATH + "\\src\\PythonGame\\Assets\\Button_img"
 start_img = pygame.image.load(BTN_PATH + "\\start_btn.png")
@@ -47,7 +50,7 @@ def draw_window(display, background):
 
 
 #Create player
-player = Character.Character('Player', WIDTH/2, HEIGHT/2 + 100, 0.5, 5, screen)
+player = Character.Character('Player', WIDTH/2, HEIGHT/2 + 100, 0.4, 5, screen)
 
 
 #=====INITIALIZE======
@@ -66,6 +69,7 @@ while running:
             running = False
     else:
         draw_window(screen, bg_img)
+        screen.blit(floor_img,(0,725))
 
         player.update_animation()
         player.draw()
