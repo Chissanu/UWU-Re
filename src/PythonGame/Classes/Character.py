@@ -10,10 +10,11 @@ GRAVITY = 0.75
 class Character(pygame.sprite.Sprite):
     def __init__(self, type, x, y, scale, speed, screen):
         super().__init__()
+        self.alive = True
         self.char_type = type
-        self.direction = 1 
-        self.step_count = 0
         self.speed = speed
+        self.speed = speed
+        self.direction = 1 
         self.vel_y = 0
         self.jump = False
         self.in_air = True
@@ -65,20 +66,18 @@ class Character(pygame.sprite.Sprite):
 
 		#apply gravity
         self.vel_y += GRAVITY
-        # if self.vel_y > 10:
-        #     self.vel_y
         dy += self.vel_y
 
         #check collision with floor
         if self.rect.bottom + dy > 940:
             dy = 940 - self.rect.bottom
             self.in_air = False
+            print("In air", self.in_air)
 
 
         #update rectangle position
         self.rect.x += dx
         self.rect.y += dy
-        # print(self.rect.y)
 
     def update_animation(self):
         #update animation
@@ -102,6 +101,11 @@ class Character(pygame.sprite.Sprite):
             #update the animation settings
             self.frame_index = 0
             self.update_time = pygame.time.get_ticks()
+    
+    def attack(self):
+        attacking_rect = pygame.Rect(self.rect.centerx, self.rect.y, 2 * self.rect.width, self.rect.height)
+        pygame.draw.rect(self.screen, (0, 255, 0), attacking_rect)
+        print("attack")
 
     def draw(self):
         self.screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)

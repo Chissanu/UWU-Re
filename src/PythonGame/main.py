@@ -15,9 +15,6 @@ start_game = False
 clock = pygame.time.Clock()
 FPS = 60
 
-#define game variables
-
-
 #define player action variables
 moving_left = False
 moving_right = False
@@ -50,8 +47,8 @@ def draw_window(display, background):
 
 
 #Create player
-player = Character.Character('Player', WIDTH/2, HEIGHT/2 + 100, 0.4, 5, screen)
-
+player = Character.Character('Player', WIDTH/2, HEIGHT/2 + 100, 0.5, 5, screen)
+enemy = Character.Character('Player', WIDTH/2, HEIGHT/2 + 100, 0.5, 5, screen)
 
 #=====INITIALIZE======
 
@@ -73,6 +70,8 @@ while running:
 
         player.update_animation()
         player.draw()
+        enemy.draw()
+        
 
         player.move(moving_left, moving_right)
 
@@ -102,8 +101,12 @@ while running:
                 moving_right = True
             if event.key == pygame.K_w and player.alive:
                 player.jump = True
+                print("jump")
             if event.key == pygame.K_SPACE:
                 attack = True
+            # if event.key == pygame.K_SPACE:
+            #     print("press")
+            #     player.attack()
 
         #keyboard button released
         if event.type == pygame.KEYUP:
@@ -114,8 +117,7 @@ while running:
             if event.key == pygame.K_SPACE:
                 attack = False
                 
-                
+               
     pygame.display.update()
 
 pygame.quit()
-    
