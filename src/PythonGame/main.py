@@ -22,6 +22,10 @@ attack = False
 
 #define colors
 GREEN = (124,252,0)
+YELLOW = (255,255,0)
+RED = (255, 0, 0)
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
 
 #load images
 CURRENT_PATH = os.getcwd()
@@ -45,6 +49,12 @@ exit_button = Button.Button(WIDTH/2 + WIDTH/4 - exit_img.get_width()/2, HEIGHT/2
 def draw_window(display, background):
     display.blit(background,(0,0))
 
+#function for drawing character health bars
+def draw_health_bar(health, x, y):
+    ratio = health / 100
+    pygame.draw.rect(screen, BLACK, (x - 2, y - 2, 404, 34))
+    pygame.draw.rect(screen, RED, (x, y, 400, 30))
+    pygame.draw.rect(screen, YELLOW, (x, y, 400 * ratio, 30))
 
 #Create player
 player = Character.Character('Player', WIDTH/2, HEIGHT/2 + 100, 0.5, 5, screen)
@@ -67,6 +77,7 @@ while running:
     else:
         draw_window(screen, bg_img)
         screen.blit(floor_img,(0,725))
+        draw_health_bar(enemy.health, 100, 100)
 
         player.update_animation()
         player.draw()
@@ -101,12 +112,10 @@ while running:
                 moving_right = True
             if event.key == pygame.K_w and player.alive:
                 player.jump = True
-                print("jump")
             if event.key == pygame.K_SPACE:
                 attack = True
-            # if event.key == pygame.K_SPACE:
-            #     print("press")
-            #     player.attack()
+            if event.key == pygame.K_SPACE:
+                player.attack(enemy)
 
         #keyboard button released
         if event.type == pygame.KEYUP:

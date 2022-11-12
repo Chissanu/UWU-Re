@@ -12,11 +12,18 @@ class Character(pygame.sprite.Sprite):
         super().__init__()
         self.alive = True
         self.char_type = type
+        self.x_coordinate = x
+        self.y_coordinate = y
         self.speed = speed
         self.speed = speed
         self.direction = 1 
         self.vel_y = 0
         self.jump = False
+        self.attacking = False
+        self.attack_type = 0
+        self.attack_cooldown = 0
+        self.hit = False
+        self.health = 100   
         self.in_air = True
         self.flip = False
         self.animation_list = []
@@ -41,7 +48,9 @@ class Character(pygame.sprite.Sprite):
         self.image = self.animation_list[self.action][self.frame_index]
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
+        self.hit_box = pygame.Rect((x, y, 80, 180))
         self.screen = screen
+    
 
     def move(self, moving_left, moving_right):
         #reset movement variables
@@ -72,12 +81,14 @@ class Character(pygame.sprite.Sprite):
         if self.rect.bottom + dy > 940:
             dy = 940 - self.rect.bottom
             self.in_air = False
-            print("In air", self.in_air)
 
 
         #update rectangle position
         self.rect.x += dx
+        self.hit_box.x += dx
         self.rect.y += dy
+        self.hit_box.y += dy
+
 
     def update_animation(self):
         #update animation
@@ -93,7 +104,6 @@ class Character(pygame.sprite.Sprite):
             self.frame_index = 0
 
 
-
     def update_action(self, new_action):
         #check if the new action is different to the previous one
         if new_action != self.action:
@@ -101,11 +111,16 @@ class Character(pygame.sprite.Sprite):
             #update the animation settings
             self.frame_index = 0
             self.update_time = pygame.time.get_ticks()
+
     
-    def attack(self):
-        attacking_rect = pygame.Rect(self.rect.centerx, self.rect.y, 2 * self.rect.width, self.rect.height)
+    def attack(self, target):
+        attacking_rect = pygame.Rect(self.hit_box.centerx - (2 * self.hit_box.width * self.flip), self.hit_box.y, 2 * self.hit_box.width, self.hit_box.height)
         pygame.draw.rect(self.screen, (0, 255, 0), attacking_rect)
-        print("attack")
+        if attacking_rect.colliderect(target.hit_box):
+            target.health -= 10
+            # target.hit = True
+
 
     def draw(self):
         self.screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
+        pygame.draw.rect(self.screen, (255, 0, 0), self.hit_box)
