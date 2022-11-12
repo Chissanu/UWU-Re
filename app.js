@@ -23,8 +23,8 @@ app.get('/', function(req, res, next) {
     res.render('index', { title: 'Express' });
 });
 
-app.get('/home', function(req, res, next) {
-    res.render('test', { title: 'Express' });
+app.get('/browse', function(req, res, next) {
+    res.render('browse', { title: 'Express' });
 });
 
 app.get('/favorite', function(req, res, next) {
