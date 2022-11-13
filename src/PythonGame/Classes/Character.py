@@ -5,7 +5,7 @@ CURRENT_PATH = os.getcwd()
 
 #define game variables
 GRAVITY = 0.75
-ATK_CD_VAL = 50
+ATK_CD_VAL = 30
 TILE_SIZE = 40
 
 #class for all character
@@ -51,7 +51,7 @@ class Character(pygame.sprite.Sprite):
         self.image = self.animation_list[self.action][self.frame_index]
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
-        self.hit_box = pygame.Rect((x, y, 80, 180))
+        self.hit_box = pygame.Rect(x - 40, y-40, 80, 120)
         self.screen = screen
 
 
@@ -149,7 +149,7 @@ class Character(pygame.sprite.Sprite):
                         pygame.draw.rect(self.screen, (0, 255, 0), attacking_rect)
                         print(attacking_rect)
                         if attacking_rect.colliderect(self.target.hit_box):
-                            self.target.health -= 10
+                            self.target.health -= 1
                             self.target.hit = True
                             
                     self.attacking = False

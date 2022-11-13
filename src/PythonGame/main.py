@@ -20,9 +20,7 @@ FPS = 60
 moving_left = False
 moving_right = False
 
-# #get keypresses
-# key = pygame.key.get_pressed()
-
+floor = 940
 #define colors
 GREEN = (124,252,0)
 YELLOW = (255,255,0)
@@ -59,9 +57,16 @@ def draw_health_bar(health, x, y):
     pygame.draw.rect(screen, RED, (x, y, 400, 30))
     pygame.draw.rect(screen, YELLOW, (x, y, 400 * ratio, 30))
 
+#create sprite groups
+enemy_group = pygame.sprite.Group()
+
 #Create player
-enemy = Enemy('Player', WIDTH/2, HEIGHT/2 + 100, 0.3, 3, screen, None)
-player = Character('Player', WIDTH/3, HEIGHT/2 + 100, 0.3, 5, screen, enemy)
+enemy1 = Enemy('Player', WIDTH/2, floor, 0.3, 3, screen, None)
+# enemy2 = Enemy('Player', WIDTH/2 + 50, floor, 0.3, 3, screen, None)
+enemy_group.add(enemy1)
+# enemy_group.add(enemy2)
+print(enemy_group)
+player = Character('Player', WIDTH/3, floor, 0.3, 8, screen, enemy1)
 
 
 #=====INITIALIZE======
@@ -81,12 +86,13 @@ while running:
     else:
         draw_window(screen, bg_img)
         screen.blit(floor_img,(0,725))
-        draw_health_bar(enemy.health, 1400, 100)
+        draw_health_bar(enemy1.health, 1400, 100)
         draw_health_bar(player.health, 100, 100)
         # player.update_animation()
 
-        enemy.update(player)
-        enemy.draw()
+        for enemy in enemy_group:
+                enemy.update(player)
+                enemy.draw()
         player.update()
         player.draw()
     
