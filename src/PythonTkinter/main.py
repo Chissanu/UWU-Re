@@ -160,13 +160,13 @@ class App(ctk.CTk):
               "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
               "timesPressed": [1,2,1,3,4,3]
               },]
-        x = 50
-        y = 100
+        x = 100
+        y = 400
         for drink in dummyData:
             #frame = DrinkFrame(self.browseItemFrame,drink)
             frame = DrinkFrame(self.browseCanvas,drink)
             frame.place(x=x,y=y)
-            y += 150
+            y += 100
             #frame.pack()
         
         # self.myscrollbar = tk.Scrollbar(self.browseFrame,orient="vertical",command=self.browseItemFrame.yview)
