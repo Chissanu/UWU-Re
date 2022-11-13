@@ -23,39 +23,34 @@ RAND_BG = "#9ADCFF"
 
 dummyData = [{"drinkName": "CustomDrink1",
         "drinkID": 1,
+        "price": 55,
         "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
         "timesPressed": [1,2,1,3,4,3]
         },
         {"drinkName": "CustomDrink2",
         "drinkID": 2,
+        "price": 55,
         "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
         "timesPressed": [1,2,1,3,4,3]
         },
         {"drinkName": "CustomDrink3",
         "drinkID": 3,
+        "price": 55,
         "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
         "timesPressed": [1,2,1,3,4,3]
         },
         {"drinkName": "CustomDrink4",
         "drinkID": 4,
+        "price": 55,
         "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
         "timesPressed": [1,2,1,3,4,3]
         },
         {"drinkName": "CustomDrink5",
         "drinkID": 5,
+        "price": 55,
         "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
         "timesPressed": [1,2,1,3,4,3]
-        },
-        {"drinkName": "CustomDrink6",
-        "drinkID": 6, 
-        "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
-        "timesPressed": [1,2,1,3,4,3]
-        },
-        {"drinkName": "CustomDrink7",
-        "drinkID": 7,
-        "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
-        "timesPressed": [1,2,1,3,4,3]
-        },]
+        }]
 
 class App(ctk.CTk):
     # def __init__(self,name,coin):
@@ -151,9 +146,34 @@ class App(ctk.CTk):
         self.browseItemFrame.place(x=50,y=80)
         
         #Item List Canvas
-        # self.browseItemCanvas = ctk.CTkCanvas(self.browseItemFrame)
-        # self.browseItemCanvas.pack(side=tk.left,fill=tk.both,ex)
-        # https://www.youtube.com/watch?v=0WafQCaok6g
+        self.browseItemCanvas = ctk.CTkCanvas(self.browseItemFrame,width=1250,height=750,bg=ALL_BG,highlightthickness=0)
+        self.browseItemCanvas.place(x=0,y=150)
+        
+        #Item list Scrollbar
+        my_scrollbar = tk.Scrollbar(self.browseItemFrame, orient=tk.VERTICAL, command=self.browseItemCanvas.yview)
+        my_scrollbar.place(x=1232,y=150,height=750)
+
+        #Configure Canvas to scroll with mouse wheel
+        self.browseItemCanvas.configure(yscrollcommand=my_scrollbar.set)
+        self.browseItemCanvas.bind('<Configure>', lambda e: self.browseItemCanvas.configure(scrollregion = self.browseItemCanvas.bbox("all")))
+        
+        #Pack item frame inside canvas
+        second_frame = tk.Frame(self.browseItemCanvas,bg=ALL_BG,width=1250,height=900,highlightthickness=0)
+        second_frame.place(x=0,y=0)
+        
+        self.browseItemCanvas.create_window((0,0), window=second_frame, anchor="nw")
+        
+        x = 30
+        y = 20
+        altura = 0
+        for drink in dummyData:
+            altura = altura + 150
+            frame = DrinkFrame(second_frame,drink).place(x=x,y=y)
+            y += 150
+        print(altura)
+        second_frame.configure(height=altura)
+        
+        
         
         #All Frame Label
         allLab = ctk.CTkLabel(self.browseItemFrame,text="All",text_font=("Inter",40),text_color="black")
@@ -172,23 +192,13 @@ class App(ctk.CTk):
         
         entry.place(x=30, y=100)
         
-        #Scrollbar
-        scrollBar = tk.Scrollbar(self.browseItemFrame,)
-    
-        # x = 50
-        # y = 100
-        # for drink in dummyData:
-        #     #frame = DrinkFrame(self.browseItemFrame,drink)
-        #     frame = DrinkFrame(self.browseItemFrame,drink)
-        #     frame.place(x=x,y=y)
-        #     y += 150
-        
         """
         ======================================
                     Packing Main Frames
         ======================================
         """
         #Pack Frame & Canvas
+        self.browseItemCanvas.bind_all("<MouseWheel>",self._on_mouse_wheel)
         self.mainCanvas.pack(fill="both", expand=1)
         self.mainFrame.pack(fill="both", expand=1)
         
@@ -208,6 +218,9 @@ class App(ctk.CTk):
 
     def button_callback(self):
         print("button pressed")
+        
+    def _on_mouse_wheel(self,event):
+        self.browseItemCanvas.yview_scroll(-1 * int((event.delta / 120)), "units")
     
     def quit(self,e):
         self.destroy()
@@ -221,9 +234,9 @@ class App(ctk.CTk):
         json_object = json.dumps(self.drinkList, indent=4)
         with open("./src/PythonTkinter/Database/drinkList.json", "w") as outfile:
             outfile.write(json_object)
+    
         
 
 
 app = App()
-app.genDrink()
 app.mainloop()
