@@ -10,12 +10,13 @@ TILE_SIZE = 40
 
 #class for all character
 class Character(pygame.sprite.Sprite):
-    def __init__(self, type, x, y, scale, speed, screen, target):
+    def __init__(self, type, x, y, scale, speed, screen):
         super().__init__()
         self.alive = True
         self.char_type = type
         self.x_coordinate = x
         self.y_coordinate = y
+        self.speed = speed
         self.speed = speed
         self.direction = 1 
         self.vel_y = 0
@@ -23,16 +24,18 @@ class Character(pygame.sprite.Sprite):
         self.attacking = False
         self.attack_cooldown = 0
         self.hit = False
-        self.health = 100
+        self.health = 50   
         self.in_air = True
         self.flip = False
         self.animation_list = []
         self.frame_index = 0
         self.action = 0
         self.update_time = pygame.time.get_ticks()
-        self.target = target
-        self.moving_left = False
-        self.moving_right = False
+        #ai specific variables
+        self.ai_move_counter = 0
+        self.idling = False
+        self.idling_counter = 0
+
 
         #load all images for the players
         animation_types = ['Idle', 'Run', 'Jump', 'Attack','Hit', 'Death']
@@ -53,19 +56,19 @@ class Character(pygame.sprite.Sprite):
         self.rect.center = (x, y)
         self.hit_box = pygame.Rect((x, y, 80, 180))
         self.screen = screen
+    
 
-
-    def move(self):
+    def move(self, moving_left, moving_right):
         #reset movement variables
         dx = 0
         dy = 0
 
         #assign movement variables if moving left or right
-        if self.moving_left and self.hit == False:
+        if moving_left:
             dx = -self.speed
             self.flip = True
             self.direction = -1
-        if self.moving_right and self.hit == False:
+        if moving_right:
             dx = self.speed
             self.flip = False
             self.direction = 1
@@ -105,8 +108,7 @@ class Character(pygame.sprite.Sprite):
     
 
     #update character actions
-    def update(self):
-        self.update_animation()
+    def update(self, moving_left, moving_right, target):
         if self.health <= 0:
             self.health = 0
             self.alive = False
@@ -115,15 +117,14 @@ class Character(pygame.sprite.Sprite):
             self.update_action(4)#4: hit
         elif self.in_air:
             self.update_action(2)#2: jump
-        elif self.moving_left or self.moving_right:
+        elif moving_left or moving_right:
             self.update_action(1)#1: run
         elif self.attacking == True and self.attack_cooldown == 0:
             self.update_action(3)#3: attack
         else:
             self.update_action(0)#0: idle
-        self.move()
+        self.move(moving_left, moving_right)
 
-    def update_animation(self):
         #update animation
         ANIMATION_COOLDOWN = 100
         #update image depending on current frame
@@ -147,11 +148,9 @@ class Character(pygame.sprite.Sprite):
                     if self.attack_cooldown == 0:
                         attacking_rect = pygame.Rect(self.hit_box.centerx - (2 * self.hit_box.width * self.flip), self.hit_box.y, 2 * self.hit_box.width, self.hit_box.height)
                         pygame.draw.rect(self.screen, (0, 255, 0), attacking_rect)
-                        print(attacking_rect)
-                        if attacking_rect.colliderect(self.target.hit_box):
-                            self.target.health -= 10
-                            self.target.hit = True
-                            
+                        if attacking_rect.colliderect(target.hit_box):
+                            target.health -= 10
+                            target.hit = True
                     self.attacking = False
                     self.attack_cooldown = ATK_CD_VAL
                 #check if damage was taken
@@ -160,16 +159,33 @@ class Character(pygame.sprite.Sprite):
                     #if the player was in the middle of an attack, then the attack is stopped
                     self.attacking = False
                     self.attack_cooldown = ATK_CD_VAL
+    
 
-
-    def check_alive(self):
-        if self.health <= 0:
-            self.health = 0
-            self.speed = 0
-            self.alive = False
-            self.update_action(5)
+    def ai(self):
+        if self.alive:     
+            if self.idling == False and random.randint(1, 200) == 1:
+                self.update_action(0)
+                self.idling = True
+                self.idling_counter = 50
+                print(self.idling)
+            if self.idling == False:
+                if self.direction == 1:
+                    ai_moving_rigt = True
+                else:
+                    ai_moving_rigt = False
+                ai_moving_left = not ai_moving_rigt
+                self.update(ai_moving_left, ai_moving_rigt, None)
+                self.ai_move_counter += 1
+                if self.ai_move_counter > TILE_SIZE:
+                    self.direction *= -1
+                    self.ai_move_counter *= -1
+            else:
+                self.idling_counter -= 1
+                if self.idling_counter <= 0:
+                    self.idling = False
 
 
     def draw(self):
         pygame.draw.rect(self.screen, (255, 150, 100), self.hit_box)
         self.screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
+

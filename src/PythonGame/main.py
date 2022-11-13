@@ -1,7 +1,8 @@
 import pygame
 import os
 from Classes import Button
-from Classes import Character
+from Classes.Character import Character
+from Classes.Enemy import Enemy
 
 pygame.init()
 
@@ -18,7 +19,9 @@ FPS = 60
 #define player action variables
 moving_left = False
 moving_right = False
-attack = False
+
+# #get keypresses
+# key = pygame.key.get_pressed()
 
 #define colors
 GREEN = (124,252,0)
@@ -57,8 +60,9 @@ def draw_health_bar(health, x, y):
     pygame.draw.rect(screen, YELLOW, (x, y, 400 * ratio, 30))
 
 #Create player
-player = Character.Character('Player', WIDTH/2, HEIGHT/2 + 100, 0.5, 5, screen)
-enemy = Character.Character('Player', WIDTH/2, HEIGHT/2 + 100, 0.5, 5, screen)
+enemy = Enemy('Player', WIDTH/2, HEIGHT/2 + 100, 0.3, 3, screen, None)
+player = Character('Player', WIDTH/3, HEIGHT/2 + 100, 0.3, 5, screen, enemy)
+
 
 #=====INITIALIZE======
 
@@ -77,27 +81,14 @@ while running:
     else:
         draw_window(screen, bg_img)
         screen.blit(floor_img,(0,725))
-        draw_health_bar(enemy.health, 100, 100)
+        draw_health_bar(enemy.health, 1400, 100)
+        draw_health_bar(player.health, 100, 100)
+        # player.update_animation()
 
-        player.update_animation()
-        player.draw()
+        enemy.update(player)
         enemy.draw()
-        
-
-        player.move(moving_left, moving_right)
-
-    	#update player actions
-        if player.alive:
-            if player.in_air:
-                player.update_action(2)#2: jump
-            elif moving_left or moving_right:
-                player.update_action(1)#1: run
-            elif attack == True:
-                player.update_action(3)
-            else:
-                player.update_action(0)#0: idle
-            player.move(moving_left, moving_right)
-
+        player.update()
+        player.draw()
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -106,25 +97,22 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 running = False
-            if event.key == pygame.K_a:
-                moving_left = True
-            if event.key == pygame.K_d:
-                moving_right = True
-            if event.key == pygame.K_w and player.alive:
-                player.jump = True
-            if event.key == pygame.K_SPACE:
-                attack = True
-            if event.key == pygame.K_SPACE:
-                player.attack(enemy)
+            elif player.attacking == False and player.alive:
+                if event.key == pygame.K_a:
+                    player.moving_left = True
+                if event.key == pygame.K_d:
+                    player.moving_right = True
+                if event.key == pygame.K_w:
+                    player.jump = True
+                if event.key == pygame.K_SPACE:
+                    player.attacking = True
 
         #keyboard button released
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_a:
-                moving_left = False
+                player.moving_left = False
             if event.key == pygame.K_d:
-                moving_right = False
-            if event.key == pygame.K_SPACE:
-                attack = False
+                player.moving_right = False
                 
                
     pygame.display.update()
