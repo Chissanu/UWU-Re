@@ -1,6 +1,7 @@
 import tkinter as tk
 import customtkinter as ctk
 from PIL import Image,ImageTk
+from Database.DB import Database
 
 class DrinkFrame(tk.Frame):
     def __init__(self, parent,drink):
@@ -20,7 +21,7 @@ class DrinkFrame(tk.Frame):
         
         #Fav btn
         self.icon = ImageTk.PhotoImage(Image.open("src\\PythonTkinter\\assets\\heart.png").resize((20,20),Image.ANTIALIAS))
-        button=  ctk.CTkButton(self.canvas, image=self.icon,width=5,height=5,text="",command= self.order,
+        button=  ctk.CTkButton(self.canvas, image=self.icon,width=5,height=5,text="",command= self.favorite,
         borderwidth=0,fg_color="#FF8787",hover_color="#FF8787")
         button.place(x=680,y=82)
         
@@ -35,4 +36,7 @@ class DrinkFrame(tk.Frame):
         print("Order for drink", self.drink["drinkID"]) 
         
     def favorite(self):
+        db = Database()
+        print(db.queryDrinkDB())
         print("I like that shit")
+    

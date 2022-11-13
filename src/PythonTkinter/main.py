@@ -4,7 +4,6 @@ import os
 import json
 from pathlib import Path
 from PIL import ImageTk, Image
-from Classes.VerticalScrolledFrame import VerticalScrolledFrame
 from Classes.DrinkFrame import DrinkFrame
 
 
