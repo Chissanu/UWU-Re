@@ -1,0 +1,23 @@
+# Log in as admin to UWURe DB
+psql -U admin -d uwure
+
+# Admin login password
+uwure
+
+# To check table lists
+\dt
+
+# To drop tables
+drop table <tableName>;
+
+# To drop database
+drop database <databaseName>;
+
+# To create drink_tables table in Postgres
+# drinkName | drinkID(Auto generated) | price | ingredientList | timespressed
+create table drink_tables(drinkName VARCHAR(255),drinkID BIGSERIAL PRIMARY KEY, price INT,ingredientList VARCHAR[6],timesPressed INT[6]);
+
+
+#To create users table in Postgres
+# username | userpass | userID(Auto generated) | userCoins | favdrinkID
+create table users(username VARCHAR(255),userpass VARCHAR(255),userid BIGSERIAL PRIMARY KEY,usercoins INT,favdrinkID INT[]);

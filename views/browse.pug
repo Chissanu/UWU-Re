@@ -1,0 +1,164 @@
+doctype html
+html
+  head
+  body
+    htmll
+      title UwU:Re
+      #main-rec
+        h1#browseLabel Browse
+        #inner-rec
+          input#searchBox(type='text', placeholder='Search')
+          //
+            Example item div
+            <div class="item" style="top:650px;">
+            <h1 id="name">Name</h1>
+            <h1 id="name" style="left: 590px;">THB 55.00</h1>
+            <h2 id="subtext">Created by: None</h2>
+            <h2 id="subtext" style="top: 100px;">Ingredient1</h2>
+            <h2 id="subtext" style="top: 150px;">Ingredient2</h2>
+            <h2 id="subtext" style="top: 200px;">Ingredient3</h2>
+            <h2 id="subtext" style="top: 250px;">Ingredient4</h2>
+            <h2 id="subtext" style="top: 300px;">Ingredient5</h2>
+            <h2 id="subtext" style="top: 350px;">Ingredient6</h2>
+            <button id="order">Order</button>
+            </div>
+    style.
+      @media screen and (max-width: 1000px) {
+      body {
+      background: #859FFD;
+      }
+      #main-rec {
+      position: absolute;
+      left: 4.34%;
+      right: 4.25%;
+      top: 13.61%;
+      bottom: 17.28%;
+      background: #FFF89A;
+      border-radius: 10px;
+      }
+      #inner-rec {
+      position: absolute;
+      left: 2.54%;
+      right: 2.41%;
+      top: 10%;
+      bottom: 5%;
+      background: #DDD4A2;
+      border-radius: 10px;
+      overflow: hidden;
+      overflow-y: scroll;
+      }
+      .item {
+      position: absolute;
+      width: 810px;
+      height: 500px;
+      left: 20px;
+      top: 100px;
+      background: #FF8787;
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+      border-radius: 20px;
+      }
+      .item h1 {
+      position: absolute;
+      font-size: 40px;
+      left: 30px;
+      top: -10px;
+      color: white;
+      }
+      .item h2 {
+      position: absolute;
+      align-items: left;
+      font-size: 30px;
+      left: 30px;
+      top: 50px;
+      font-weight: normal;
+      color: white;
+      }
+      .item button {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 5px 20px;
+      gap: 10px;
+      width: 140px;
+      height: 50px;
+      left: 650px;
+      top: 430px;
+      background: #058ED9;
+      color: white;
+      font-size: 30px;
+      border: 20px;
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+      border-radius: 20px;
+      }
+      #browseLabel {
+      /* Browse */
+      position: absolute;
+      width: 156px;
+      height: 60px;
+      left: 330px;
+      top: 0px;
+      font-family: 'Poppins';
+      font-style: normal;
+      font-weight: 600;
+      font-size: 80px;
+      line-height: 60px;
+      /* identical to box height */
+      text-align: center;
+      letter-spacing: 0.04em;
+      color: #000000;
+      }
+      #searchBox {
+      position: absolute;
+      width: 350px;
+      height: 50px;
+      font-size: 40px;
+      top: 20px;
+      left: 25px;
+      border: none;
+      border-radius: 15px;
+      }
+      }
+    script.
+      var toAdd = document.createDocumentFragment();
+      let start = 100
+
+      //Gen box
+      for (var i = 0; i < 2; i++) {
+      var newDiv = document.createElement('div');
+      // var name = document.createElement('h1');
+      newDiv.id = 'item'+(i+1);
+      newDiv.style = `top:${start}px`
+      newDiv.className = 'item';
+      // newDiv.appendChild(name);
+      toAdd.appendChild(newDiv);
+      start += 550
+      }
+      document.getElementById('inner-rec').appendChild(toAdd);
+      //Gen text
+      const arrayElement = document.querySelectorAll('.item');
+      for(let i = 0; i < arrayElement.length; i++) {
+      const name = document.createElement('h1');
+      const price = document.createElement('h1');
+      const author = document.createElement('h2');
+      const btn = document.createElement('button')
+      name.textContent = "Name";
+      price.textContent = "THB 55.00"
+      price.style = "left:590px"
+      author.textContent = "Created by: None"
+      btn.textContent = "Order"
+      btn.id = "drink" + (i)
+      arrayElement[i].appendChild(name);
+      arrayElement[i].appendChild(price);
+      arrayElement[i].appendChild(author);
+      arrayElement[i].appendChild(btn);
+      let top = 100
+      for(let j = 0; j < 6; j++) {
+      const drink = document.createElement('h2')
+      drink.textContent = "Ingredient" + (j+1)
+      drink.style = `top:${top}px`
+      arrayElement[i].appendChild(drink);
+      top += 50
+      }
+      }

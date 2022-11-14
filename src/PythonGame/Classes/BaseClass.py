@@ -1,43 +1,140 @@
-class Base:
-    def __init__(self,atk,armor,spd,luck,hp):
-        self.atk = 10
-        self.armor = 10
-        self.spd = 10
-        self.luck = 10
-        self.hp = 100
-    
-    def getAtk(self):
-        return self.atk
-    
-    def getArmor(self):
-        return self.armor
-    
-    def getSpd(self):
-        return self.spd
-    
-    def getLuck(self):
-        return self.luck
-    
-    def getHp(self):
-        return self.hp
-    
-    def setAtk(self,newAtk):
-        self.atk = newAtk
-        
-    def setArmor(self,newArmor):
-        self.armor = newArmor
-        
-    def setSpd(self,newSpd):
-        self.spd = newSpd
-        
-    def setLuck(self,newLuck):
-        self.luck = newLuck
-        
-    def setHp(self,newHp):
-        self.hp = newHp
-        
-    def attack(self):
-        pass
+import pygame, sys, os, random
+from pygame.locals import *
 
-        
+
+#class for all character
+class Character(pygame.sprite.Sprite):
+    def __init__(self, type, x, y, scale, speed, screen):
+        super().__init__()
+        CURRENT_PATH = os.getcwd()
+        self.screen = screen
+        self.alive = True
+        self.jump = False
+        self.in_air = True
+        self.flip = False
+        self.attacking = False
+        self.hit = False
+        self.moving_left = False
+        self.moving_right = False
+        self.char_type = type
+        self.speed = speed
+        self.gravity = 0.75
+        self.direction = 1 
+        self.vel_y = 0
+        self.attack_cooldown = 0
+        self.health = 100
+        self.frame_index = 0
+        self.action = 0
+        self.animation_list = []
+        self.update_time = pygame.time.get_ticks()
+
+        #load all images for the players
+        animation_types = ['Idle', 'Run', 'Jump', 'Attack', 'Hit', 'Death']
+        ANIMATION_PATH = CURRENT_PATH + '\\src\\PythonGame\\Assets\\Character_img'
+        for animation in animation_types:
+            #reset temporary list of images
+            temp_list = []
+            #count number of files in the folder
+            num_of_frames = len(os.listdir(ANIMATION_PATH + "\\{}\\{}".format(self.char_type,animation)))
+            for i in range(num_of_frames):
+                img = pygame.image.load(ANIMATION_PATH + "\\{}\\{}\\{}".format(self.char_type,animation,i) + ".png")
+                img = pygame.transform.scale(img, (int(img.get_width() * scale), int(img.get_height() * scale)))
+                temp_list.append(img)
+            self.animation_list.append(temp_list)
+
+        self.image = self.animation_list[self.action][self.frame_index]
+        self.rect = self.image.get_rect()
+        self.rect.center = (x, y)
+        self.hit_box = pygame.Rect(x - 40, y - 40, 80, 120)
+
+
+    def move(self):
+        #reset movement variables
+        dx = 0
+        dy = 0
+
+        #assign movement variables if moving left or right
+        if self.moving_left and self.hit == False:
+            dx = -self.speed
+            self.flip = True
+            self.direction = -1
+        if self.moving_right and self.hit == False:
+            dx = self.speed
+            self.flip = False
+            self.direction = 1
+
+		#jump
+        if self.jump == True and self.in_air == False:
+            self.vel_y = -15
+            self.jump = False
+            self.in_air = True
+
+		#apply gravity
+        self.vel_y += self.gravity
+        dy += self.vel_y
+
+        #check collision with floor
+        if self.rect.bottom + dy > 940:
+            dy = 940 - self.rect.bottom
+            self.in_air = False
+
+        if self.attack_cooldown > 0:
+            self.attack_cooldown -= 1
+
+        #update rectangle position
+        self.rect.x += dx
+        self.hit_box.x += dx
+        self.rect.y += dy
+        self.hit_box.y += dy
+
+
+    def update_action(self, new_action):
+        #check if the new action is different to the previous one
+        if new_action != self.action:
+            self.action = new_action
+            #update the animation settings
+            self.frame_index = 0
+            self.update_time = pygame.time.get_ticks()
     
+
+    #update character actions
+    def update(self):
+        self.update_animation()
+        if self.health <= 0:
+            self.health = 0
+            self.speed = 0
+            self.alive = False
+            self.update_action(5)#5: death
+        elif self.hit == True:
+            self.update_action(4)#4: hit
+        elif self.in_air:
+            self.update_action(2)#2: jump
+        elif self.moving_left or self.moving_right:
+            self.update_action(1)#1: run
+        elif self.attacking == True and self.attack_cooldown == 0:
+            self.update_action(3)#3: attack
+        else:
+            self.update_action(0)#0: idle
+        self.move()
+
+
+    def update_animation(self):
+		#update animation
+        ANIMATION_COOLDOWN = 100
+        #update image depending on current frame
+        self.image = self.animation_list[self.action][self.frame_index]
+        #check if enough time has passed since the last update
+        if pygame.time.get_ticks() - self.update_time > ANIMATION_COOLDOWN:
+            self.update_time = pygame.time.get_ticks()
+            self.frame_index += 1
+        #if the animation has run out the reset back to the start
+        if self.frame_index >= len(self.animation_list[self.action]):
+            if self.action == 3:
+                self.frame_index = len(self.animation_list[self.action]) - 1
+            else:
+                self.frame_index = 0
+
+
+    def draw(self):
+        pygame.draw.rect(self.screen, (255, 150, 100), self.hit_box)
+        self.screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
