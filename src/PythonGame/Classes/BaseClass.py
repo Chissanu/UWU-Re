@@ -16,6 +16,7 @@ class Character(pygame.sprite.Sprite):
         self.hit = False
         self.moving_left = False
         self.moving_right = False
+        self.scale = scale
         self.char_type = type
         self.speed = speed
         self.gravity = 0.75
@@ -25,8 +26,8 @@ class Character(pygame.sprite.Sprite):
         self.health = 100
         self.frame_index = 0
         self.action = 0
-        self.atk_cd_val = 50
         self.animation_list = []
+        self.atk_cd_val = 50
         self.update_time = pygame.time.get_ticks()
 
 
@@ -40,7 +41,7 @@ class Character(pygame.sprite.Sprite):
             num_of_frames = len(os.listdir(ANIMATION_PATH + "\\{}\\{}".format(self.char_type,animation)))
             for i in range(num_of_frames):
                 img = pygame.image.load(ANIMATION_PATH + "\\{}\\{}\\{}".format(self.char_type,animation,i) + ".png").convert_alpha()
-                img = pygame.transform.scale(img, (int(img.get_width() * scale), int(img.get_height() * scale)))
+                img = pygame.transform.scale(img, (int(img.get_width() * self.scale), int(img.get_height() * self.scale)))
                 temp_list.append(img)
             self.animation_list.append(temp_list)
 

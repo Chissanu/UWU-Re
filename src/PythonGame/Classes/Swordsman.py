@@ -45,3 +45,4 @@ class Swordsman(Character):
                     #if the player was in the middle of an attack, then the attack is stopped
                     self.attacking = False
                     self.attack_cooldown = self.atk_cd_val
+                    

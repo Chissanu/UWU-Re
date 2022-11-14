@@ -64,16 +64,16 @@ arrow_group = pygame.sprite.Group()
 
 #Create player
 enemy1 = Enemy('Swordsman', WIDTH/2, 800, 0.3, 3, screen)
-# enemy2 = Enemy('Player', WIDTH/2 + 50, 800, 0.3, 3, screen)
-enemy_group.add(enemy1)
-# enemy_group.add(enemy2)
-player = Swordsman('Swordsman', WIDTH/3, 800, 0.3, 10, screen, enemy1)
-# player = Archer('Archer', WIDTH/3, 800, 0.75, 10, screen, enemy1, arrow_group)
+enemy2 = Enemy('Swordsman', WIDTH/2 + 50, 800, 0.3, 3, screen)
+enemy_group.add(enemy1) 
+enemy_group.add(enemy2)
+# player = Swordsman('Swordsman', WIDTH/3, 800, 0.3, 10, screen, enemy1)
+player = Archer('Archer', WIDTH/3, 800, 0.3, 10, screen, enemy_group, arrow_group)
 
 
 #=====INITIALIZE======
 
-running = True
+running = True 
 while running:
 
     clock.tick(FPS)
@@ -88,17 +88,19 @@ while running:
     else:
         draw_window(screen, bg_img)
         screen.blit(floor_img,(0,725))
-        draw_health_bar(enemy1.health, 1400, 100)
         draw_health_bar(player.health, 100, 100)
 
+        posY = 100
         for enemy in enemy_group:
-                enemy.update(player)
-                enemy.draw()
+            enemy.update(player)
+            enemy.draw()
+            draw_health_bar(enemy.health, 1400, posY) 
+            posY += 50
+
         player.update()
         player.draw()
 
         arrow_group.update(WIDTH)
-        arrow_group.draw(screen)
 
     
     for event in pygame.event.get():
