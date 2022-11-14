@@ -6,8 +6,8 @@ from Classes.BaseClass import Character
 class Swordsman(Character):
     def __init__(self, type, x, y, scale, speed, screen, target):
         super().__init__(type, x, y, scale, speed, screen)
+        self.atk_cd_val = 30 
         self.target = target
-        self.atk_cd_val = 0
 
     def update_animation(self):
         #update animation

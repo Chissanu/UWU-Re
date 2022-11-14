@@ -25,8 +25,10 @@ class Character(pygame.sprite.Sprite):
         self.health = 100
         self.frame_index = 0
         self.action = 0
+        self.atk_cd_val = 50
         self.animation_list = []
         self.update_time = pygame.time.get_ticks()
+
 
         #load all images for the players
         animation_types = ['Idle', 'Run', 'Jump', 'Attack', 'Hit', 'Death']
@@ -37,7 +39,7 @@ class Character(pygame.sprite.Sprite):
             #count number of files in the folder
             num_of_frames = len(os.listdir(ANIMATION_PATH + "\\{}\\{}".format(self.char_type,animation)))
             for i in range(num_of_frames):
-                img = pygame.image.load(ANIMATION_PATH + "\\{}\\{}\\{}".format(self.char_type,animation,i) + ".png")
+                img = pygame.image.load(ANIMATION_PATH + "\\{}\\{}\\{}".format(self.char_type,animation,i) + ".png").convert_alpha()
                 img = pygame.transform.scale(img, (int(img.get_width() * scale), int(img.get_height() * scale)))
                 temp_list.append(img)
             self.animation_list.append(temp_list)
@@ -129,10 +131,26 @@ class Character(pygame.sprite.Sprite):
             self.frame_index += 1
         #if the animation has run out the reset back to the start
         if self.frame_index >= len(self.animation_list[self.action]):
-            if self.action == 3:
+            if self.alive == False:
                 self.frame_index = len(self.animation_list[self.action]) - 1
             else:
                 self.frame_index = 0
+                #check if an attack was executed
+                if self.action == 1 or self.action == 2:
+                    self.attacking = False
+                if self.action == 3:
+                #     if self.attack_cooldown == 0:
+                #         self.target.health -= 10
+                #         self.target.hit = True
+                            
+                    self.attacking = False
+                    self.attack_cooldown = self.atk_cd_val
+                #check if damage was taken
+                if self.action == 4:
+                    self.hit = False
+                    #if the player was in the middle of an attack, then the attack is stopped
+                    self.attacking = False
+                    self.attack_cooldown = self.atk_cd_val
 
 
     def draw(self):

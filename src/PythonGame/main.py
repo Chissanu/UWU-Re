@@ -33,15 +33,15 @@ BLACK = (0, 0, 0)
 CURRENT_PATH = os.getcwd()
 #background
 BG_PATH = CURRENT_PATH + "\\src\\PythonGame\\Assets\\Background"
-bg_img = pygame.image.load(BG_PATH + "\\paper.jpg")
+bg_img = pygame.image.load(BG_PATH + "\\paper.jpg").convert_alpha()
 bg_img = pygame.transform.scale(bg_img,SIZE)
 scale = 2
-floor_img = pygame.image.load(BG_PATH + "\\ruler20.png")
+floor_img = pygame.image.load(BG_PATH + "\\ruler20.png").convert_alpha()
 floor_img = pygame.transform.scale(floor_img, (int(floor_img.get_width() * scale), int(floor_img.get_height() * scale)))
 #button images
 BTN_PATH = CURRENT_PATH + "\\src\\PythonGame\\Assets\\Button_img"
-start_img = pygame.image.load(BTN_PATH + "\\start_btn.png")
-exit_img = pygame.image.load(BTN_PATH + "\\exit_btn.png")
+start_img = pygame.image.load(BTN_PATH + "\\start_btn.png").convert_alpha()
+exit_img = pygame.image.load(BTN_PATH + "\\exit_btn.png").convert_alpha()
 
 #create buttons
 start_button = Button.Button(WIDTH/4 - start_img.get_width()/2, HEIGHT/2, start_img, 1.5)
@@ -60,15 +60,15 @@ def draw_health_bar(health, x, y):
 
 #create sprite groups
 enemy_group = pygame.sprite.Group()
+arrow_group = pygame.sprite.Group()
 
 #Create player
-enemy1 = Enemy('Swordsman', WIDTH/2, 800, 0.75, 3, screen)
+enemy1 = Enemy('Swordsman', WIDTH/2, 800, 0.3, 3, screen)
 # enemy2 = Enemy('Player', WIDTH/2 + 50, 800, 0.3, 3, screen)
 enemy_group.add(enemy1)
 # enemy_group.add(enemy2)
-print(enemy_group)
-# player = Swordsman('Swordsman', WIDTH/3, 800, 0.75, 8, screen, enemy1)
-player = Archer('Archer', WIDTH/3, 800, 1, 0.75, screen)
+player = Swordsman('Swordsman', WIDTH/3, 800, 0.3, 10, screen, enemy1)
+# player = Archer('Archer', WIDTH/3, 800, 0.75, 10, screen, enemy1, arrow_group)
 
 
 #=====INITIALIZE======
@@ -96,6 +96,10 @@ while running:
                 enemy.draw()
         player.update()
         player.draw()
+
+        arrow_group.update(WIDTH)
+        arrow_group.draw(screen)
+
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

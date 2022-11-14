@@ -14,7 +14,7 @@ class Enemy(Character):
         self.vision = pygame.Rect(0, 0, 350, 20)
         self.vision_x = self.vision.x
         self.attack_box_multiplier = 1.5
-        self.atk_cd_val = 30
+        self.atk_cd_val = 50
         self.tile_size = 100
         self.original_speed = self.speed
         self.increase_speed = 5
