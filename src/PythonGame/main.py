@@ -61,12 +61,12 @@ def draw_health_bar(health, x, y):
 enemy_group = pygame.sprite.Group()
 
 #Create player
-enemy1 = Enemy('Player', WIDTH/2, 800, 0.3, 3, screen)
+enemy1 = Enemy('Player', WIDTH/2, 800, 1, 3, screen)
 # enemy2 = Enemy('Player', WIDTH/2 + 50, 800, 0.3, 3, screen)
 enemy_group.add(enemy1)
 # enemy_group.add(enemy2)
 print(enemy_group)
-player = Swordsman('Player', WIDTH/3, 800, 0.3, 8, screen, enemy1)
+player = Swordsman('Player', WIDTH/3, 800, 1, 8, screen, enemy1)
 
 
 #=====INITIALIZE======
