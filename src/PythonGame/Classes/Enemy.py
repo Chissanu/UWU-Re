@@ -1,23 +1,23 @@
 import pygame, sys, os, random
 from pygame.locals import *
-from Classes.Character import Character
-
-CURRENT_PATH = os.getcwd()
+from Classes.BaseClass import Character
 
 #define game variables
-GRAVITY = 0.75
-ATK_CD_VAL = 50
-TILE_SIZE = 300
 
 class Enemy(Character):
-    def __init__(self, type, x, y, scale, speed, screen, target):
-        super().__init__(type, x, y, scale, speed, screen, target)
+    def __init__(self, type, x, y, scale, speed, screen):
+        super().__init__(type, x, y, scale, speed, screen)
         self.health = 100
         self.move_counter = 0
         self.idling = False
         self.idling_counter = 0
         self.vision = pygame.Rect(0, 0, 350, 20)
-        self.attack_box_extend = 1.5
+        self.vision_x = self.vision.x
+        self.attack_box_multiplier = 1.5
+        self.atk_cd_val = 30
+        self.tile_size = 100
+        self.original_speed = self.speed
+        self.increase_speed = 5
 
     
     def move(self, moving_left, moving_right):
@@ -42,7 +42,7 @@ class Enemy(Character):
             self.in_air = True
 
 		#apply gravity
-        self.vel_y += GRAVITY
+        self.vel_y += self.gravity
         dy += self.vel_y
 
         #check collision with floor
@@ -64,66 +64,41 @@ class Enemy(Character):
             self.update_action(5)#5: death
         elif self.hit == True:
             self.update_action(4)#4: hit
-            print("player:", target.rect.centerx)
-            print("enemmy:", self.rect.centerx)
-            # if target.rect.centerx < self.rect.centerx:
-            #     self.direction *= -1
-            #     self.move_counter *= -1
-            # else:
-            #     self.direction *= -1
-            #     self.move_counter *= -1
-            self.direction *= -1
-            self.move_counter *= -1
+            if target.rect.centerx > self.rect.centerx:
+                if self.direction == -1:
+                    self.direction *= -1
+                    self.move_counter *= -1
+            else:
+                if self.direction == 1:
+                    self.direction *= -1
+                    self.move_counter *= -1
+
         elif self.attacking == True or self.attack_cooldown > 0:
             if self.attack_cooldown == 0:
                 self.update_action(3)#3: attack
             else:
                 self.update_action(0)
         #check if the ai in near the player
-        elif (self.vision.colliderect(target.hit_box) and self.attack_cooldown == 0) or self.hit == True:
-            check_attack_rect = pygame.Rect(self.hit_box.centerx - (self.attack_box_extend * self.hit_box.width * self.flip),
+        elif self.vision.colliderect(target.hit_box) and self.attack_cooldown == 0:
+            self.speed = self.increase_speed
+            check_attack_rect = pygame.Rect(self.hit_box.centerx - (self.attack_box_multiplier * self.hit_box.width * self.flip),
             self.hit_box.y,
-            self.attack_box_extend * self.hit_box.width,
+            self.attack_box_multiplier * self.hit_box.width,
             self.hit_box.height)
             pygame.draw.rect(self.screen, (0, 255, 255), check_attack_rect)
             if not check_attack_rect.colliderect(target.hit_box):
-                if self.direction == 1:
-                    self.moving_right = True
-                else:
-                    self.moving_right = False
-                self.moving_left = not self.moving_right
-                self.move(self.moving_left, self.moving_right)
-                self.update_action(1)#1: run
-                self.move_counter += 1
-                #update enemy vision as its moves
-                self.vision.center = (self.rect.centerx + 50 * self.direction, self.rect.centery +50)
-                pygame.draw.rect(self.screen, (255, 0, 0), self.vision)
-                if self.move_counter > TILE_SIZE:
-                    self.direction *= -1
-                    self.move_counter *= -1
+                self.trigger_vision()
             else:
                 self.attacking = True
         else: 
-            if self.idling == False and random.randint(1, 200) == 0:
-                # self.update_action(0)#0: idle
+            self.speed = self.original_speed
+            if self.idling == False and random.randint(1, 200) == 1:
+                self.update_action(0)#0: idle
                 self.idling = True
                 self.idling_counter = 50
             
             elif self.idling == False:   
-                if self.direction == 1:
-                    self.moving_right = True
-                else:
-                    self.moving_right = False
-                self.moving_left = not self.moving_right
-                self.move(self.moving_left, self.moving_right)
-                self.update_action(1)#1: run
-                self.move_counter += 1
-                #update enemy vision as its moves
-                self.vision.center = (self.rect.centerx + 50 * self.direction, self.rect.centery +50)
-                pygame.draw.rect(self.screen, (255, 0, 0), self.vision)
-                if self.move_counter > TILE_SIZE:
-                    self.direction *= -1
-                    self.move_counter *= -1
+                self.trigger_vision()
             else:
                 self.idling_counter -= 1
                 if self.idling_counter <= 0:
@@ -131,7 +106,25 @@ class Enemy(Character):
         
         if self.attack_cooldown > 0:
             self.attack_cooldown -= 1
-    
+
+
+    def trigger_vision(self):
+        if self.direction == 1:
+            self.moving_right = True
+        else:
+            self.moving_right = False
+        self.moving_left = not self.moving_right
+        self.move(self.moving_left, self.moving_right)
+        self.update_action(1)#1: run
+        self.move_counter += 1
+        #update enemy vision as its moves
+        self.vision.center = (self.rect.centerx + self.vision.width/2 * self.direction, self.rect.centery +50)
+        pygame.draw.rect(self.screen, (255, 0, 0), self.vision)
+        if self.move_counter > self.tile_size:
+            self.direction *= -1
+            self.move_counter *= -1
+
+
     def update_animation(self, target):
         #update animation
         ANIMATION_COOLDOWN = 100
@@ -154,9 +147,9 @@ class Enemy(Character):
                     self.attacking = False
                 if self.action == 3:
                     if self.attack_cooldown == 0:
-                        attacking_rect = pygame.Rect(self.hit_box.centerx - (self.attack_box_extend * self.hit_box.width * self.flip), 
+                        attacking_rect = pygame.Rect(self.hit_box.centerx - (self.attack_box_multiplier* self.hit_box.width * self.flip), 
                         self.hit_box.y, 
-                        self.attack_box_extend * self.hit_box.width, 
+                        self.attack_box_multiplier * self.hit_box.width, 
                         self.hit_box.height)
                         pygame.draw.rect(self.screen, (0, 255, 0), attacking_rect)
                         if attacking_rect.colliderect(target.hit_box):
@@ -164,27 +157,11 @@ class Enemy(Character):
                             target.hit = True
                             
                     self.attacking = False
-                    self.attack_cooldown = ATK_CD_VAL
+                    self.attack_cooldown = self.atk_cd_val
                 #check if damage was taken
                 if self.action == 4:
                     self.hit = False
                     #if the player was in the middle of an attack, then the attack is stopped
                     self.attacking = False
-                    self.attack_cooldown = ATK_CD_VAL
-
-        # elif self.in_air:
-        #     self.update_action(2)#2: jump
-        # elif self.moving_left or self.moving_right:
-        #     self.update_action(1)#1: run
-        # else:
-        #     self.update_action(0)#0: idle
-
-
-    def update_action(self, new_action):
-        #check if the new action is different to the previous one
-        if new_action != self.action:
-            self.action = new_action
-            #update the animation settings
-            self.frame_index = 0
-            self.update_time = pygame.time.get_ticks()
+                    self.attack_cooldown = self.atk_cd_val
 

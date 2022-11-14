@@ -1,41 +1,35 @@
 import pygame, sys, os, random
 from pygame.locals import *
 
-CURRENT_PATH = os.getcwd()
-
-#define game variables
-GRAVITY = 0.75
-ATK_CD_VAL = 30
-TILE_SIZE = 40
 
 #class for all character
 class Character(pygame.sprite.Sprite):
-    def __init__(self, type, x, y, scale, speed, screen, target):
+    def __init__(self, type, x, y, scale, speed, screen):
         super().__init__()
+        CURRENT_PATH = os.getcwd()
+        self.screen = screen
         self.alive = True
-        self.char_type = type
-        self.x_coordinate = x
-        self.y_coordinate = y
-        self.speed = speed
-        self.direction = 1 
-        self.vel_y = 0
         self.jump = False
-        self.attacking = False
-        self.attack_cooldown = 0
-        self.hit = False
-        self.health = 100
         self.in_air = True
         self.flip = False
-        self.animation_list = []
-        self.frame_index = 0
-        self.action = 0
-        self.update_time = pygame.time.get_ticks()
-        self.target = target
+        self.attacking = False
+        self.hit = False
         self.moving_left = False
         self.moving_right = False
+        self.char_type = type
+        self.speed = speed
+        self.gravity = 0.75
+        self.direction = 1 
+        self.vel_y = 0
+        self.attack_cooldown = 0
+        self.health = 100
+        self.frame_index = 0
+        self.action = 0
+        self.animation_list = []
+        self.update_time = pygame.time.get_ticks()
 
         #load all images for the players
-        animation_types = ['Idle', 'Run', 'Jump', 'Attack','Hit', 'Death']
+        animation_types = ['Idle', 'Run', 'Jump', 'Attack', 'Hit', 'Death']
         ANIMATION_PATH = CURRENT_PATH + '\\src\\PythonGame\\Assets\\Character_img'
         for animation in animation_types:
             #reset temporary list of images
@@ -51,8 +45,7 @@ class Character(pygame.sprite.Sprite):
         self.image = self.animation_list[self.action][self.frame_index]
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
-        self.hit_box = pygame.Rect(x - 40, y-40, 80, 120)
-        self.screen = screen
+        self.hit_box = pygame.Rect(x - 40, y - 40, 80, 120)
 
 
     def move(self):
@@ -77,7 +70,7 @@ class Character(pygame.sprite.Sprite):
             self.in_air = True
 
 		#apply gravity
-        self.vel_y += GRAVITY
+        self.vel_y += self.gravity
         dy += self.vel_y
 
         #check collision with floor
@@ -109,6 +102,7 @@ class Character(pygame.sprite.Sprite):
         self.update_animation()
         if self.health <= 0:
             self.health = 0
+            self.speed = 0
             self.alive = False
             self.update_action(5)#5: death
         elif self.hit == True:
@@ -123,8 +117,9 @@ class Character(pygame.sprite.Sprite):
             self.update_action(0)#0: idle
         self.move()
 
+
     def update_animation(self):
-        #update animation
+		#update animation
         ANIMATION_COOLDOWN = 100
         #update image depending on current frame
         self.image = self.animation_list[self.action][self.frame_index]
@@ -132,42 +127,12 @@ class Character(pygame.sprite.Sprite):
         if pygame.time.get_ticks() - self.update_time > ANIMATION_COOLDOWN:
             self.update_time = pygame.time.get_ticks()
             self.frame_index += 1
-                
         #if the animation has run out the reset back to the start
         if self.frame_index >= len(self.animation_list[self.action]):
-            #if the player is dead then end the animation
-            if self.alive == False:
+            if self.action == 3:
                 self.frame_index = len(self.animation_list[self.action]) - 1
             else:
                 self.frame_index = 0
-                #check if an attack was executed
-                if self.action == 1 or self.action == 2:
-                    self.attacking = False
-                if self.action == 3:
-                    if self.attack_cooldown == 0:
-                        attacking_rect = pygame.Rect(self.hit_box.centerx - (2 * self.hit_box.width * self.flip), self.hit_box.y, 2 * self.hit_box.width, self.hit_box.height)
-                        pygame.draw.rect(self.screen, (0, 255, 0), attacking_rect)
-                        print(attacking_rect)
-                        if attacking_rect.colliderect(self.target.hit_box):
-                            self.target.health -= 1
-                            self.target.hit = True
-                            
-                    self.attacking = False
-                    self.attack_cooldown = ATK_CD_VAL
-                #check if damage was taken
-                if self.action == 4:
-                    self.hit = False
-                    #if the player was in the middle of an attack, then the attack is stopped
-                    self.attacking = False
-                    self.attack_cooldown = ATK_CD_VAL
-
-
-    def check_alive(self):
-        if self.health <= 0:
-            self.health = 0
-            self.speed = 0
-            self.alive = False
-            self.update_action(5)
 
 
     def draw(self):

@@ -1,7 +1,7 @@
 import pygame
 import os
 from Classes import Button
-from Classes.Character import Character
+from Classes.Swordsman import Swordsman
 from Classes.Enemy import Enemy
 
 pygame.init()
@@ -61,12 +61,12 @@ def draw_health_bar(health, x, y):
 enemy_group = pygame.sprite.Group()
 
 #Create player
-enemy1 = Enemy('Player', WIDTH/2, floor, 0.3, 3, screen, None)
-# enemy2 = Enemy('Player', WIDTH/2 + 50, floor, 0.3, 3, screen, None)
+enemy1 = Enemy('Player', WIDTH/2, 800, 0.3, 3, screen)
+# enemy2 = Enemy('Player', WIDTH/2 + 50, 800, 0.3, 3, screen)
 enemy_group.add(enemy1)
 # enemy_group.add(enemy2)
 print(enemy_group)
-player = Character('Player', WIDTH/3, floor, 0.3, 8, screen, enemy1)
+player = Swordsman('Player', WIDTH/3, 800, 0.3, 8, screen, enemy1)
 
 
 #=====INITIALIZE======
@@ -88,7 +88,6 @@ while running:
         screen.blit(floor_img,(0,725))
         draw_health_bar(enemy1.health, 1400, 100)
         draw_health_bar(player.health, 100, 100)
-        # player.update_animation()
 
         for enemy in enemy_group:
                 enemy.update(player)
