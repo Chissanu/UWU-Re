@@ -51,16 +51,21 @@ class Database:
       else:
          print(data)
          
-   def addFavorite(self):
+   def addFavorite(self,newDrinkID):
       cur = con.cursor()
-      val = (1,[2,3])
-      sql = "INSERT INTO users(username,favdrinkID) VALUES(%s,%s)"
-      cur.execute(sql,val)
-      con.commit()
+      sql = "SELECT favdrinkid from users where userid = 1"
+      cur.execute(sql)
+      userDatas = list(cur.fetchall()[0])
+      if userDatas[0] == None:
+         userDatas.pop(0)
+         userDatas.append(newDrinkID)
+         
+      print(userDatas)
+      #con.commit()
       con.close()
 
 db = Database()
-db.addFavorite()
+db.addFavorite(5)
 # def main():
 #    ingredientList = []
 #    drinkList = []
