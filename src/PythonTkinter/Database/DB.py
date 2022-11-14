@@ -51,21 +51,47 @@ class Database:
       else:
          print(data)
          
-   def addFavorite(self,newDrinkID):
+   def addFavorite(self,drinkID,userID):
       cur = con.cursor()
-      sql = "SELECT favdrinkid from users where userid = 1"
-      cur.execute(sql)
-      userDatas = list(cur.fetchall()[0])
-      if userDatas[0] == None:
-         userDatas.pop(0)
-         userDatas.append(newDrinkID)
+      # sql = "SELECT favdrinkid from users where userid = 2"
+      searchSQL = "SELECT favdrinkid from users where userID = {userID}".format(userID = userID)
+      cur.execute(searchSQL)
+      con.commit()
+      try:
+         userDatas = cur.fetchall()[0][0]
+         newDrinkList = []
+         print(userDatas)
+         if userDatas == None:
+            userDatas.pop(0)
+            updateSQL = "UPDATE users SET favdrinkid = '{arr}' where userid = {userID};".format(arr = drinkID,userID = userID)
+      except:
+         print("Empty")
          
-      print(userDatas)
-      #con.commit()
+      con.commit()
       con.close()
+      
+      # if userDatas[0]:
+      #    data = set([drinkID])
+      #    #updateSQL = "UPDATE users SET favdrinkid = '{arr}' where userid = {userID};".format(arr = data,userID = userID)
+      #    print("That user doesn't have favorite")
+      # else:
+      #    for data in userDatas[0][0]:
+      #       newDrinkList.append(data)
+      #    updateSQL = "UPDATE users SET favdrinkid = '{arr}' where userid = {userID};".format(arr = set(newDrinkList),userID = userID)
+      
+      # else:
+      #    newDrinkList = userDatas[0][0]
+         
+      # if userDatas[0] == None:
+      #    userDatas.pop(0)
+      #    userDatas.append(newDrinkID)
+         
+      #print(userDatas[0][0])
+      #con.commit()
+      #cur.execute(updateSQL)
 
 db = Database()
-db.addFavorite(5)
+db.addFavorite(14,3)
 # def main():
 #    ingredientList = []
 #    drinkList = []
