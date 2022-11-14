@@ -95,7 +95,28 @@ class Character(pygame.sprite.Sprite):
             #update the animation settings
             self.frame_index = 0
             self.update_time = pygame.time.get_ticks()
-            
+    
+
+    #update character actions
+    def update(self):
+        self.update_animation()
+        if self.health <= 0:
+            self.health = 0
+            self.speed = 0
+            self.alive = False
+            self.update_action(5)#5: death
+        elif self.hit == True:
+            self.update_action(4)#4: hit
+        elif self.in_air:
+            self.update_action(2)#2: jump
+        elif self.moving_left or self.moving_right:
+            self.update_action(1)#1: run
+        elif self.attacking == True and self.attack_cooldown == 0:
+            self.update_action(3)#3: attack
+        else:
+            self.update_action(0)#0: idle
+        self.move()
+
 
     def update_animation(self):
 		#update animation
