@@ -70,6 +70,43 @@ class App(ctk.CTk):
         self.profileName = "Chissanu"
         self.coin = "Coins:" + str(1000)
         self.drinkList = {}
+        """
+        ======================================
+                    Log in FRAME
+        ======================================
+        """
+        #Frame & Canvas Creation
+        self.loginFrame = ctk.CTkFrame(self,width=WIDTH,height=HEIGHT,fg_color=BLUE_BG)
+        self.loginCanvas = ctk.CTkCanvas(self.loginFrame,width=WIDTH,height=HEIGHT,bg=BLUE_BG,highlightthickness=0)
+        
+        # Create Logo
+        nameLabel1 = ctk.CTkLabel(self.loginCanvas,text="UwU:",text_font=("Inter",80),text_color="white")
+        nameLabel1.place(x=750,y=50)
+        nameLabel2 = ctk.CTkLabel(self.loginCanvas,text="Re",text_font=("Inter",80),text_color="black")
+        nameLabel2.place(x=1015,y=50)
+        line = self.loginCanvas.create_line(750,180,1160,180, fill="white", width=10) 
+        
+        #Create profile icon
+        img = ImageTk.PhotoImage(Image.open(self.profileIconPath).resize((300,300)))
+        profile.append(img)
+        self.loginCanvas.create_image(800,220,anchor=tk.NW,image=img)
+        
+        signinBtn = ctk.CTkButton(self.loginFrame,
+                                    width=500,
+                                    height=140,
+                                    text="Sign in with QR Code",
+                                    text_font=("Inter",50, 'bold'),
+                                    text_color="white",
+                                    corner_radius=30,
+                                    hover_color=("#4166EA"),
+                                    fg_color="#0938DC",
+                                    command=lambda :self.change_frame(self.mainFrame,"browse"))
+        signinBtn.place(x=580,y=600)
+        
+        
+        #Pack Frame & Canvas
+        self.loginCanvas.pack(fill="both", expand=1)
+        self.loginFrame.pack(fill="both", expand=1)
         
         """
         ======================================
@@ -77,8 +114,8 @@ class App(ctk.CTk):
         ======================================
         """
         #Frame & Canvas creation
-        self.mainFrame = ctk.CTkFrame(self,width=WIDTH,height=HEIGHT,fg_color=BLUE_BG)
-        self.mainCanvas = ctk.CTkCanvas(self.mainFrame,width=WIDTH,height=HEIGHT,bg=BLUE_BG,highlightthickness=0)
+        self.mainFrame = ctk.CTkFrame(self.loginFrame,width=WIDTH,height=HEIGHT,fg_color=BLUE_BG)
+        self.mainCanvas = ctk.CTkCanvas(self.loginFrame,width=WIDTH,height=HEIGHT,bg=BLUE_BG,highlightthickness=0)
         
         #Logo Label
         self.nameLabel1 = ctk.CTkLabel(self.mainCanvas,text="UwU:",text_font=("Inter",180),text_color="white")
@@ -172,8 +209,6 @@ class App(ctk.CTk):
         print(altura)
         second_frame.configure(height=altura)
         
-        
-        
         #All Frame Label
         allLab = ctk.CTkLabel(self.browseItemFrame,text="All",text_font=("Inter",40),text_color="black")
         allLab.place(x=-10,y=30)
@@ -198,8 +233,8 @@ class App(ctk.CTk):
         """
         #Pack Frame & Canvas
         self.browseItemCanvas.bind_all("<MouseWheel>",self._on_mouse_wheel)
-        self.mainCanvas.pack(fill="both", expand=1)
-        self.mainFrame.pack(fill="both", expand=1)
+        # self.mainCanvas.pack(fill="both", expand=1)
+        # self.mainFrame.pack(fill="both", expand=1)
         
     
     def change_frame(self,oldFrame,newFrame):
@@ -215,12 +250,12 @@ class App(ctk.CTk):
             self.randomCanvas.pack(fill="both", expand=1)
         print(newFrame)
 
-    def button_callback(self):
+    def signin(self):
         print("button pressed")
         
     def _on_mouse_wheel(self,event):
         self.browseItemCanvas.yview_scroll(-1 * int((event.delta / 120)), "units")
-    
+        
     def quit(self,e):
         self.destroy()
     
