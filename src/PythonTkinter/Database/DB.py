@@ -56,54 +56,25 @@ class Database:
       # sql = "SELECT favdrinkid from users where userid = 2"
       searchSQL = "SELECT favdrinkid from users where userID = {userID}".format(userID = userID)
       cur.execute(searchSQL)
-      con.commit()
-      try:
-         userDatas = cur.fetchall()[0][0]
-         newDrinkList = []
-         print(userDatas)
-         if userDatas == None:
-            userDatas.pop(0)
-            updateSQL = "UPDATE users SET favdrinkid = '{arr}' where userid = {userID};".format(arr = drinkID,userID = userID)
-      except:
-         print("Empty")
-         
-      con.commit()
-      con.close()
-      
-      # if userDatas[0]:
-      #    data = set([drinkID])
-      #    #updateSQL = "UPDATE users SET favdrinkid = '{arr}' where userid = {userID};".format(arr = data,userID = userID)
-      #    print("That user doesn't have favorite")
-      # else:
-      #    for data in userDatas[0][0]:
-      #       newDrinkList.append(data)
-      #    updateSQL = "UPDATE users SET favdrinkid = '{arr}' where userid = {userID};".format(arr = set(newDrinkList),userID = userID)
-      
-      # else:
-      #    newDrinkList = userDatas[0][0]
-         
-      # if userDatas[0] == None:
-      #    userDatas.pop(0)
-      #    userDatas.append(newDrinkID)
-         
-      #print(userDatas[0][0])
-      #con.commit()
-      #cur.execute(updateSQL)
+      userDatas = cur.fetchall()[0][0]
+      drinkArr = []
+      print(userDatas)
+      if userDatas:
+         #Array not empty 
+         userDatas.append(drinkID)
+         updateSQL = "UPDATE users SET favdrinkid = '{arr}' where userid = {userID};".format(arr = set(userDatas),userID = userID)
+         print("Foo")
+      else:
+         #Array empty
+         drinks = {drinkID}
+         updateSQL = "UPDATE users SET favdrinkid = '{arr}' where userid = {userID};".format(arr = drinks,userID = userID)
+         print("Bar")
 
-db = Database()
-db.addFavorite(14,3)
-# def main():
-#    ingredientList = []
-#    drinkList = []
-#    drinkName = input("What's the drink name? > ")
-#    for i in range(6):
-#       text = "How much ML for Drink {drinkNum}: >".format(drinkNum = i+1)
-#       ml = int(input(text))
-#       name = input("What's the ingredient name? >")
-#       ingredientList.append(name)
-#       drinkList.append(ml)
-   
-#    val = (drinkName,ingredientList,drinkList)
-#    self.insertDrink(val)
-#    print(drinkList)
-   
+      print(updateSQL)
+      cur.execute(updateSQL)
+      con.commit()
+      
+      con.close()
+
+# db = Database()
+# db.addFavorite(5,3)

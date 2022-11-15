@@ -4,6 +4,7 @@ tk
 customtkinter
 pillow
 serial
+qrcode
 
 
 NPM:

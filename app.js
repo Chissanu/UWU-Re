@@ -28,9 +28,13 @@ app.get('/browse', function(req, res, next) {
 });
 
 app.get('/favorite', function(req, res, next) {
-    console.log(drinkList);
     res.render('favorite', { drinksName: drinkList.drinkname });
 });
+
+app.get('/login', function(req, res, next) {
+    res.render('login', { drinksName: drinkList.drinkname });
+});
+
 
 const setDrinkList = (rows) => {
     drinkList = rows;

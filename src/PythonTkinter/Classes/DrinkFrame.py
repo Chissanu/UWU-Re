@@ -35,8 +35,8 @@ class DrinkFrame(tk.Frame):
     def order(self):
         print("Order for drink", self.drink["drinkID"]) 
         
-    def favorite(self):
+    def favorite(self,userID,drinkID):
         db = Database()
-        print(db.queryDrinkDB())
+        #db.addFavorite(userID,drinkID)
         print("I like that shit")
     

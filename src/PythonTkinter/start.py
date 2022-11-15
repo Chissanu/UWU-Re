@@ -9,7 +9,7 @@ con = psycopg2.connect(
    port= '5432'
 )
 
-
+    
 def main():
     #Log in screen
     app = App("Chissanu",1000)
