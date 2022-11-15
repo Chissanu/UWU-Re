@@ -79,8 +79,17 @@ def sortDrink():
     
     for val in sortedDrink:
         print(val["drinkName"])
+
+def genRandomDrink(value):
+    #Input = 8
+    #Output = [2,1,1,2,1,1] should be equal to input
     
-sortDrink()
+    drinkArr = []
+    return drinkArr
+
+
+# sortDrink()
+print(genRandomDrink(10))
 # while True:
 #     drink.dispense()
     
