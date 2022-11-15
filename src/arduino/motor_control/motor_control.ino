@@ -94,7 +94,7 @@ int calibrate(String axis, Stepper x_stepper, Stepper z_stepper){
     delay(5000);
     z_stepper.step(zMaxSteps); // to not push button
     Serial.println("z calibration complete");
-    Serial.println(zMaxSteps - 10);
+    Serial.println(zMaxSteps);
     return zMaxSteps;
   }
 }
