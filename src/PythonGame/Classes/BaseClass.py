@@ -102,7 +102,6 @@ class Character(pygame.sprite.Sprite):
 
     #update character actions
     def update(self):
-        self.update_animation()
         if self.health <= 0:
             self.health = 0
             self.speed = 0
@@ -114,10 +113,11 @@ class Character(pygame.sprite.Sprite):
             self.update_action(2)#2: jump
         elif self.moving_left or self.moving_right:
             self.update_action(1)#1: run
-        elif self.attacking == True and self.attack_cooldown == 0:
+        elif self.attacking == True:
             self.update_action(3)#3: attack
         else:
             self.update_action(0)#0: idle
+        self.update_animation()
         self.move()
 
 
@@ -130,6 +130,7 @@ class Character(pygame.sprite.Sprite):
         if pygame.time.get_ticks() - self.update_time > ANIMATION_COOLDOWN:
             self.update_time = pygame.time.get_ticks()
             self.frame_index += 1
+            # print(self.frame_index)
         #if the animation has run out the reset back to the start
         if self.frame_index >= len(self.animation_list[self.action]):
             if self.alive == False:
@@ -139,11 +140,7 @@ class Character(pygame.sprite.Sprite):
                 #check if an attack was executed
                 if self.action == 1 or self.action == 2:
                     self.attacking = False
-                if self.action == 3:
-                #     if self.attack_cooldown == 0:
-                #         self.target.health -= 10
-                #         self.target.hit = True
-                            
+                if self.action == 3:                  
                     self.attacking = False
                     self.attack_cooldown = self.atk_cd_val
                 #check if damage was taken
@@ -152,6 +149,8 @@ class Character(pygame.sprite.Sprite):
                     #if the player was in the middle of an attack, then the attack is stopped
                     self.attacking = False
                     self.attack_cooldown = self.atk_cd_val
+
+    
 
 
     def draw(self):

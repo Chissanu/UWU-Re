@@ -4,10 +4,12 @@ from Classes.BaseClass import Character
 
 
 class Swordsman(Character):
-    def __init__(self, type, x, y, scale, speed, screen, target):
+    def __init__(self, type, x, y, scale, speed, screen, target_group):
         super().__init__(type, x, y, scale, speed, screen)
         self.atk_cd_val = 30 
-        self.target = target
+        self.health = 100
+        self.target_group = target_group
+        
 
     def update_animation(self):
         #update animation
@@ -30,12 +32,15 @@ class Swordsman(Character):
                 if self.action == 1 or self.action == 2:
                     self.attacking = False
                 if self.action == 3:
-                    if self.attack_cooldown == 0:
-                        attacking_rect = pygame.Rect(self.hit_box.centerx - (2 * self.hit_box.width * self.flip), self.hit_box.y, 2 * self.hit_box.width, self.hit_box.height)
-                        pygame.draw.rect(self.screen, (0, 255, 0), attacking_rect)
-                        if attacking_rect.colliderect(self.target.hit_box):
-                            self.target.health -= 10
-                            self.target.hit = True
+                    attacking_rect = pygame.Rect(self.hit_box.centerx - (2 * self.hit_box.width * self.flip), self.hit_box.y, 2 * self.hit_box.width, self.hit_box.height)
+                    pygame.draw.rect(self.screen, (0, 255, 0), attacking_rect)
+                    for enemy in self.target_group:
+                        if attacking_rect.colliderect(enemy.hit_box):
+                            if enemy.alive:
+                                enemy.health -= 10
+                                enemy.hit = True
+                            else:
+                                enemy.kill()
                             
                     self.attacking = False
                     self.attack_cooldown = self.atk_cd_val

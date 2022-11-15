@@ -73,13 +73,13 @@ class Enemy(Character):
                     self.direction *= -1
                     self.move_counter *= -1
 
-        elif self.attacking == True or self.attack_cooldown > 0:
+        elif self.attacking == True:
             if self.attack_cooldown == 0:
                 self.update_action(3)#3: attack
             else:
                 self.update_action(0)
         #check if the ai in near the player
-        elif self.vision.colliderect(target.hit_box) and self.attack_cooldown == 0:
+        elif self.vision.colliderect(target.hit_box) and target.alive:
             self.speed = self.increase_speed
             check_attack_rect = pygame.Rect(self.hit_box.centerx - (self.attack_box_multiplier * self.hit_box.width * self.flip),
             self.hit_box.y,
@@ -87,19 +87,21 @@ class Enemy(Character):
             self.hit_box.height)
             pygame.draw.rect(self.screen, (0, 255, 255), check_attack_rect)
             if not check_attack_rect.colliderect(target.hit_box):
-                self.trigger_vision()
+                self.patrol()
             else:
                 self.attacking = True
         else: 
             self.speed = self.original_speed
             if self.idling == False and random.randint(1, 200) == 1:
+                print("here")
                 self.update_action(0)#0: idle
                 self.idling = True
                 self.idling_counter = 50
             
             elif self.idling == False:   
-                self.trigger_vision()
+                self.patrol()
             else:
+                self.update_action(0)
                 self.idling_counter -= 1
                 if self.idling_counter <= 0:
                     self.idling = False
@@ -108,7 +110,7 @@ class Enemy(Character):
             self.attack_cooldown -= 1
 
 
-    def trigger_vision(self):
+    def patrol(self):
         if self.direction == 1:
             self.moving_right = True
         else:
@@ -146,15 +148,14 @@ class Enemy(Character):
                 if self.action == 1 or self.action == 2:
                     self.attacking = False
                 if self.action == 3:
-                    if self.attack_cooldown == 0:
-                        attacking_rect = pygame.Rect(self.hit_box.centerx - (self.attack_box_multiplier* self.hit_box.width * self.flip), 
-                        self.hit_box.y, 
-                        self.attack_box_multiplier * self.hit_box.width, 
-                        self.hit_box.height)
-                        pygame.draw.rect(self.screen, (0, 255, 0), attacking_rect)
-                        if attacking_rect.colliderect(target.hit_box):
-                            target.health -= 10
-                            target.hit = True
+                    attacking_rect = pygame.Rect(self.hit_box.centerx - (self.attack_box_multiplier* self.hit_box.width * self.flip), 
+                    self.hit_box.y, 
+                    self.attack_box_multiplier * self.hit_box.width, 
+                    self.hit_box.height)
+                    pygame.draw.rect(self.screen, (0, 255, 0), attacking_rect)
+                    if attacking_rect.colliderect(target.hit_box):
+                        target.health -= 10
+                        target.hit = True
                             
                     self.attacking = False
                     self.attack_cooldown = self.atk_cd_val

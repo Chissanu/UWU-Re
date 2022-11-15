@@ -10,22 +10,19 @@ CURRENT_PATH = os.getcwd()
 class Archer(Character):
     def __init__(self, type, x, y, scale, speed, screen, target_group, arrow_group):
         super().__init__(type, x, y, scale, speed, screen)
+        self.health = 100
         self.target_group = target_group
         self.atk_cd_val = 50
         self.arrow_gruop = arrow_group
     
 
     def shoot(self):
-        if self.attack_cooldown == 0:
-            self.attack_cooldown = self.atk_cd_val
-            arrow = Arrow(self.rect.centerx + (0.2 * self.rect.size[0] * self.direction), self.rect.centery, self.direction, self.arrow_gruop, self.scale, self.screen, self.flip, self.target_group)
-            self.arrow_gruop.add(arrow)
-            self.attacking = False
+        arrow = Arrow(self.char_type, self.rect.centerx + (0.2 * self.rect.size[0] * self.direction), self.rect.centery, self.scale, self.speed, self.screen, self.target_group, self.arrow_gruop, self.flip, self.direction)
+        self.arrow_gruop.add(arrow)
 
 
     #update character actions
     def update(self):
-        self.update_animation()
         if self.health <= 0:
             self.health = 0
             self.speed = 0
@@ -37,33 +34,33 @@ class Archer(Character):
             self.update_action(2)#2: jump
         elif self.moving_left or self.moving_right:
             self.update_action(1)#1: run
-        elif self.attacking and self.attack_cooldown == 0:
+        elif self.attacking:
             self.update_action(3)#3: attack
             if self.frame_index == len(self.animation_list[self.action]) - 1:
                 self.shoot()
         else:
             self.update_action(0)#0: idle
+        self.update_animation()
         self.move()
-    
 
-class Arrow(pygame.sprite.Sprite):
-    def __init__(self, x, y, direction, arrow_group, scale, screen, flip, target_group):
-        pygame.sprite.Sprite.__init__(self)
+
+class Arrow(Archer):
+    def __init__(self, type, x, y, scale, speed, screen, target_group, arrow_group, flip, direction):
+        super().__init__(type, x, y, scale, speed, screen, target_group, arrow_group)
         arrow_img = pygame.image.load(CURRENT_PATH + '\\src\\PythonGame\\Assets\\Character_img\\Archer\\Arrow\\0.png').convert_alpha()
         arrow_img = pygame.transform.scale(arrow_img, (int(arrow_img.get_width() * scale), int(arrow_img.get_height() * scale)))
-        self.speed = 10
         self.image = arrow_img
+        self.arrow_speed = 50
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
-        self.direction = direction
-        self.arrow_group = arrow_group
-        self.screen = screen
+        self.arrow_image = arrow_img
         self.flip = flip
-        self.target_group = target_group
+        self.direction = direction
+
 
     def update(self, screen_width):
-        self.screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
-        self.rect.x += (self.direction * self.speed)
+        self.screen.blit(pygame.transform.flip(self.arrow_image, self.flip, False), self.rect)
+        self.rect.x += (self.direction * self.arrow_speed)
         attacking_rect = pygame.Rect(self.rect)
         for enemy in self.target_group:
             if attacking_rect.colliderect(enemy.hit_box):

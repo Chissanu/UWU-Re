@@ -1,1 +1,5 @@
-print(3%7)
+def here():
+    return True, False
+a, b = here()
+print(a)
+print(b)
