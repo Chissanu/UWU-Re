@@ -5,20 +5,23 @@ from Classes.BaseClass import Character
 #define game variables
 
 class Enemy(Character):
-    def __init__(self, type, x, y, scale, speed, screen, screen_width, platform_group):
+    def __init__(self, type, x, y, scale, speed, screen, screen_width, platform_group, platform_width,  scroll):
         super().__init__(type, x, y, scale, speed, screen, screen_width, platform_group)
         self.health = 100
         self.move_counter = 0
+        self.platform_width = platform_width
         self.idling = False
         self.idling_counter = 0
         self.vision = pygame.Rect(0, 0, 350, 20)
         self.vision_x = self.vision.x
         self.attack_box_multiplier = 1.5
         self.atk_cd_val = 50
-        self.tile_size = 100
+        self.tile_size = platform_width
         self.original_speed = self.speed
         self.increase_speed = 5
         self.atk_damage = 10
+        self.gravity = 0.05
+        self.scroll = scroll
 
     
     def move(self, moving_left, moving_right):
@@ -36,20 +39,15 @@ class Enemy(Character):
             self.flip = False
             self.direction = 1
 
-		#jump
-        if self.jump == True and self.in_air == False:
-            self.vel_y = -15
-            self.jump = False
-            self.in_air = True
+		# #jump
+        # if self.jump == True and self.in_air == False:
+        #     self.vel_y = -15
+        #     self.jump = False
+        #     self.in_air = True
 
 		#apply gravity
         self.vel_y += self.gravity
         dy += self.vel_y
-
-        #check collision with floor
-        if self.rect.bottom + dy > 940:
-            dy = 940 - self.rect.bottom
-            self.in_air = False
 
         #ensure player doesn't go off the edge of the screen
         if self.hit_box.left + dx < 0:
@@ -60,15 +58,24 @@ class Enemy(Character):
             dx = self.screen_width - self.hit_box.right
             self.direction *= -1
             self.move_counter *= -1
-        if self.move_counter > self.tile_size:
+        if self.move_counter > self.tile_size/15:
             self.direction *= -1
             self.move_counter *= -1
 
+        #check collision with platforms
+        for platform in self.platform_group:
+            #collision in the y direction
+            if platform.rect.colliderect(self.hit_box.x, self.hit_box.y + dy, self.hit_box.width, self.hit_box.height):
+                        self.hit_box.bottom = platform.rect.top
+                        self.rect.bottom = platform.rect.top
+                        # self.vel_y = 0
+                        dy = 0
+                        # self.in_air = False
         #update rectangle position
         self.rect.x += dx
         self.hit_box.x += dx
-        self.rect.y += dy
-        self.hit_box.y += dy
+        self.rect.y += dy + self.scroll
+        self.hit_box.y += dy + self.scroll
 
     def update(self, target):
         self.update_animation(target)

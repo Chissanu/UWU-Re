@@ -4,6 +4,7 @@ from Classes.Swordsman import Swordsman
 from Classes.Enemy import Enemy
 from Classes.Archer import Archer
 from Classes.Preview import Preview
+from Classes.Platform import Platform
 
 pygame.init()
 
@@ -19,6 +20,7 @@ select_char_mode = False
 sword_selected = True
 archer_selected = False
 MAX_PLATFORMS = 10
+MAX_ENEMY = 2
 scroll = 0
 bg_scroll = 0
 
@@ -93,45 +95,27 @@ def draw_health_bar(health, x, y):
 #         if accept_button.draw(screen) and selected:
 #             return player, True, False
 #         # return True
+
 #create sprite groups
 enemy_group = pygame.sprite.Group() 
 arrow_group = pygame.sprite.Group()
 platform_group = pygame.sprite.Group() 
 
-#Create player
+#Create starting preview player
 player = Preview('Swordsman', WIDTH/3 - 100, 670, 1, 10, screen, WIDTH, platform_group)
 # number_enemy = 2
 # for i in range(number_enemy):
 #     enemy = Enemy('Swordsman', WIDTH/(i+1), 800, 0.5, 5, screen, WIDTH, platform_group)
 #     enemy_group.add(enemy)
 
-#platform class
-class Platform(pygame.sprite.Sprite):
-    def __init__(self, platform_img, x, y, width):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(platform_img, (width, 50))
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-
-    def update(self, scroll):
-        self.rect.y += scroll
-        #check if platform has gone off
-        if self.rect.top > HEIGHT:
-            self.kill()
-
     
 #create starting platform
-platform = Platform(swordsman_btn_img, WIDTH//2 - 300, HEIGHT - 150, 500)
+platform = Platform(swordsman_btn_img, WIDTH//2 - 300, HEIGHT - 150, 500, HEIGHT)
 platform_group.add(platform)
 
-# #create temporary platforms
-# for p in range(MAX_PLATFORMS):
-# 	p_w = random.randint(300, 450)
-# 	p_x = random.randint(0, WIDTH - p_w)
-# 	p_y = p * random.randint(80, 120)
-# 	platform = Platform(p_x, p_y, p_w)
-# 	platform_group.add(platform)
+# if len(enemy_group) < MAX_ENEMY:
+#     enemy = Enemy('Swordsman', WIDTH/(i+1), 800, 0.5, 5, screen, WIDTH, platform_group, 50)
+#     enemy_group.add(enemy)
 
 
 #=====INITIALIZE======  
@@ -162,9 +146,9 @@ while running:
             sword_selected = False
         if accept_button.draw(screen) and (sword_selected or archer_selected):
             if sword_selected:
-                player = Swordsman('Swordsman', WIDTH/3, 800, 0.2, 10, screen, WIDTH, enemy_group, platform_group)
+                player = Swordsman('Swordsman', WIDTH/3, 800, 0.5, 10, screen, WIDTH, enemy_group, platform_group)
             if archer_selected:
-                player = Archer('Archer', WIDTH/3, 800, 0.2, 10, screen, WIDTH, enemy_group, arrow_group, platform_group)
+                player = Archer('Archer', WIDTH/3, 800, 0.5, 10, screen, WIDTH, enemy_group, arrow_group, platform_group)
                 
             start_game, select_char_mode = True, False
 
@@ -179,28 +163,33 @@ while running:
 
         #draw player
         player.draw()
-
-        #draw player health bar
-        draw_health_bar(player.health, 100, 100)
-
-        #create enemy
-        posY = 100
-        for enemy in enemy_group:
-            enemy.update(player)
-            enemy.draw()
-            draw_health_bar(enemy.health, 1400, posY) 
-            posY += 50
         
         #update platforms
         if len(platform_group) < MAX_PLATFORMS:
             platform_width = random.randint(300, 400)
             platform_x = random.randint(0, WIDTH - platform_width)
             platform_y = platform.rect.y - 120
-            platform = Platform(platform_img, platform_x, platform_y, platform_width)
+            platform = Platform(platform_img, platform_x, platform_y, platform_width, HEIGHT)
             platform_group.add(platform)
+            if len(enemy_group) < MAX_ENEMY:
+                enemy = Enemy('Swordsman', platform_x + platform_width/2, platform_y - 100, 0.5, 5, screen, WIDTH, platform_group, platform_width, scroll)
+                print(platform_width)
+                enemy_group.add(enemy)
+
+        #update enemy
+        posY = 100
+        for enemy in enemy_group:
+            enemy.update(player)
+            enemy.draw()
+            draw_health_bar(enemy.health, 1400, posY) 
+            posY += 50
 
         platform_group.update(scroll)
+
         platform_group.draw(screen)
+
+        #draw player health bar
+        draw_health_bar(player.health, 100, 100)
 
         #restart game to main menu
         if player.alive == False:

@@ -33,7 +33,6 @@ class Character(pygame.sprite.Sprite):
         self.animation_list = []
         self.atk_cd_val = 50
         self.update_time = pygame.time.get_ticks()
-        # print(self.platform_group)
 
 
         #load all images for the players
