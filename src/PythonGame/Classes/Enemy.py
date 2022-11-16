@@ -1,12 +1,12 @@
-import pygame, sys, os, random
+import pygame, os, random
 from pygame.locals import *
 from Classes.BaseClass import Character
 
 #define game variables
 
 class Enemy(Character):
-    def __init__(self, type, x, y, scale, speed, screen):
-        super().__init__(type, x, y, scale, speed, screen)
+    def __init__(self, type, x, y, scale, speed, screen, screen_width, platform_group):
+        super().__init__(type, x, y, scale, speed, screen, screen_width, platform_group)
         self.health = 100
         self.move_counter = 0
         self.idling = False
@@ -18,6 +18,7 @@ class Enemy(Character):
         self.tile_size = 100
         self.original_speed = self.speed
         self.increase_speed = 5
+        self.atk_damage = 10
 
     
     def move(self, moving_left, moving_right):
@@ -49,6 +50,19 @@ class Enemy(Character):
         if self.rect.bottom + dy > 940:
             dy = 940 - self.rect.bottom
             self.in_air = False
+
+        #ensure player doesn't go off the edge of the screen
+        if self.hit_box.left + dx < 0:
+            dx = -self.hit_box.left
+            self.direction *= -1
+            self.move_counter *= -1
+        if self.hit_box.right + dx > self.screen_width:
+            dx = self.screen_width - self.hit_box.right
+            self.direction *= -1
+            self.move_counter *= -1
+        if self.move_counter > self.tile_size:
+            self.direction *= -1
+            self.move_counter *= -1
 
         #update rectangle position
         self.rect.x += dx
@@ -93,7 +107,6 @@ class Enemy(Character):
         else: 
             self.speed = self.original_speed
             if self.idling == False and random.randint(1, 200) == 1:
-                print("here")
                 self.update_action(0)#0: idle
                 self.idling = True
                 self.idling_counter = 50
@@ -122,9 +135,6 @@ class Enemy(Character):
         #update enemy vision as its moves
         self.vision.center = (self.rect.centerx + self.vision.width/2 * self.direction, self.rect.centery +50)
         pygame.draw.rect(self.screen, (255, 0, 0), self.vision)
-        if self.move_counter > self.tile_size:
-            self.direction *= -1
-            self.move_counter *= -1
 
 
     def update_animation(self, target):
@@ -154,7 +164,7 @@ class Enemy(Character):
                     self.hit_box.height)
                     pygame.draw.rect(self.screen, (0, 255, 0), attacking_rect)
                     if attacking_rect.colliderect(target.hit_box):
-                        target.health -= 10
+                        target.health -= self.atk_damage
                         target.hit = True
                             
                     self.attacking = False

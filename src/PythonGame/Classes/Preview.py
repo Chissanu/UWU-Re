@@ -1,10 +1,10 @@
-import pygame, sys, os, random
+import pygame, os, random
 from pygame.locals import *
 from Classes.BaseClass import Character
 
 class Preview(Character):
-    def __init__(self, type, x, y, scale, speed, screen):
-        super().__init__(type, x, y, scale, speed, screen)
+    def __init__(self, type, x, y, scale, speed, screen, WIDTH, platform_group):
+        super().__init__(type, x, y, scale, speed, screen, WIDTH, platform_group)
         self.gravity = 0.10
 
     def move(self):

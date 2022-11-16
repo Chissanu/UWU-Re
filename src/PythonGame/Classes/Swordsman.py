@@ -1,15 +1,16 @@
-import pygame, sys, os, random
+import pygame, os, random
 from pygame.locals import *
 from Classes.BaseClass import Character
 
 
 class Swordsman(Character):
-    def __init__(self, type, x, y, scale, speed, screen, target_group):
-        super().__init__(type, x, y, scale, speed, screen)
+    def __init__(self, type, x, y, scale, speed, screen, screen_width, target_group, platform_group):
+        super().__init__(type, x, y, scale, speed, screen, screen_width, platform_group)
         self.atk_cd_val = 30 
+        self.atk_damage = 50
         self.health = 100
         self.target_group = target_group
-        
+
 
     def update_animation(self):
         #update animation
@@ -37,7 +38,7 @@ class Swordsman(Character):
                     for enemy in self.target_group:
                         if attacking_rect.colliderect(enemy.hit_box):
                             if enemy.alive:
-                                enemy.health -= 10
+                                enemy.health -= self.atk_damage
                                 enemy.hit = True
                             else:
                                 enemy.kill()

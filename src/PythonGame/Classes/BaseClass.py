@@ -1,13 +1,17 @@
-import pygame, sys, os, random
+import pygame, os, random
 from pygame.locals import *
 
+SCROLL_THRESHOLD = 300
 
 #class for all character
 class Character(pygame.sprite.Sprite):
-    def __init__(self, type, x, y, scale, speed, screen):
+    def __init__(self, type, x, y, scale, speed, screen, screen_width, platform_group):
         super().__init__()
         CURRENT_PATH = os.getcwd()
+        self.scroll = 0
         self.screen = screen
+        self.screen_width = screen_width
+        self.platform_group = platform_group
         self.alive = True
         self.jump = False
         self.in_air = True
@@ -29,6 +33,7 @@ class Character(pygame.sprite.Sprite):
         self.animation_list = []
         self.atk_cd_val = 50
         self.update_time = pygame.time.get_ticks()
+        # print(self.platform_group)
 
 
         #load all images for the players
@@ -48,11 +53,12 @@ class Character(pygame.sprite.Sprite):
         self.image = self.animation_list[self.action][self.frame_index]
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
-        self.hit_box = pygame.Rect(x - 40, y - 40, 80, 120)
+        self.hit_box = pygame.Rect((self.rect.center), (80, 120))
 
 
     def move(self):
         #reset movement variables
+        self.scroll = 0
         dx = 0
         dy = 0
 
@@ -65,10 +71,9 @@ class Character(pygame.sprite.Sprite):
             dx = self.speed
             self.flip = False
             self.direction = 1
-
 		#jump
-        if self.jump == True and self.in_air == False:
-            self.vel_y = -15
+        if self.jump == True:
+            self.vel_y = -20
             self.jump = False
             self.in_air = True
 
@@ -76,19 +81,46 @@ class Character(pygame.sprite.Sprite):
         self.vel_y += self.gravity
         dy += self.vel_y
 
-        #check collision with floor
-        if self.rect.bottom + dy > 940:
-            dy = 940 - self.rect.bottom
-            self.in_air = False
+        #ensure player doesn't go off the edge of the screen
+        if self.hit_box.left + dx < 0:
+            dx = -self.hit_box.left
+        if self.hit_box.right + dx > self.screen_width:
+            dx = self.screen_width - self.hit_box.right
+        
+        #check collision with platforms
+        for platform in self.platform_group:
+            #collision in the y direction
+            if platform.rect.colliderect(self.hit_box.x, self.hit_box.y + dy, self.hit_box.width, self.hit_box.height):
+                #check if above the platform
+                if self.hit_box.bottom < platform.rect.centery:
+                    if self.vel_y > 0:
+                        self.hit_box.bottom = platform.rect.top
+                        self.rect.bottom = platform.rect.top
+                        self.vel_y = 0
+                        dy = 0
+                        self.in_air = False
 
+        #check collision with floor
+        # if self.hit_box.bottom + dy > 940:
+        #     dy = 940 - self.hit_box.bottom
+        #     self.in_air = False
         if self.attack_cooldown > 0:
             self.attack_cooldown -= 1
+
+        #check if the player has bounced to the top of the screen
+        if self.hit_box.top <= SCROLL_THRESHOLD:
+            #if player is jumping
+            if self.vel_y < 0:
+                self.scroll = -dy
 
         #update rectangle position
         self.rect.x += dx
         self.hit_box.x += dx
-        self.rect.y += dy
-        self.hit_box.y += dy
+        self.rect.y += dy + self.scroll
+        self.hit_box.y += dy + self.scroll
+
+        return self.scroll
+
 
 
     def update_action(self, new_action):
@@ -118,7 +150,8 @@ class Character(pygame.sprite.Sprite):
         else:
             self.update_action(0)#0: idle
         self.update_animation()
-        self.move()
+        self.scroll = self.move()
+        return self.scroll
 
 
     def update_animation(self):
