@@ -1,23 +1,27 @@
-import pygame, sys, os, random
+import pygame, os, random
 from pygame.locals import *
 from Classes.BaseClass import Character
 
 #define game variables
 
 class Enemy(Character):
-    def __init__(self, type, x, y, scale, speed, screen):
-        super().__init__(type, x, y, scale, speed, screen)
+    def __init__(self, type, x, y, scale, speed, screen, screen_width, platform_group, platform_width,  scroll):
+        super().__init__(type, x, y, scale, speed, screen, screen_width, platform_group)
         self.health = 100
         self.move_counter = 0
+        self.platform_width = platform_width
         self.idling = False
         self.idling_counter = 0
         self.vision = pygame.Rect(0, 0, 350, 20)
         self.vision_x = self.vision.x
         self.attack_box_multiplier = 1.5
         self.atk_cd_val = 50
-        self.tile_size = 100
+        self.tile_size = platform_width
         self.original_speed = self.speed
         self.increase_speed = 5
+        self.atk_damage = 10
+        self.gravity = 0.05
+        self.scroll = scroll
 
     
     def move(self, moving_left, moving_right):
@@ -35,26 +39,43 @@ class Enemy(Character):
             self.flip = False
             self.direction = 1
 
-		#jump
-        if self.jump == True and self.in_air == False:
-            self.vel_y = -15
-            self.jump = False
-            self.in_air = True
+		# #jump
+        # if self.jump == True and self.in_air == False:
+        #     self.vel_y = -15
+        #     self.jump = False
+        #     self.in_air = True
 
 		#apply gravity
         self.vel_y += self.gravity
         dy += self.vel_y
 
-        #check collision with floor
-        if self.rect.bottom + dy > 940:
-            dy = 940 - self.rect.bottom
-            self.in_air = False
+        #ensure player doesn't go off the edge of the screen
+        if self.hit_box.left + dx < 0:
+            dx = -self.hit_box.left
+            self.direction *= -1
+            self.move_counter *= -1
+        if self.hit_box.right + dx > self.screen_width:
+            dx = self.screen_width - self.hit_box.right
+            self.direction *= -1
+            self.move_counter *= -1
+        if self.move_counter > self.tile_size/15:
+            self.direction *= -1
+            self.move_counter *= -1
 
+        #check collision with platforms
+        for platform in self.platform_group:
+            #collision in the y direction
+            if platform.rect.colliderect(self.hit_box.x, self.hit_box.y + dy, self.hit_box.width, self.hit_box.height):
+                        self.hit_box.bottom = platform.rect.top
+                        self.rect.bottom = platform.rect.top
+                        # self.vel_y = 0
+                        dy = 0
+                        # self.in_air = False
         #update rectangle position
         self.rect.x += dx
         self.hit_box.x += dx
-        self.rect.y += dy
-        self.hit_box.y += dy
+        self.rect.y += dy + self.scroll
+        self.hit_box.y += dy + self.scroll
 
     def update(self, target):
         self.update_animation(target)
@@ -73,13 +94,13 @@ class Enemy(Character):
                     self.direction *= -1
                     self.move_counter *= -1
 
-        elif self.attacking == True or self.attack_cooldown > 0:
+        elif self.attacking == True:
             if self.attack_cooldown == 0:
                 self.update_action(3)#3: attack
             else:
                 self.update_action(0)
         #check if the ai in near the player
-        elif self.vision.colliderect(target.hit_box) and self.attack_cooldown == 0:
+        elif self.vision.colliderect(target.hit_box) and target.alive:
             self.speed = self.increase_speed
             check_attack_rect = pygame.Rect(self.hit_box.centerx - (self.attack_box_multiplier * self.hit_box.width * self.flip),
             self.hit_box.y,
@@ -87,7 +108,7 @@ class Enemy(Character):
             self.hit_box.height)
             pygame.draw.rect(self.screen, (0, 255, 255), check_attack_rect)
             if not check_attack_rect.colliderect(target.hit_box):
-                self.trigger_vision()
+                self.patrol()
             else:
                 self.attacking = True
         else: 
@@ -98,8 +119,9 @@ class Enemy(Character):
                 self.idling_counter = 50
             
             elif self.idling == False:   
-                self.trigger_vision()
+                self.patrol()
             else:
+                self.update_action(0)
                 self.idling_counter -= 1
                 if self.idling_counter <= 0:
                     self.idling = False
@@ -108,7 +130,7 @@ class Enemy(Character):
             self.attack_cooldown -= 1
 
 
-    def trigger_vision(self):
+    def patrol(self):
         if self.direction == 1:
             self.moving_right = True
         else:
@@ -120,9 +142,6 @@ class Enemy(Character):
         #update enemy vision as its moves
         self.vision.center = (self.rect.centerx + self.vision.width/2 * self.direction, self.rect.centery +50)
         pygame.draw.rect(self.screen, (255, 0, 0), self.vision)
-        if self.move_counter > self.tile_size:
-            self.direction *= -1
-            self.move_counter *= -1
 
 
     def update_animation(self, target):
@@ -146,15 +165,14 @@ class Enemy(Character):
                 if self.action == 1 or self.action == 2:
                     self.attacking = False
                 if self.action == 3:
-                    if self.attack_cooldown == 0:
-                        attacking_rect = pygame.Rect(self.hit_box.centerx - (self.attack_box_multiplier* self.hit_box.width * self.flip), 
-                        self.hit_box.y, 
-                        self.attack_box_multiplier * self.hit_box.width, 
-                        self.hit_box.height)
-                        pygame.draw.rect(self.screen, (0, 255, 0), attacking_rect)
-                        if attacking_rect.colliderect(target.hit_box):
-                            target.health -= 10
-                            target.hit = True
+                    attacking_rect = pygame.Rect(self.hit_box.centerx - (self.attack_box_multiplier* self.hit_box.width * self.flip), 
+                    self.hit_box.y, 
+                    self.attack_box_multiplier * self.hit_box.width, 
+                    self.hit_box.height)
+                    pygame.draw.rect(self.screen, (0, 255, 0), attacking_rect)
+                    if attacking_rect.colliderect(target.hit_box):
+                        target.health -= self.atk_damage
+                        target.hit = True
                             
                     self.attacking = False
                     self.attack_cooldown = self.atk_cd_val
