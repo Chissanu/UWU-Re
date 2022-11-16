@@ -1,26 +1,28 @@
-doctype html
-head
-  title Log in
-#name
-  h1#uwu UwU:
-  h1#re Re
-hr#whiteLine
-#login
-  form(action='/api/login' method='post')
-    label#Label(for='username') Username:
-    input#nameInput(type='text' name='username')
-    br
-    br
-    br
-    label#Label(for='username') Password:
-    br
-    input#passInput(type='password' name='password')
-    br
-    input#submit(type='submit' value='Login')
-  button#register(type='button' onclick="location.href = '/register'") Register
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Log in</title>
+    </head>
+    <body>
+        <div id="name">
+            <h1 id="uwu">UwU:</h1>
+            <h1 id="re">Re</h1>
+        </div>
+        <hr id="whiteLine"/>
+        <div id="login">
+        <form action="/action_page.php">
+            <label for="username" id="Label">Username:</label>
+            <input type="text" id="nameInput" name="fname"><br><br><br>
+            <label for="username" id="Label">Password:</label><br>
+            <input type="password" id="passInput" name="lname"><br>
+            <input type="submit" value="Login" id="submit">
+        </form>   
+        </div>        
+    </body>
+</html>
 
-style.
-  @media screen and (max-width: 1000px) {
+<style>
+    @media screen and (max-width: 1000px) {
         body {
             background: #859FFD;
         }
@@ -73,14 +75,5 @@ style.
             left:300px;
             top: 1800px;
         }
-        #register {
-            height: 150px;
-            width: 350px;
-            position: absolute;
-            font-size: 70px;
-            border-radius: 50px;
-            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
-            left:300px;
-            top: 1500px;
-        }
     }
+  </style>

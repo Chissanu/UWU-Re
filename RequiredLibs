@@ -11,3 +11,6 @@ NPM:
 Express
 Nodemon
 PG
+cookie-parser
+body-parser 
+jsonwebtoken

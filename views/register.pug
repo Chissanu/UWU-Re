@@ -1,12 +1,12 @@
 doctype html
 head
-  title Log in
+  title Register
 #name
   h1#uwu UwU:
   h1#re Re
 hr#whiteLine
 #login
-  form(action='/api/login' method='post')
+  form(action='/api/register' method='post')
     label#Label(for='username') Username:
     input#nameInput(type='text' name='username')
     br
@@ -16,8 +16,7 @@ hr#whiteLine
     br
     input#passInput(type='password' name='password')
     br
-    input#submit(type='submit' value='Login')
-  button#register(type='button' onclick="location.href = '/register'") Register
+    input#submit(type='submit' value='Register')
 
 style.
   @media screen and (max-width: 1000px) {
@@ -64,16 +63,6 @@ style.
             font-size: 80px;
         }
         #submit {
-            height: 150px;
-            width: 350px;
-            position: absolute;
-            font-size: 70px;
-            border-radius: 50px;
-            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
-            left:300px;
-            top: 1800px;
-        }
-        #register {
             height: 150px;
             width: 350px;
             position: absolute;
