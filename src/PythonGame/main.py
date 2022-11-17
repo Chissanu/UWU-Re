@@ -122,6 +122,8 @@ while running:
     #Home
     if select_char_mode == False and start_game == False:
         draw_window(screen, bg_img)
+
+        
         if start_button.draw(screen):
             select_char_mode = True
         if exit_button.draw(screen):
