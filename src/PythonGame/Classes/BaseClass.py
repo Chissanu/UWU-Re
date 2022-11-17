@@ -64,6 +64,8 @@ class Character(pygame.sprite.Sprite):
 
 
     def move(self):
+        if self.rect.top >  1080:
+            self.health = 0
         #reset movement variables
         self.scroll = 0
         dx = 0

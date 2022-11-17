@@ -25,6 +25,7 @@ MAX_SHOP = 1
 scroll = 0 
 bg_scroll = 0
 score = 0
+shop_open = False
 
 #set framerate
 clock = pygame.time.Clock()
@@ -32,7 +33,7 @@ FPS = 60
 
 #define font
 font_small = pygame.font.SysFont('Lucida Sans', 50)
-font_big = pygame.font.SysFont('Lucida Sans', 24)
+font_big = pygame.font.SysFont('Lucida Sans', 100)
 
 #define player action variables
 moving_left = False
@@ -111,7 +112,7 @@ class Shop(pygame.sprite.Sprite):
         #check if platform has gone off
         if self.rect.top > HEIGHT:
             self.kill()
-
+shop = Shop(0, 0)
 
 # player = Archer('Archer', WIDTH/3, 800, 0.3, 10, screen, WIDTH, enemy_group, arrow_group, platform_group)
 
@@ -146,8 +147,15 @@ while running:
                 player = Swordsman('Swordsman', WIDTH/3, 800, 0.3, 10, screen, WIDTH, enemy_group, platform_group)
             if archer_selected:
                 player = Archer('Archer', WIDTH/3, 800, 0.3, 10, screen, WIDTH, enemy_group, arrow_group, platform_group)
-                
             start_game, select_char_mode = True, False
+
+    key = pygame.key.get_pressed()
+    if shop_open:
+        draw_window(screen, bg_img)  
+        draw_text("shop open!!!", font_big, BLACK, WIDTH/2, HEIGHT/2)
+        if accept_button.draw(screen):
+            start_game = True
+            shop_open = False
 
     if start_game:
         #draw bakground
@@ -182,7 +190,12 @@ while running:
             if len(enemy_group) < MAX_ENEMY:         
                 enemy = Enemy('Swordsman', platform_x + platform_width/2, platform.rect.y - 85, 0.3, 5, screen, WIDTH, platform_group, platform_width, HEIGHT)
                 enemy_group.add(enemy)
-
+        
+        if player.hit_box.colliderect(shop.rect) and key [pygame.K_f]:
+            shop_open = True
+            start_game = False
+        else:
+            shop_open = False
         shop_group.draw(screen)
         shop_group.update(scroll)
 
@@ -190,7 +203,7 @@ while running:
         platform_group.draw(screen)
 
 
-        # update enemyก
+        # update enemy
         for enemy in enemy_group:
             enemy.draw_health_bar(enemy.hit_box.centerx - 50, enemy.hit_box.y -10) 
             enemy.draw()
