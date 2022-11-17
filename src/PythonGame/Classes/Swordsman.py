@@ -40,8 +40,6 @@ class Swordsman(Character):
                             if enemy.alive:
                                 enemy.health -= self.atk_damage
                                 enemy.hit = True
-                            else:
-                                enemy.kill()
                             
                     self.attacking = False
                     self.attack_cooldown = self.atk_cd_val

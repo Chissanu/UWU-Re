@@ -34,6 +34,8 @@ class Archer(Character):
 
     #update character actions
     def update(self):
+        self.update_animation()
+        self.scroll = self.move()
         if self.health <= 0:
             self.health = 0
             self.speed = 0
@@ -51,8 +53,6 @@ class Archer(Character):
                 self.shoot()
         else:
             self.update_action(0)#0: idle
-        self.update_animation()
-        self.scroll = self.move()
         return self.scroll
 
 

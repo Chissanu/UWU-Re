@@ -141,6 +141,8 @@ class Character(pygame.sprite.Sprite):
 
     #update character actions
     def update(self):
+        self.update_animation()
+        self.scroll = self.move()
         if self.health <= 0:
             self.health = 0
             self.speed = 0
@@ -155,9 +157,7 @@ class Character(pygame.sprite.Sprite):
         elif self.attacking == True:
             self.update_action(3)#3: attack
         else:
-            self.update_action(0)#0: idle
-        self.update_animation()
-        self.scroll = self.move()
+            self.update_action(0)#0: idlำ
         return self.scroll
 
 
@@ -199,5 +199,5 @@ class Character(pygame.sprite.Sprite):
 
 
     def draw(self):
-        pygame.draw.rect(self.screen, (255, 150, 100), self.hit_box)
+        # pygame.draw.rect(self.screen, (255, 150, 100), self.hit_box)
         self.screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)

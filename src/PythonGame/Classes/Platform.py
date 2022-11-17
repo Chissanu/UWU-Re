@@ -18,3 +18,5 @@ class Platform(pygame.sprite.Sprite):
         if self.rect.top > self.screen_height:
             self.kill()
 
+
+

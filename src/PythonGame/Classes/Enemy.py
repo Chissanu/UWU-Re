@@ -26,6 +26,7 @@ class Enemy(Character):
         self.atk_damage = 10
         self.gravity = 0.05
         self.screen_height = screen_height
+        self.kill_score = 50
 
     
     def move(self, moving_left, moving_right):
@@ -64,11 +65,10 @@ class Enemy(Character):
         self.hit_box.y += scroll
         if self.rect.bottom > self.screen_height:
             self.kill()
-
-        if self.health <= 0:
-            self.health = 0
-            self.alive = False
-            self.update_action(5)#5: death
+        # if self.health <= 0:
+        #     self.health = 0
+        #     self.alive = False
+        #     self.update_action(5)#5: death
         elif self.hit == True:
             self.update_action(4)#4: hit
             if target.rect.centerx > self.rect.centerx:
@@ -168,7 +168,13 @@ class Enemy(Character):
                     #if the player was in the middle of an attack, then the attack is stopped
                     self.attacking = False
                     self.attack_cooldown = self.atk_cd_val
-
+    
+    def check_alive(self):
+        if self.health <= 0:
+            self.health = 0
+            self.alive = False
+            self.update_action(5)#5: death
+            return 
 
     def draw_health_bar(self, x, y):
         ratio = self.health / 100
