@@ -79,57 +79,48 @@ client.query(`Select * from users`, (err, res) => {
     client.end;
 });
 
-const insertUser = async (userName, userPass) => {
-    try {          // gets connection
+const insertUser = async(userName, userPass) => {
+    try { // gets connection
         await client.query(
             `INSERT INTO "users" ("username", "userpass","usercoins")  
-             VALUES ($1, $2, $3)`, [userName, userPass,0]); // sends queries
+             VALUES ($1, $2, $3)`, [userName, userPass, 0]); // sends queries
         return true;
     } catch (error) {
         console.error(error.stack);
         return false;
     } finally {
-        await client.end();               // closes connection
+        await client.end(); // closes connection
     }
 };
 
-// insertUser('Matt', 'moderator').then(result => {
-//     if (result) {
-//         console.log('User inserted');
-//     }
-// });
-
 apiRoute.post("/register", (req, res) => {
-    const {username, password } = req.body;
+    const { username, userpass } = req.body;
     console.log("Registering with with this data")
-    if (!username || !password)
-      return res.redirect("/?error=missing credentials");
+    if (!username || !userpass)
+        return res.redirect("/?error=missing credentials");
     if (users.some((user) => username === user.username))
-      return res.redirect("/?error=username already exists");
-    insertUser(username, password).then(result => {
+        return res.redirect("/?error=username already exists");
+    insertUser(username, userpass).then(result => {
         if (result) {
             console.log('User inserted');
+            userList.push(req.body)
         }
     });
-    // users = [user, ...users];
     const token = jwt.sign({ data: { username } }, SECRET);
     res.cookie("token", token, { httpOnly: true });
     res.redirect("/");
-  });
+});
 
 apiRoute.post("/login", (req, res) => {
-    const { username, password } = req.body;
+    const { username, userpass } = req.body;
     let user;
     console.log("Loggin in with this data")
-    //console.log(userList.find)
-    if (!username || !password)
+        //console.log(userList.find)
+    if (!username || !userpass)
         return res.redirect("/?error=missing credentials");
-    
+
     for (let i = 0; i < userList.length; i++) {
-        console.log(userList[i].username);
-        console.log(userList[i].userpass);
-        console.log("============")
-        if (username == userList[i].username && password == userList[i].userpass) {
+        if (username == userList[i].username && userpass == userList[i].userpass) {
             user = userList[i]
         }
     }
@@ -142,13 +133,13 @@ apiRoute.post("/login", (req, res) => {
 apiRoute.get("/logout", (req, res) => {
     res.clearCookie("token");
     res.redirect("/");
-  });
+});
 
 function authMiddleware(req, res, next) {
     const token = req.cookies.token;
     if (token)
         jwt.verify(token, SECRET, (err, decoded) => {
-        req.user = err || decoded.data;
+            req.user = err || decoded.data;
         });
     next();
 }
