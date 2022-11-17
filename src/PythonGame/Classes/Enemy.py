@@ -2,7 +2,11 @@ import pygame, os, random
 from pygame.locals import *
 from Classes.BaseClass import Character
 
-#define game variables
+GREEN = (124,252,0)
+YELLOW = (255,255,0)
+RED = (255, 0, 0)
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
 
 class Enemy(Character):
     def __init__(self, type, x, y, scale, speed, screen, screen_width, platform_group, platform_width, screen_height):
@@ -164,4 +168,11 @@ class Enemy(Character):
                     #if the player was in the middle of an attack, then the attack is stopped
                     self.attacking = False
                     self.attack_cooldown = self.atk_cd_val
+
+
+    def draw_health_bar(self, x, y):
+        ratio = self.health / 100
+        pygame.draw.rect(self.screen, BLACK, (x - 2, y - 2, 104, 14))
+        pygame.draw.rect(self.screen, RED, (x, y, 100, 10)) 
+        pygame.draw.rect(self.screen, YELLOW, (x, y, 100 * ratio, 10))
 

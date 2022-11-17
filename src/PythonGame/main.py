@@ -31,8 +31,8 @@ FPS = 60
 #define player action variables
 moving_left = False
 moving_right = False    
-
 floor = 940
+
 #define colors
 GREEN = (124,252,0)
 YELLOW = (255,255,0)
@@ -72,13 +72,7 @@ def draw_window(display, background):
 def draw_game_bg(display, background, bg_scroll):
     display.blit(background,(0,0 + bg_scroll))
     display.blit(background,(0,-500 + bg_scroll))
- 
-#function for drawing character health bars
-def draw_health_bar(health, x, y):
-    ratio = health / 100
-    pygame.draw.rect(screen, BLACK, (x - 2, y - 2, 404, 34))
-    pygame.draw.rect(screen, RED, (x, y, 400, 30)) 
-    pygame.draw.rect(screen, YELLOW, (x, y, 400 * ratio, 30))
+
 
 # def selection():
 #     draw_window(screen, bg_img)
@@ -150,7 +144,6 @@ while running:
             start_game, select_char_mode = True, False
 
     if start_game:
-        # pygame.draw.line(screen, BLACK, (0, SCROLL_THRESHOLD), (WIDTH, SCROLL_THRESHOLD))
         #draw bakground
         scroll = player.update()
         bg_scroll += scroll
@@ -180,12 +173,12 @@ while running:
 
 
 
-        #update enemy
+        # update enemy
         posY = 100
         for enemy in enemy_group:
             enemy.update(player, scroll)
+            enemy.draw_health_bar(enemy.hit_box.centerx - 50, enemy.hit_box.y -10) 
             enemy.draw()
-            draw_health_bar(enemy.health, 1400, posY) 
             posY += 50
 
         platform_group.update(scroll)
@@ -193,7 +186,7 @@ while running:
         platform_group.draw(screen)
 
         #draw player health bar
-        draw_health_bar(player.health, 100, 100)
+        player.draw_health_bar(100, 100)
 
         #restart game to main menu
         if player.alive == False:

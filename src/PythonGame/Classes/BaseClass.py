@@ -2,6 +2,12 @@ import pygame, os, random
 from pygame.locals import *
 
 SCROLL_THRESHOLD = 300
+#define colors
+GREEN = (124,252,0)
+YELLOW = (255,255,0)
+RED = (255, 0, 0)
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
 
 #class for all character
 class Character(pygame.sprite.Sprite):
@@ -185,6 +191,11 @@ class Character(pygame.sprite.Sprite):
                     self.attack_cooldown = self.atk_cd_val
 
     
+    def draw_health_bar(self, x, y):
+        ratio = self.health / 100
+        pygame.draw.rect(self.screen, BLACK, (x - 2, y - 2, 404, 34))
+        pygame.draw.rect(self.screen, RED, (x, y, 400, 30)) 
+        pygame.draw.rect(self.screen, YELLOW, (x, y, 400 * ratio, 30))
 
 
     def draw(self):
