@@ -2,6 +2,8 @@ doctype html
 html
   head
     title Browse
+    script
+      include js/orderDrink.js
   body
     mixin drinkItems(drinkData,itemID,top)
         .item(id="item" + itemID style="top:" + top + "px")
@@ -14,7 +16,7 @@ html
             h2.h2(style='top:270px')="Ingredient 4: " + drinkData.ingredientlist[3]
             h2.h2(style='top:320px')="Ingredient 5: " + drinkData.ingredientlist[4]
             h2.h2(style='top:370px')="Ingredient 6: " + drinkData.ingredientlist[5]
-            button#order Order
+            button(id="order" + itemID onClick='orderDrink('+ itemID +')') Order
     #main-rec
         h1#browseLabel Browse
         #inner-rec
@@ -123,3 +125,8 @@ html
       border-radius: 15px;
       }
       }
+
+script. 
+  - function orderDrink() {
+
+  }

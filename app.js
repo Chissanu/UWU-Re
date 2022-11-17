@@ -5,7 +5,6 @@ var logger = require('morgan');
 const { Client } = require('pg')
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const jwt = require("jsonwebtoken");
 
 const client = new Client({
     host: "localhost",
@@ -14,8 +13,6 @@ const client = new Client({
     password: "uwure",
     database: "uwure"
 })
-
-const SECRET = "TOKEN_SECRET";
 
 let drinkList;
 let userList;
@@ -42,7 +39,7 @@ app.get('/browse', function(req, res, next) {
 });
 
 app.get('/favorite', function(req, res, next) {
-    res.render('favorite', { drinksName: drinkList.drinkname });
+    res.render('favorite');
 });
 
 app.get('/home', function(req, res, next) {
@@ -55,7 +52,7 @@ app.get('/register', function(req, res, next) {
 
 app.get('/test', function(req, res, next) {
     console.log(drinkList)
-    res.render('test',{ drinks: drinkList });
+    res.render('test', { drinks: drinkList });
 });
 
 const setDrinkList = (rows) => {
@@ -112,8 +109,6 @@ apiRoute.post("/register", (req, res) => {
             userList.push(req.body)
         }
     });
-    const token = jwt.sign({ data: { username } }, SECRET);
-    res.cookie("token", token, { httpOnly: true });
     res.redirect("/");
 });
 
@@ -131,23 +126,11 @@ apiRoute.post("/login", (req, res) => {
         }
     }
     if (!user) return res.redirect("/?error=invalid credentials");
-    const token = jwt.sign({ data: { username: username } }, SECRET);
-    res.cookie("token", token, { httpOnly: true });
     res.redirect("/home");
 });
 
 apiRoute.get("/logout", (req, res) => {
-    res.clearCookie("token");
     res.redirect("/");
 });
 
-function authMiddleware(req, res, next) {
-    const token = req.cookies.token;
-    if (token)
-        jwt.verify(token, SECRET, (err, decoded) => {
-            req.user = err || decoded.data;
-        });
-    next();
-}
-app.use(authMiddleware);
 module.exports = app;
