@@ -21,12 +21,18 @@ sword_selected = True
 archer_selected = False
 MAX_PLATFORMS = 20
 MAX_ENEMY = 5
+MAX_SHOP = 1
 scroll = 0 
 bg_scroll = 0
+score = 0
 
 #set framerate
 clock = pygame.time.Clock()
 FPS = 60
+
+#define font
+font_small = pygame.font.SysFont('Lucida Sans', 50)
+font_big = pygame.font.SysFont('Lucida Sans', 24)
 
 #define player action variables
 moving_left = False
@@ -72,10 +78,15 @@ def draw_game_bg(display, background, bg_scroll):
     display.blit(background,(0,0 + bg_scroll))
     display.blit(background,(0,-500 + bg_scroll))
 
+def draw_text(text, font, text_col, x, y):
+	img = font.render(text, True, text_col)
+	screen.blit(img, (x, y))
+
 #create sprite groups
 platform_group = pygame.sprite.Group() 
 enemy_group = pygame.sprite.Group() 
 arrow_group = pygame.sprite.Group()
+shop_group = pygame.sprite.Group()
 
 #Create starting preview player
 player = Preview('Swordsman', WIDTH/3 - 100, 670, 1, 10, screen, WIDTH, platform_group)
@@ -84,6 +95,25 @@ player = Preview('Swordsman', WIDTH/3 - 100, 670, 1, 10, screen, WIDTH, platform
 #create starting platform
 platform = Platform(swordsman_btn_img, WIDTH//2 - 300, HEIGHT - 150, 500, HEIGHT)
 platform_group.add(platform)
+
+
+class Shop(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load(CURRENT_PATH + '\\src\\PythonGame\\Assets\\Background\\shop.png').convert_alpha()
+        self.image = pygame.transform.scale(self.image, (int(self.image.get_width() * 0.05), int(self.image.get_height() * 0.05)))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+    
+    def update(self, scroll):
+        self.rect.y += scroll
+        #check if platform has gone off
+        if self.rect.top > HEIGHT:
+            self.kill()
+
+
+# player = Archer('Archer', WIDTH/3, 800, 0.3, 10, screen, WIDTH, enemy_group, arrow_group, platform_group)
 
 #=====INITIALIZE======  
 
@@ -123,7 +153,6 @@ while running:
 
     if start_game:
         #draw bakground
-        scroll = player.update()
         bg_scroll += scroll
         if bg_scroll >= 500:
             bg_scroll = 0
@@ -146,37 +175,43 @@ while running:
             platform = Platform(platform_img, platform_x, platform_y, platform_width, HEIGHT)
             platform_group.add(platform)
 
-            spawn_chance = random.randint(0, 1)
-            if spawn_chance == 1:
-                if len(enemy_group) < MAX_ENEMY:         
-                    enemy = Enemy('Swordsman', platform_x + platform_width/2, platform.rect.y - 85, 0.3, 5, screen, WIDTH, platform_group, platform_width, HEIGHT)
-                    enemy_group.add(enemy)
+        spawn_chance = random.randint(0, 10)
+        if spawn_chance == 0:
+            if len(shop_group) < MAX_SHOP:
+                shop = Shop(platform_x + platform_width/2, platform.rect.y - 85)
+                shop_group.add(shop)
+        if spawn_chance > 5:
+            if len(enemy_group) < MAX_ENEMY:         
+                enemy = Enemy('Swordsman', platform_x + platform_width/2, platform.rect.y - 85, 0.3, 5, screen, WIDTH, platform_group, platform_width, HEIGHT)
+                enemy_group.add(enemy)
+
+        shop_group.draw(screen)
+        shop_group.update(scroll)
 
         platform_group.update(scroll)
-
         platform_group.draw(screen)
 
 
-        # update enemy
-        posY = 100
+        # update enemyก
         for enemy in enemy_group:
-            enemy.update(player, scroll)
             enemy.draw_health_bar(enemy.hit_box.centerx - 50, enemy.hit_box.y -10) 
             enemy.draw()
-            posY += 50
+            if enemy.update(player, scroll):
+                score += 50
 
+
+        draw_text('SCORE: ' + str(score), font_small, BLACK, 0, 0)
         #draw player health bar
         player.draw_health_bar(100, 100)
-
         #restart game to main menu
         if player.alive == False:
             start_game = False
             enemy_group.empty()
             arrow_group.empty()
-
+        pygame.draw.line(screen, BLACK, (0,300),(WIDTH, 300))
 
         arrow_group.update()
-
+        scroll = player.update()
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:   

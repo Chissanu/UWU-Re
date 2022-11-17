@@ -9,9 +9,9 @@ CURRENT_PATH = os.getcwd()
 class Archer(Character):
     def __init__(self, type, x, y, scale, speed, screen, screen_width, target_group, arrow_group, platform_group):
         super().__init__(type, x, y, scale, speed, screen, screen_width, platform_group)
-        self.health = 10
+        self.health = 100
         self.target_group = target_group
-        self.atk_cd_val = 50
+        self.atk_cd_val = 0
         self.atk_damage = 50
         self.arrow_gruop = arrow_group
     

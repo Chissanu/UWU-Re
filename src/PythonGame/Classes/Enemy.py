@@ -60,15 +60,15 @@ class Enemy(Character):
         self.hit_box.x += dx
 
     def update(self, target, scroll):
-        self.update_animation(target)
+        score = self.update_animation(target)
         self.rect.y += scroll
         self.hit_box.y += scroll
         if self.rect.bottom > self.screen_height:
             self.kill()
-        # if self.health <= 0:
-        #     self.health = 0
-        #     self.alive = False
-        #     self.update_action(5)#5: death
+        if self.health <= 0:
+            self.health = 0
+            self.alive = False
+            self.update_action(5)#5: death
         elif self.hit == True:
             self.update_action(4)#4: hit
             if target.rect.centerx > self.rect.centerx:
@@ -114,6 +114,7 @@ class Enemy(Character):
         
         if self.attack_cooldown > 0:
             self.attack_cooldown -= 1
+        return score
         
 
     def patrol(self):
@@ -143,8 +144,9 @@ class Enemy(Character):
         #if the animation has run out the reset back to the start
         if self.frame_index >= len(self.animation_list[self.action]):
             #if the player is dead then end the animation
-            if self.alive == False:
-                self.frame_index = len(self.animation_list[self.action]) - 1
+            if self.action == 5:
+                self.kill()
+                return True
             else:
                 self.frame_index = 0
                 #check if an attack was executed
@@ -168,13 +170,19 @@ class Enemy(Character):
                     #if the player was in the middle of an attack, then the attack is stopped
                     self.attacking = False
                     self.attack_cooldown = self.atk_cd_val
+                
     
     def check_alive(self):
         if self.health <= 0:
             self.health = 0
             self.alive = False
             self.update_action(5)#5: death
-            return 
+            if self.action == 5:
+                if self.frame_index == len(self.animation_list[self.action]):
+                    self.kill()
+                    return True
+        else:
+            return False
 
     def draw_health_bar(self, x, y):
         ratio = self.health / 100
