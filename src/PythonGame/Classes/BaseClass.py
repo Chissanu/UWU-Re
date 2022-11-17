@@ -107,10 +107,6 @@ class Character(pygame.sprite.Sprite):
                         dy = 0
                         self.in_air = False
 
-        #check collision with floor
-        # if self.hit_box.bottom + dy > 940:
-        #     dy = 940 - self.hit_box.bottom
-        #     self.in_air = False
         if self.attack_cooldown > 0:
             self.attack_cooldown -= 1
 
@@ -118,7 +114,7 @@ class Character(pygame.sprite.Sprite):
         if self.hit_box.top <= SCROLL_THRESHOLD:
             #if player is jumping
             if self.vel_y < 0:
-                self.scroll = -dy
+                self.scroll = int(-dy)
 
         #update rectangle position
         self.rect.x += dx
@@ -199,5 +195,5 @@ class Character(pygame.sprite.Sprite):
 
 
     def draw(self):
-        # pygame.draw.rect(self.screen, (255, 150, 100), self.hit_box)
+        pygame.draw.rect(self.screen, (255, 150, 100), self.hit_box)
         self.screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)

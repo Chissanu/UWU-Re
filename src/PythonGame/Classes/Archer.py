@@ -12,7 +12,7 @@ class Archer(Character):
         self.health = 100
         self.target_group = target_group
         self.atk_cd_val = 0
-        self.atk_damage = 50
+        self.atk_damage = 10
         self.arrow_gruop = arrow_group
     
 
@@ -49,7 +49,8 @@ class Archer(Character):
             self.update_action(1)#1: run
         elif self.attacking:
             self.update_action(3)#3: attack
-            if self.frame_index == len(self.animation_list[self.action]) - 1:
+            if self.action == 3 and self.frame_index == len(self.animation_list[self.action]) - 1:
+                print("here")
                 self.shoot()
         else:
             self.update_action(0)#0: idle
@@ -73,12 +74,12 @@ class Arrow(Archer):
     def update(self):
         self.screen.blit(pygame.transform.flip(self.arrow_image, self.flip, False), self.rect)
         self.rect.x += (self.direction * self.arrow_speed)
-        attacking_rect = pygame.Rect(self.rect)
         for enemy in self.target_group:
-            if attacking_rect.colliderect(enemy.hit_box):
+            if self.rect.colliderect(enemy.hit_box):
                 if enemy.alive:
                     enemy.health -= self.atk_damage
                     enemy.hit = True
+                    print(enemy.health)
                     self.kill()
         if self.rect.right < 0 or self.rect.left > self.screen_width:
             self.kill()
