@@ -52,6 +52,12 @@ app.get('/home', function(req, res, next) {
 app.get('/register', function(req, res, next) {
     res.render('register');
 });
+
+app.get('/test', function(req, res, next) {
+    console.log(drinkList)
+    res.render('test',{ drinks: drinkList });
+});
+
 const setDrinkList = (rows) => {
     drinkList = rows;
 }
