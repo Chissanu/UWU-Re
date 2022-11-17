@@ -20,7 +20,7 @@ select_char_mode = False
 sword_selected = True
 archer_selected = False
 MAX_PLATFORMS = 10
-MAX_ENEMY = 10
+MAX_ENEMY = 5
 scroll = 0
 bg_scroll = 0
 
@@ -71,7 +71,7 @@ def draw_window(display, background):
 
 def draw_game_bg(display, background, bg_scroll):
     display.blit(background,(0,0 + bg_scroll))
-    display.blit(background,(0,-600 + bg_scroll))
+    display.blit(background,(0,-500 + bg_scroll))
  
 #function for drawing character health bars
 def draw_health_bar(health, x, y):
@@ -154,7 +154,7 @@ while running:
         #draw bakground
         scroll = player.update()
         bg_scroll += scroll
-        if bg_scroll >= 600:
+        if bg_scroll >= 500:
             bg_scroll = 0
         draw_game_bg(screen, bg_img, bg_scroll)
 
@@ -165,13 +165,20 @@ while running:
         if len(platform_group) < MAX_PLATFORMS:
             platform_width = random.randint(700, 800)
             platform_x = random.randint(0, WIDTH - platform_width)
-            # platform_y = random.choice([platform.rect.y - 200, platform.rect.y])
-            platform_y = platform.rect.y - 200
+            platform_y = random.choice([platform.rect.y - 200, platform.rect.y])
+            # platform_y = platform.rect.y - 200
             platform = Platform(platform_img, platform_x, platform_y, platform_width, HEIGHT)
             platform_group.add(platform)
-            if len(enemy_group) < MAX_ENEMY:
-                enemy = Enemy('Swordsman', platform_x + platform_width/2, platform_y - 100, 0.3, 5, screen, WIDTH, platform_group, platform_width, HEIGHT)
-                enemy_group.add(enemy)
+            # for plarform in platform_group:
+            #     for platform_index in len(platform_group):
+            #         pass
+            spawn_chance = random.randint(0, 1)
+            if spawn_chance == 1:
+                if len(enemy_group) < MAX_ENEMY:         
+                    enemy = Enemy('Swordsman', platform_x + platform_width/2, platform_y - 100, 0.3, 5, screen, WIDTH, platform_group, platform_width, HEIGHT)
+                    enemy_group.add(enemy)
+
+
 
         #update enemy
         posY = 100
