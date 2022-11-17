@@ -52,7 +52,9 @@ class Character(pygame.sprite.Sprite):
         self.image = self.animation_list[self.action][self.frame_index]
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
-        self.hit_box = pygame.Rect((self.rect.center), (80, 120))
+        self.hit_box = pygame.Rect(self.rect.center, (80, 120))
+        self.hit_box.center = (self.rect.centerx , self.rect.centery)
+        self.hit_box.bottom = self.rect.bottom
 
 
     def move(self):

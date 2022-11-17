@@ -5,7 +5,7 @@ from Classes.BaseClass import Character
 #define game variables
 
 class Enemy(Character):
-    def __init__(self, type, x, y, scale, speed, screen, screen_width, platform_group, platform_width,  scroll):
+    def __init__(self, type, x, y, scale, speed, screen, screen_width, platform_group, platform_width, screen_height):
         super().__init__(type, x, y, scale, speed, screen, screen_width, platform_group)
         self.health = 100
         self.move_counter = 0
@@ -21,13 +21,12 @@ class Enemy(Character):
         self.increase_speed = 5
         self.atk_damage = 10
         self.gravity = 0.05
-        self.scroll = scroll
+        self.screen_height = screen_height
 
     
     def move(self, moving_left, moving_right):
         #reset movement variables
         dx = 0
-        dy = 0
 
         #assign movement variables if moving left or right
         if moving_left:
@@ -38,16 +37,6 @@ class Enemy(Character):
             dx = self.speed
             self.flip = False
             self.direction = 1
-
-		# #jump
-        # if self.jump == True and self.in_air == False:
-        #     self.vel_y = -15
-        #     self.jump = False
-        #     self.in_air = True
-
-		#apply gravity
-        self.vel_y += self.gravity
-        dy += self.vel_y
 
         #ensure player doesn't go off the edge of the screen
         if self.hit_box.left + dx < 0:
@@ -61,24 +50,17 @@ class Enemy(Character):
         if self.move_counter > self.tile_size/15:
             self.direction *= -1
             self.move_counter *= -1
-
-        #check collision with platforms
-        for platform in self.platform_group:
-            #collision in the y direction
-            if platform.rect.colliderect(self.hit_box.x, self.hit_box.y + dy, self.hit_box.width, self.hit_box.height):
-                        self.hit_box.bottom = platform.rect.top
-                        self.rect.bottom = platform.rect.top
-                        # self.vel_y = 0
-                        dy = 0
-                        # self.in_air = False
-        #update rectangle position
+        
         self.rect.x += dx
         self.hit_box.x += dx
-        self.rect.y += dy + self.scroll
-        self.hit_box.y += dy + self.scroll
 
-    def update(self, target):
+    def update(self, target, scroll):
         self.update_animation(target)
+        self.rect.y += scroll
+        self.hit_box.y += scroll
+        if self.rect.bottom > self.screen_height:
+            self.kill()
+
         if self.health <= 0:
             self.health = 0
             self.alive = False
@@ -128,7 +110,7 @@ class Enemy(Character):
         
         if self.attack_cooldown > 0:
             self.attack_cooldown -= 1
-
+        
 
     def patrol(self):
         if self.direction == 1:
