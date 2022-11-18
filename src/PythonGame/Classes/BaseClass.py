@@ -174,6 +174,7 @@ class Character(pygame.sprite.Sprite):
                 self.frame_index = len(self.animation_list[self.action]) - 1
                 self.alive = False
                 self.kill()
+                return True
             else:
                 self.frame_index = 0
                 #check if an attack was executed
@@ -189,7 +190,7 @@ class Character(pygame.sprite.Sprite):
                     #if the player was in the middle of an attack, then the attack is stopped
                     self.attacking = False
                     self.attack_cooldown = self.atk_cd_val
-
+        return False
 
     def attack(self):
         return

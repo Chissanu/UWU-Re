@@ -130,18 +130,6 @@ class Enemy(Character):
             self.target.health -= self.atk_damage
             self.target.hit = True
                 
-    
-    def check_alive(self):
-        if self.health <= 0:
-            self.health = 0
-            self.alive = False
-            self.update_action(5)#5: death
-            if self.action == 5:
-                if self.frame_index == len(self.animation_list[self.action]):
-                    self.kill()
-                    return True
-        else:
-            return False
 
     def draw_health_bar(self, x, y):
         ratio = self.health / 100

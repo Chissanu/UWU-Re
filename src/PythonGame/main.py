@@ -20,7 +20,7 @@ select_char_mode = False
 sword_selected = True
 archer_selected = False
 MAX_PLATFORMS = 20
-MAX_ENEMY = 5
+MAX_ENEMY = 10
 MAX_SHOP = 1
 scroll = 0 
 bg_scroll = 0
@@ -179,15 +179,15 @@ while running:
             platform = Platform(platform_img, platform_x, platform_y, platform_width, HEIGHT)
             platform_group.add(platform)
 
-        spawn_chance = random.randint(0, 10)
-        if spawn_chance == 0:
-            if len(shop_group) < MAX_SHOP:
-                shop = Shop(platform_x + platform_width/2, platform.rect.y - 85)
-                shop_group.add(shop)
-        if spawn_chance > 5:
-            if len(enemy_group) < MAX_ENEMY:         
-                enemy = Enemy('Swordsman', platform_x + platform_width/2, platform.rect.y - 85, 0.3, 5, screen, WIDTH, player, platform_group, platform_width, HEIGHT)
-                enemy_group.add(enemy)
+            spawn_chance = random.randint(0, 10)
+            if spawn_chance == 0:
+                if len(shop_group) < MAX_SHOP:
+                    shop = Shop(platform_x + platform_width/2, platform.rect.y - 85)
+                    shop_group.add(shop)
+            if spawn_chance > 5:
+                if len(enemy_group) < MAX_ENEMY:         
+                    enemy = Enemy('Swordsman', platform_x + platform_width/2, platform.rect.y - 85, 0.3, 5, screen, WIDTH, player, platform_group, platform_width, HEIGHT)
+                    enemy_group.add(enemy)
         
         if player.hit_box.colliderect(shop.rect) and key [pygame.K_f]:
             shop_open = True
