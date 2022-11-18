@@ -3,8 +3,8 @@ from pygame.locals import *
 from Classes.BaseClass import Character
 
 class Preview(Character):
-    def __init__(self, type, x, y, scale, speed, screen, WIDTH, platform_group):
-        super().__init__(type, x, y, scale, speed, screen, WIDTH, platform_group)
+    def __init__(self, type, x, y, scale, speed, screen, WIDTH, target, platform_group):
+        super().__init__(type, x, y, scale, speed, screen, WIDTH, target, platform_group)
         self.gravity = 0.10
         self.moving_right = True
 

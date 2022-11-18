@@ -9,8 +9,8 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
 class Enemy(Character):
-    def __init__(self, type, x, y, scale, speed, screen, screen_width, platform_group, platform_width, screen_height):
-        super().__init__(type, x, y, scale, speed, screen, screen_width, platform_group)
+    def __init__(self, type, x, y, scale, speed, screen, screen_width, target, platform_group, platform_width, screen_height):
+        super().__init__(type, x, y, scale, speed, screen, screen_width, target, platform_group)
         self.health = 100
         self.move_counter = 0
         self.platform_width = platform_width
@@ -27,6 +27,7 @@ class Enemy(Character):
         self.gravity = 0.05
         self.screen_height = screen_height
         self.kill_score = 50
+        self.atk_cd_val = 100
 
     
     def move(self, moving_left, moving_right):
@@ -74,8 +75,8 @@ class Enemy(Character):
         pygame.draw.rect(self.screen, (255, 0, 0), self.vision)
 
 
-    def update(self, target, scroll):
-        score = self.update_animation(target)
+    def update(self, scroll):
+        score = self.update_animation()
         self.rect.y += scroll
         self.hit_box.y += scroll
         if self.rect.bottom > self.screen_height:
@@ -86,7 +87,7 @@ class Enemy(Character):
             self.update_action(5)#5: death
         elif self.hit == True:
             self.update_action(4)#4: hit
-            if target.rect.centerx > self.rect.centerx:
+            if self.target.rect.centerx > self.rect.centerx:
                 if self.direction == -1:
                     self.direction *= -1
                     self.move_counter *= -1
@@ -101,14 +102,14 @@ class Enemy(Character):
             else:
                 self.update_action(0)
         #check if the ai in near the player
-        elif self.vision.colliderect(target.hit_box) and target.alive:
+        elif self.vision.colliderect(self.target.hit_box) and self.target.alive:
             self.speed = self.increase_speed
             check_attack_rect = pygame.Rect(self.hit_box.centerx - (self.attack_box_multiplier * self.hit_box.width * self.flip),
             self.hit_box.y,
             self.attack_box_multiplier * self.hit_box.width,
             self.hit_box.height)
             pygame.draw.rect(self.screen, (0, 255, 255), check_attack_rect)
-            if not check_attack_rect.colliderect(target.hit_box):
+            if not check_attack_rect.colliderect(self.target.hit_box):
                 self.patrol()
             else:
                 self.attacking = True
@@ -132,45 +133,15 @@ class Enemy(Character):
         return score
 
 
-    def update_animation(self, target):
-        #update animation
-        ANIMATION_COOLDOWN = 100
-        #update image depending on current frame
-        self.image = self.animation_list[self.action][self.frame_index]
-        #check if enough time has passed since the last update
-        if pygame.time.get_ticks() - self.update_time > ANIMATION_COOLDOWN:
-            self.update_time = pygame.time.get_ticks()
-            self.frame_index += 1
-                
-        #if the animation has run out the reset back to the start
-        if self.frame_index >= len(self.animation_list[self.action]):
-            #if the player is dead then end the animation
-            if self.action == 5:
-                self.kill()
-                return True
-            else:
-                self.frame_index = 0
-                #check if an attack was executed
-                if self.action == 1 or self.action == 2:
-                    self.attacking = False
-                if self.action == 3:
-                    attacking_rect = pygame.Rect(self.hit_box.centerx - (self.attack_box_multiplier* self.hit_box.width * self.flip), 
-                    self.hit_box.y, 
-                    self.attack_box_multiplier * self.hit_box.width, 
-                    self.hit_box.height)
-                    pygame.draw.rect(self.screen, (0, 255, 0), attacking_rect)
-                    if attacking_rect.colliderect(target.hit_box):
-                        target.health -= self.atk_damage
-                        target.hit = True
-                            
-                    self.attacking = False
-                    self.attack_cooldown = self.atk_cd_val
-                #check if damage was taken
-                if self.action == 4:
-                    self.hit = False
-                    #if the player was in the middle of an attack, then the attack is stopped
-                    self.attacking = False
-                    self.attack_cooldown = self.atk_cd_val
+    def attack(self):
+        attacking_rect = pygame.Rect(self.hit_box.centerx - (self.attack_box_multiplier* self.hit_box.width * self.flip), 
+        self.hit_box.y, 
+        self.attack_box_multiplier * self.hit_box.width, 
+        self.hit_box.height)
+        pygame.draw.rect(self.screen, (0, 255, 0), attacking_rect)
+        if attacking_rect.colliderect(self.target.hit_box):
+            self.target.health -= self.atk_damage
+            self.target.hit = True
                 
     
     def check_alive(self):

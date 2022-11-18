@@ -89,10 +89,6 @@ enemy_group = pygame.sprite.Group()
 arrow_group = pygame.sprite.Group()
 shop_group = pygame.sprite.Group()
 
-#Create starting preview player
-player = Preview('Swordsman', WIDTH/3 - 100, 670, 1, 10, screen, WIDTH, platform_group)
-
-    
 #create starting platform
 platform = Platform(swordsman_btn_img, WIDTH//2 - 300, HEIGHT - 150, 500, HEIGHT)
 platform_group.add(platform)
@@ -125,7 +121,9 @@ while running:
     #Home
     if select_char_mode == False and start_game == False:
         draw_window(screen, bg_img)        
-        if start_button.draw(screen): 
+        if start_button.draw(screen):
+            #Create starting preview player
+            player = Preview('Swordsman', WIDTH/3 - 100, 670, 1, 10, screen, WIDTH, enemy_group, platform_group) 
             select_char_mode = True
         if exit_button.draw(screen):
             running = False
@@ -135,11 +133,11 @@ while running:
         player.draw()
         player.update()
         if swordsman_button.draw(screen):
-            player = Preview('Swordsman', WIDTH/3 - 100, 670, 1, 10, screen, WIDTH, platform_group)
+            player = Preview('Swordsman', WIDTH/3 - 100, 670, 1, 10, screen, WIDTH, enemy_group, platform_group)
             sword_selected = True
             archer_selected = False
         if archer_button.draw(screen):
-            player = Preview('Archer', WIDTH/3 - 100, 670, 1, 10, screen, WIDTH, platform_group)
+            player = Preview('Archer', WIDTH/3 - 100, 670, 1, 10, screen, WIDTH, enemy_group, platform_group)
             archer_selected = True
             sword_selected = False
         if accept_button.draw(screen) and (sword_selected or archer_selected):
@@ -188,7 +186,7 @@ while running:
                 shop_group.add(shop)
         if spawn_chance > 5:
             if len(enemy_group) < MAX_ENEMY:         
-                enemy = Enemy('Swordsman', platform_x + platform_width/2, platform.rect.y - 85, 0.3, 5, screen, WIDTH, platform_group, platform_width, HEIGHT)
+                enemy = Enemy('Swordsman', platform_x + platform_width/2, platform.rect.y - 85, 0.3, 5, screen, WIDTH, player, platform_group, platform_width, HEIGHT)
                 enemy_group.add(enemy)
         
         if player.hit_box.colliderect(shop.rect) and key [pygame.K_f]:
@@ -207,7 +205,7 @@ while running:
         for enemy in enemy_group:
             enemy.draw_health_bar(enemy.hit_box.centerx - 50, enemy.hit_box.y -10) 
             enemy.draw()
-            if enemy.update(player, scroll):
+            if enemy.update(scroll):
                 score += 50
 
 

@@ -11,7 +11,7 @@ BLACK = (0, 0, 0)
 
 #class for all character
 class Character(pygame.sprite.Sprite):
-    def __init__(self, type, x, y, scale, speed, screen, screen_width, platform_group):
+    def __init__(self, type, x, y, scale, speed, screen, screen_width, target, platform_group):
         super().__init__()
         CURRENT_PATH = os.getcwd()
         self.scroll = 0
@@ -39,6 +39,7 @@ class Character(pygame.sprite.Sprite):
         self.animation_list = []
         self.atk_cd_val = 50
         self.update_time = pygame.time.get_ticks()
+        self.target = target
 
 
         #load all images for the players
@@ -109,9 +110,6 @@ class Character(pygame.sprite.Sprite):
                         dy = 0
                         self.in_air = False
 
-        if self.attack_cooldown > 0:
-            self.attack_cooldown -= 1
-
         #check if the player has bounced to the top of the screen
         if self.hit_box.top <= SCROLL_THRESHOLD:
             #if player is jumping
@@ -144,7 +142,6 @@ class Character(pygame.sprite.Sprite):
         if self.health <= 0:
             self.health = 0
             self.speed = 0
-            self.alive = False
             self.update_action(5)#5: death
         elif self.hit == True:
             self.update_action(4)#4: hit
@@ -160,6 +157,8 @@ class Character(pygame.sprite.Sprite):
 
 
     def update_animation(self):
+        if self.attack_cooldown > 0:
+            self.attack_cooldown -= 1
 		#update animation
         ANIMATION_COOLDOWN = 100
         #update image depending on current frame
@@ -168,11 +167,13 @@ class Character(pygame.sprite.Sprite):
         if pygame.time.get_ticks() - self.update_time > ANIMATION_COOLDOWN:
             self.update_time = pygame.time.get_ticks()
             self.frame_index += 1
-            # print(self.frame_index)
         #if the animation has run out the reset back to the start
         if self.frame_index >= len(self.animation_list[self.action]):
+            #after animation death done
             if self.frame_index == 5:
-                self.frame_index = len(self.animation_list[self.action]) - 1 
+                self.frame_index = len(self.animation_list[self.action]) - 1
+                self.alive = False
+                self.kill()
             else:
                 self.frame_index = 0
                 #check if an attack was executed
@@ -188,8 +189,11 @@ class Character(pygame.sprite.Sprite):
                     #if the player was in the middle of an attack, then the attack is stopped
                     self.attacking = False
                     self.attack_cooldown = self.atk_cd_val
+
+
     def attack(self):
         return
+        
     
     def draw_health_bar(self, x, y):
         ratio = self.health / 100
