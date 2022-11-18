@@ -20,7 +20,6 @@ class Enemy(Character):
         self.vision_x = self.vision.x
         self.attack_box_multiplier = 1.5
         self.atk_cd_val = 50
-        self.tile_size = platform_width
         self.original_speed = self.speed
         self.increase_speed = 5
         self.atk_damage = 10
@@ -28,46 +27,34 @@ class Enemy(Character):
         self.screen_height = screen_height
         self.kill_score = 50
         self.atk_cd_val = 100
+        self.moving_right = True
 
     
-    def move(self, moving_left, moving_right):
+    def move(self):
         #reset movement variables
         dx = 0
-
+        if self.direction == 1:
+            self.moving_right = True
+        else:
+            self.moving_right = False
+        self.moving_left = not self.moving_right
         #assign movement variables if moving left or right
-        if moving_left:
+        if self.moving_left:
             dx = -self.speed
             self.flip = True
             self.direction = -1
-        if moving_right:
+        if self.moving_right:
             dx = self.speed
             self.flip = False
             self.direction = 1
-
-        #ensure player doesn't go off the edge of the screen
-        if self.hit_box.left + dx < 0:
-            dx = -self.hit_box.left
-            self.direction *= -1
-            self.move_counter *= -1
-        if self.hit_box.right + dx > self.screen_width:
-            dx = self.screen_width - self.hit_box.right
-            self.direction *= -1
-            self.move_counter *= -1
-        if self.move_counter > self.tile_size/15:
+            
+        if self.move_counter > self.platform_width/15:
             self.direction *= -1
             self.move_counter *= -1
         
         self.rect.x += dx
         self.hit_box.x += dx
 
-    
-    def patrol(self):
-        if self.direction == 1:
-            self.moving_right = True
-        else:
-            self.moving_right = False
-        self.moving_left = not self.moving_right
-        self.move(self.moving_left, self.moving_right)
         self.update_action(1)#1: run
         self.move_counter += 1
         #update enemy vision as its moves
@@ -110,7 +97,7 @@ class Enemy(Character):
             self.hit_box.height)
             pygame.draw.rect(self.screen, (0, 255, 255), check_attack_rect)
             if not check_attack_rect.colliderect(self.target.hit_box):
-                self.patrol()
+                self.move()
             else:
                 self.attacking = True
         else: 
@@ -121,7 +108,7 @@ class Enemy(Character):
                 self.idling_counter = 50
             
             elif self.idling == False:   
-                self.patrol()
+                self.move()
             else:
                 self.update_action(0)
                 self.idling_counter -= 1
