@@ -44,7 +44,7 @@ class Character(pygame.sprite.Sprite):
 
         #load all images for the players
         animation_types = ['Idle', 'Run', 'Jump', 'Attack', 'Hit', 'Death']
-        ANIMATION_PATH = CURRENT_PATH + '\\src\\PythonGame\\Assets\\Character_img'
+        ANIMATION_PATH = os.path.join(CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'Character_img')
         for animation in animation_types:
             #reset temporary list of images
             temp_list = []
