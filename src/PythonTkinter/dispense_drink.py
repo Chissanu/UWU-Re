@@ -1,63 +1,50 @@
-import myQueue
-import serial
+#import serial
 import time
 import json
+import random
+from Database.DB import Database
 #from wsgiref.types import InputStream
 
-dummyData = [{"drinkName": "CustomDrink1",
-              "drinkID": 1,
-              "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
-              "timesPressed": [1,2,1,3,4,3]
-              },
-             {"drinkName": "CustomDrink2",
-              "drinkID": 2,
-              "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
-              "timesPressed": [1,2,1,3,4,3]
-              },
-             {"drinkName": "CustomDrink3",
-              "drinkID": 3,
-              "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
-              "timesPressed": [1,2,1,3,4,3]
-              },
-             {"drinkName": "CustomDrink4",
-              "drinkID": 4,
-              "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
-              "timesPressed": [1,2,1,3,4,3]
-              },
-             {"drinkName": "CustomDrink5",
-              "drinkID": 5,
-              "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
-              "timesPressed": [1,2,1,3,4,3]
-              },
-             {"drinkName": "CustomDrink6",
-              "drinkID": 6,
-              "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
-              "timesPressed": [1,2,1,3,4,3]
-              },]
-
-class dispenseDrink:
+class DispenseDrink:
     def __init__(self):
-        self.arduino = serial.Serial(port='COM3', baudrate=9600, timeout=.1)
-        time.sleep(1)
-        self.drinkQue = myQueue.queue()
+        self.db = Database()
+        self.drinkList = self.db.queryDrinkDB()
+        
+        # for drink in self.drinkList:
+        #     print(drink)
+    def checkDrink(self):
+        pass
+        
+    def dispense(self,drinkID):
+        drinkData = list(self.db.getDrinkFromID(drinkID)[0])
+        pumpArr = self.db.getPumpList()
+        arr = ""
+        print(drinkData)
+        print(pumpArr)
+        for i in range(6):
+            for j in range(6):
+                if drinkData[4][i].lower() == pumpArr[j][0]:
+                    
+                    arr += str(pumpArr[j][2]) + "" + str(drinkData[5][i])
+        
+        print(arr)
+        for i in range(6):
+            self.db.updatePump(drinkData[4][i].lower(),drinkData[5][i])
     
-    def queueD(self, drinkDataInput):
-        for i in range(len(drinkDataInput["drinkList"])):
-            self.drinkQue.enqueue([drinkDataInput["drinkList"][i], drinkDataInput["timesPressed"][i]])
-    
-    def dispense(self):
-        #data = None
-        #self.arduino.write(self.drinkQue.dequeue())
-        a = "hello"
-        self.arduino.write(bytes(a, 'utf-8'))
-        time.sleep(0.05)
-            #while data != "hello":
-                #data = self.arduino.readline()
-           # print(data)
 
-# drink = dispenseDrink()
-# drink.queueD(dummyData[0])
+dis = DispenseDrink()
+dis.dispense(1)
 
+
+
+
+
+"""
+=======================================================
+            This code will sort input datas
+            to match pump order in drinkList.json
+=======================================================
+"""
 def sortDrink():
     f = open ('./src/PythonTkinter/Database/drinkList.json', "r")
     drinkOrder = json.loads(f.read())
@@ -71,25 +58,26 @@ def sortDrink():
         drinkDict["amountLeft"] = drinkOrder[drink]
         drinks.append(drinkDict)
     
+    #Nested loop to sort the item
     for drink in drinks:
         for data in dummyData:
             if data["drinkName"] == drink["name"]:
                 sortedDrink.append(data)
                 break
     
-    for val in sortedDrink:
-        print(val["drinkName"])
+    return sortedDrink
+        
 
-def genRandomDrink(value):
-    #Input = 8
-    #Output = [2,1,1,2,1,1] should be equal to input
-    
-    drinkArr = []
-    return drinkArr
+def genRandomDrink(val):
+    arr = [0,0,0,0,0,0]
+    for i in range(val):
+        index = random.randrange(0,6)
+        arr[index] += 1
+    return arr
 
 
-# sortDrink()
-print(genRandomDrink(10))
+#sortDrink() 
+#print(genRandomDrink(10))
 # while True:
 #     drink.dispense()
     

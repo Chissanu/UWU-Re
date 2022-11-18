@@ -21,3 +21,6 @@ create table drink_tables(drinkName VARCHAR(255),drinkID BIGSERIAL PRIMARY KEY, 
 #To create users table in Postgres
 # username | userpass | userID(Auto generated) | userCoins | favdrinkID
 create table users(username VARCHAR(255),userpass VARCHAR(255),userid BIGSERIAL PRIMARY KEY,usercoins INT,favdrinkID INT[]);
+
+#To create pump_list table in Postgres
+create table pump_list(name VARCHAR(255), leftOvers INT, pumpID INT default NULL);
