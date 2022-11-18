@@ -50,7 +50,20 @@ class Database:
          print("Could not find drink with that name")
       else:
          print(data)
-         
+   
+   """
+   =========================
+   
+         User FUNCTIONS
+   
+   =========================
+   """
+   def takeMoney(self,userID,price):
+      cur = con.cursor()
+      sql = "UPDATE users SET usercoins = usercoins - {amount} where userid = {user};".format(user = userID,amount = price)
+      cur.execute(sql)
+      con.commit()
+   
    def addFavorite(self,drinkID,userID):
       cur = con.cursor()
       # sql = "SELECT favdrinkid from users where userid = 2"
@@ -70,7 +83,14 @@ class Database:
 
       cur.execute(updateSQL)
       con.commit()
-      con.close()
+   
+   """
+   =========================
+   
+         PUMP FUNCTIONS
+   
+   =========================
+   """
    
    def getPumpList(self):
       cur = con.cursor()

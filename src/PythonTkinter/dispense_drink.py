@@ -12,32 +12,31 @@ class DispenseDrink:
         
         # for drink in self.drinkList:
         #     print(drink)
-    def checkDrink(self):
-        pass
         
     def dispense(self,drinkID):
         drinkData = list(self.db.getDrinkFromID(drinkID)[0])
         pumpArr = self.db.getPumpList()
-        arr = ""
-        print(drinkData)
-        print(pumpArr)
+        drinkCommand = ""
+        #Generate pump string 31 22 12 means Pump3:1push and so on
         for i in range(6):
             for j in range(6):
                 if drinkData[4][i].lower() == pumpArr[j][0]:
-                    
-                    arr += str(pumpArr[j][2]) + "" + str(drinkData[5][i])
+                    if pumpArr[j][1] > 0:
+                        drinkCommand += str(pumpArr[j][2]) + "" + str(drinkData[5][i])
+                    else:
+                        drinkCommand += str(pumpArr[j][2]) + "0"
         
-        print(arr)
+        #Update Pump
         for i in range(6):
             self.db.updatePump(drinkData[4][i].lower(),drinkData[5][i])
+        
+        drinkCommand = "0" + drinkCommand
+        #Result  
+        print(drinkCommand)
     
 
 dis = DispenseDrink()
 dis.dispense(1)
-
-
-
-
 
 """
 =======================================================
@@ -45,27 +44,27 @@ dis.dispense(1)
             to match pump order in drinkList.json
 =======================================================
 """
-def sortDrink():
-    f = open ('./src/PythonTkinter/Database/drinkList.json', "r")
-    drinkOrder = json.loads(f.read())
-    drinks = []
-    sortedDrink = []
+# def sortDrink():
+#     f = open ('./src/PythonTkinter/Database/drinkList.json', "r")
+#     drinkOrder = json.loads(f.read())
+#     drinks = []
+#     sortedDrink = []
     
-    #Insert json drink to dict
-    for drink in drinkOrder.keys():
-        drinkDict = {}
-        drinkDict["name"] = drink
-        drinkDict["amountLeft"] = drinkOrder[drink]
-        drinks.append(drinkDict)
+#     #Insert json drink to dict
+#     for drink in drinkOrder.keys():
+#         drinkDict = {}
+#         drinkDict["name"] = drink
+#         drinkDict["amountLeft"] = drinkOrder[drink]
+#         drinks.append(drinkDict)
     
-    #Nested loop to sort the item
-    for drink in drinks:
-        for data in dummyData:
-            if data["drinkName"] == drink["name"]:
-                sortedDrink.append(data)
-                break
+#     #Nested loop to sort the item
+#     for drink in drinks:
+#         for data in dummyData:
+#             if data["drinkName"] == drink["name"]:
+#                 sortedDrink.append(data)
+#                 break
     
-    return sortedDrink
+#     return sortedDrink
         
 
 def genRandomDrink(val):
