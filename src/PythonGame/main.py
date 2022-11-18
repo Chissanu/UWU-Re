@@ -1,4 +1,4 @@
-import pygame, os, random
+import pygame, os, sys, random, pygame_gui
 from Classes.Button import Button
 from Classes.Swordsman import Swordsman
 from Classes.Enemy import Enemy
@@ -26,6 +26,9 @@ scroll = 0
 bg_scroll = 0
 score = 0
 shop_open = False
+manager = pygame_gui.UIManager((WIDTH, HEIGHT))
+text_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((350, 275), (900, 50)), manager=manager,
+                                               object_id='#main_text_entry')
 
 #set framerate
 clock = pygame.time.Clock()
@@ -83,6 +86,29 @@ def draw_text(text, font, text_col, x, y):
 	img = font.render(text, True, text_col)
 	screen.blit(img, (x, y))
 
+
+def get_user_name():
+    while True:
+        UI_REFRESH_RATE = clock.tick(60)/1000
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if (event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED and
+                event.ui_object_id == '#main_text_entry'):
+                return event.text
+            
+            manager.process_events(event)
+        
+        manager.update(UI_REFRESH_RATE)
+
+        screen.fill("white")
+
+        manager.draw_ui(screen)
+
+        pygame.display.update()
+    
+
 #create sprite groups
 platform_group = pygame.sprite.Group() 
 enemy_group = pygame.sprite.Group() 
@@ -125,11 +151,13 @@ while running:
             #Create starting preview player
             player = Preview('Swordsman', WIDTH/3 - 100, 670, 1, 10, screen, WIDTH, enemy_group, platform_group) 
             select_char_mode = True
+            name = get_user_name()
         if exit_button.draw(screen):
             running = False
     
     if select_char_mode == True and start_game == False:
         draw_window(screen, bg_img)
+        draw_text(name, font_big, BLACK, 1500, 0)
         player.draw()
         player.update()
         if swordsman_button.draw(screen):
@@ -161,6 +189,8 @@ while running:
         if bg_scroll >= 500:
             bg_scroll = 0
         draw_game_bg(screen, bg_img, bg_scroll)
+        #draw name 
+        draw_text(name, font_big, BLACK, 1500, 0)
 
         #draw player
         player.draw()
@@ -217,6 +247,7 @@ while running:
             start_game = False
             enemy_group.empty()
             arrow_group.empty()
+            print(name)
         pygame.draw.line(screen, BLACK, (0,300),(WIDTH, 300))
 
         arrow_group.update()
