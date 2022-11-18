@@ -33,7 +33,7 @@ class Archer(Character):
 class Arrow(pygame.sprite.Sprite):
     def __init__(self, x, y, scale, screen, screen_width, target_group, arrow_group, flip, direction, atk_damage):
         pygame.sprite.Sprite.__init__(self)
-        arrow_img = pygame.image.load(CURRENT_PATH + '\\src\\PythonGame\\Assets\\Character_img\\Archer\\Arrow\\0.png').convert_alpha()
+        arrow_img = pygame.image.load(os.path.join(CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'Character_img', 'Archer', 'Arrow', '0.png')).convert_alpha()
         arrow_img = pygame.transform.scale(arrow_img, (int(arrow_img.get_width() * scale), int(arrow_img.get_height() * scale)))
         self.image = arrow_img
         self.arrow_speed = 10
