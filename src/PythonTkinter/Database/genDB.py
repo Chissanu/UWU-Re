@@ -25,6 +25,21 @@ def genUser():
         cur.execute(sql,val)
         con.commit()
     con.close()
-        
+    
+def genIngredients():
+    cur = con.cursor()
+    ingredientList = ["coffee","juice","tea","cider","sodar","water","vodka","beer"]
+    for i in range(6):
+        val = (ingredientList[i],10,i + 1)
+        sql = "INSERT INTO pump_list(name,leftovers,pumpID) VALUES(%s,%s,%s)"
+        cur.execute(sql,val)
+        con.commit()
+    for i in range(2):
+        val = (ingredientList[i+6],10)
+        sql = "INSERT INTO pump_list(name,leftovers) VALUES(%s,%s)"
+        cur.execute(sql,val)
+        con.commit()
+    con.close()
 #genUser()
-genDrink()
+#genDrink()
+genIngredients()

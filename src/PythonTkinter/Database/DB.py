@@ -31,9 +31,9 @@ class Database:
       data = cur.fetchall()
       return data
       
-   def getDrink(self,name):
+   def getDrinkFromID(self,drinkID):
       cur = con.cursor()
-      sql = "SELECT * FROM drink_tables where drinkName like '{drinkName}'".format(drinkName = name)
+      sql = "SELECT * FROM drink_tables where {drinkID} = drinkID".format(drinkID = drinkID)
       cur.execute(sql)
       data = cur.fetchall()
       if not data:
@@ -50,7 +50,20 @@ class Database:
          print("Could not find drink with that name")
       else:
          print(data)
-         
+   
+   """
+   =========================
+   
+         User FUNCTIONS
+   
+   =========================
+   """
+   def takeMoney(self,userID,price):
+      cur = con.cursor()
+      sql = "UPDATE users SET usercoins = usercoins - {amount} where userid = {user};".format(user = userID,amount = price)
+      cur.execute(sql)
+      con.commit()
+   
    def addFavorite(self,drinkID,userID):
       cur = con.cursor()
       # sql = "SELECT favdrinkid from users where userid = 2"
@@ -63,18 +76,34 @@ class Database:
          #Array not empty 
          userDatas.append(drinkID)
          updateSQL = "UPDATE users SET favdrinkid = '{arr}' where userid = {userID};".format(arr = set(userDatas),userID = userID)
-         print("Foo")
       else:
          #Array empty
          drinks = {drinkID}
          updateSQL = "UPDATE users SET favdrinkid = '{arr}' where userid = {userID};".format(arr = drinks,userID = userID)
-         print("Bar")
 
-      print(updateSQL)
       cur.execute(updateSQL)
       con.commit()
-      
-      con.close()
+   
+   """
+   =========================
+   
+         PUMP FUNCTIONS
+   
+   =========================
+   """
+   
+   def getPumpList(self):
+      cur = con.cursor()
+      sql = "SELECT * FROM pump_list WHERE pumpID is not null"
+      cur.execute(sql)
+      data = cur.fetchall()
+      return data
+   
+   def updatePump(self,name,val):
+      cur = con.cursor()
+      sql = "UPDATE pump_list set leftovers = leftovers - {amount} WHERE name like '{pumpID}';".format(amount = val,pumpID = name)
+      cur.execute(sql)
+      con.commit()
 
 # db = Database()
 # db.addFavorite(5,3)

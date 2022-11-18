@@ -52,19 +52,19 @@ BLACK = (0, 0, 0)
 #load images
 CURRENT_PATH = os.getcwd()
 #background
-BG_PATH = CURRENT_PATH + "\\src\\PythonGame\\Assets\\Background"
-bg_img = pygame.image.load(BG_PATH + "\\lined_paper.png").convert_alpha()
+BG_PATH = os.path.join(CURRENT_PATH, "src", "PythonGame", "Assets", "Background") # might have to add "" if it doesn't work
+bg_img = pygame.image.load(os.path.join(BG_PATH, "lined_paper.png")).convert_alpha()
 bg_img = pygame.transform.scale(bg_img,SIZE)
 scale = 2
-platform_img = pygame.image.load(BG_PATH + "\\pencil_HB_ready.png").convert_alpha()
+platform_img = pygame.image.load(os.path.join(BG_PATH, "pencil_HB_ready.png")).convert_alpha()
 platform_img = pygame.transform.scale(platform_img, (int(platform_img.get_width() * scale), int(platform_img.get_height() * scale)))
 #button images
-BTN_PATH = CURRENT_PATH + "\\src\\PythonGame\\Assets\\Button_img"
-start_img = pygame.image.load(BTN_PATH + "\\start_btn.png").convert_alpha()
-exit_img = pygame.image.load(BTN_PATH + "\\exit_btn.png").convert_alpha()
-swordsman_btn_img = pygame.image.load(BTN_PATH + "\\swordsman_btn.png").convert_alpha()
-archer_btn_img = pygame.image.load(BTN_PATH + "\\archer_btn.png").convert_alpha()
-accept_img = pygame.image.load(BTN_PATH + "\\accept_btn.png").convert_alpha()
+BTN_PATH = os.path.join(CURRENT_PATH, "src", "PythonGame", "Assets", "Button_img")
+start_img = pygame.image.load(os.path.join(BTN_PATH, "start_btn.png")).convert_alpha()
+exit_img = pygame.image.load(os.path.join(BTN_PATH, "exit_btn.png")).convert_alpha()
+swordsman_btn_img = pygame.image.load(os.path.join(BTN_PATH, "swordsman_btn.png")).convert_alpha()
+archer_btn_img = pygame.image.load(os.path.join(BTN_PATH, "archer_btn.png")).convert_alpha()
+accept_img = pygame.image.load(os.path.join(BTN_PATH, "accept_btn.png")).convert_alpha()
 
 #create buttons
 start_button = Button(WIDTH/4 - start_img.get_width()/2, HEIGHT/2, start_img, 1.5)
@@ -123,7 +123,7 @@ platform_group.add(platform)
 class Shop(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load(CURRENT_PATH + '\\src\\PythonGame\\Assets\\Background\\shop.png').convert_alpha()
+        self.image = pygame.image.load(os.path.join(CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'Background', 'shop.png')).convert_alpha()
         self.image = pygame.transform.scale(self.image, (int(self.image.get_width() * 0.05), int(self.image.get_height() * 0.05)))
         self.rect = self.image.get_rect()
         self.rect.x = x
