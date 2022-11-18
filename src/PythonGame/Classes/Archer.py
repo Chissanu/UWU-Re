@@ -15,8 +15,7 @@ class Archer(Character):
         self.atk_damage = 10
         self.arrow_gruop = arrow_group
     
-
-    def shoot(self):
+    def attack(self):
         arrow = Arrow(self.char_type,
         self.rect.centerx + (0.2 * self.rect.size[0] * self.direction), 
         self.rect.centery, 
@@ -30,31 +29,6 @@ class Archer(Character):
         self.direction,
         self.platform_group)
         self.arrow_gruop.add(arrow)
-
-
-    #update character actions
-    def update(self):
-        self.update_animation()
-        self.scroll = self.move()
-        if self.health <= 0:
-            self.health = 0
-            self.speed = 0
-            self.alive = False
-            self.update_action(5)#5: death
-        elif self.hit == True:
-            self.update_action(4)#4: hit
-        elif self.in_air:
-            self.update_action(2)#2: jump
-        elif self.moving_left or self.moving_right:
-            self.update_action(1)#1: run
-        elif self.attacking:
-            self.update_action(3)#3: attack
-            if self.action == 3 and self.frame_index == len(self.animation_list[self.action]) - 1:
-                print("here")
-                self.shoot()
-        else:
-            self.update_action(0)#0: idle
-        return self.scroll
 
 
 class Arrow(Archer):
@@ -79,7 +53,6 @@ class Arrow(Archer):
                 if enemy.alive:
                     enemy.health -= self.atk_damage
                     enemy.hit = True
-                    print(enemy.health)
                     self.kill()
         if self.rect.right < 0 or self.rect.left > self.screen_width:
             self.kill()

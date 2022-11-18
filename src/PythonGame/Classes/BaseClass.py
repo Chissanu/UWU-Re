@@ -171,14 +171,15 @@ class Character(pygame.sprite.Sprite):
             # print(self.frame_index)
         #if the animation has run out the reset back to the start
         if self.frame_index >= len(self.animation_list[self.action]):
-            if self.alive == False:
-                self.frame_index = len(self.animation_list[self.action]) - 1
+            if self.frame_index == 5:
+                self.frame_index = len(self.animation_list[self.action]) - 1 
             else:
                 self.frame_index = 0
                 #check if an attack was executed
                 if self.action == 1 or self.action == 2:
                     self.attacking = False
-                if self.action == 3:                  
+                if self.action == 3:
+                    self.attack()            
                     self.attacking = False
                     self.attack_cooldown = self.atk_cd_val
                 #check if damage was taken
@@ -187,7 +188,8 @@ class Character(pygame.sprite.Sprite):
                     #if the player was in the middle of an attack, then the attack is stopped
                     self.attacking = False
                     self.attack_cooldown = self.atk_cd_val
-
+    def attack(self):
+        return
     
     def draw_health_bar(self, x, y):
         ratio = self.health / 100

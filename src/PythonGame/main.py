@@ -125,7 +125,7 @@ while running:
     #Home
     if select_char_mode == False and start_game == False:
         draw_window(screen, bg_img)        
-        if start_button.draw(screen):
+        if start_button.draw(screen): 
             select_char_mode = True
         if exit_button.draw(screen):
             running = False
@@ -144,9 +144,9 @@ while running:
             sword_selected = False
         if accept_button.draw(screen) and (sword_selected or archer_selected):
             if sword_selected:
-                player = Swordsman('Swordsman', WIDTH/3, 800, 0.3, 10, screen, WIDTH, enemy_group, platform_group)
+                player = Swordsman('Swordsman', WIDTH/2, 800, 0.3, 10, screen, WIDTH, enemy_group, platform_group)
             if archer_selected:
-                player = Archer('Archer', WIDTH/3, 800, 0.3, 10, screen, WIDTH, enemy_group, arrow_group, platform_group)
+                player = Archer('Archer', WIDTH/2, 800, 0.3, 10, screen, WIDTH, enemy_group, arrow_group, platform_group)
             start_game, select_char_mode = True, False
 
     key = pygame.key.get_pressed()

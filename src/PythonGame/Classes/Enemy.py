@@ -59,6 +59,21 @@ class Enemy(Character):
         self.rect.x += dx
         self.hit_box.x += dx
 
+    
+    def patrol(self):
+        if self.direction == 1:
+            self.moving_right = True
+        else:
+            self.moving_right = False
+        self.moving_left = not self.moving_right
+        self.move(self.moving_left, self.moving_right)
+        self.update_action(1)#1: run
+        self.move_counter += 1
+        #update enemy vision as its moves
+        self.vision.center = (self.rect.centerx + self.vision.width/2 * self.direction, self.rect.centery +50)
+        pygame.draw.rect(self.screen, (255, 0, 0), self.vision)
+
+
     def update(self, target, scroll):
         score = self.update_animation(target)
         self.rect.y += scroll
@@ -115,20 +130,6 @@ class Enemy(Character):
         if self.attack_cooldown > 0:
             self.attack_cooldown -= 1
         return score
-        
-
-    def patrol(self):
-        if self.direction == 1:
-            self.moving_right = True
-        else:
-            self.moving_right = False
-        self.moving_left = not self.moving_right
-        self.move(self.moving_left, self.moving_right)
-        self.update_action(1)#1: run
-        self.move_counter += 1
-        #update enemy vision as its moves
-        self.vision.center = (self.rect.centerx + self.vision.width/2 * self.direction, self.rect.centery +50)
-        pygame.draw.rect(self.screen, (255, 0, 0), self.vision)
 
 
     def update_animation(self, target):
