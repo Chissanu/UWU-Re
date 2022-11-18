@@ -1,10 +1,11 @@
-import pygame, os, sys, random, pygame_gui
+import pygame, os, sys, random, pygame_gui, time
 from Classes.Button import Button
 from Classes.Swordsman import Swordsman
 from Classes.Enemy import Enemy
 from Classes.Archer import Archer
 from Classes.Preview import Preview
 from Classes.Platform import Platform
+from Classes.Buff import Buff
 
 pygame.init()
 
@@ -22,6 +23,7 @@ archer_selected = False
 MAX_PLATFORMS = 20
 MAX_ENEMY = 10
 MAX_SHOP = 1
+MAX_BUFF = 1
 scroll = 0 
 bg_scroll = 0
 score = 0
@@ -114,6 +116,7 @@ platform_group = pygame.sprite.Group()
 enemy_group = pygame.sprite.Group() 
 arrow_group = pygame.sprite.Group()
 shop_group = pygame.sprite.Group()
+buff_group = pygame.sprite.Group()
 
 #create starting platform
 platform = Platform(swordsman_btn_img, WIDTH//2 - 300, HEIGHT - 150, 500, HEIGHT)
@@ -135,6 +138,7 @@ class Shop(pygame.sprite.Sprite):
         if self.rect.top > HEIGHT:
             self.kill()
 shop = Shop(0, 0)
+buff = Buff(0, 0)
 
 # player = Archer('Archer', WIDTH/3, 800, 0.3, 10, screen, WIDTH, enemy_group, arrow_group, platform_group)
 
@@ -209,23 +213,37 @@ while running:
             platform = Platform(platform_img, platform_x, platform_y, platform_width, HEIGHT)
             platform_group.add(platform)
 
-            spawn_chance = random.randint(0, 10)
+            spawn_chance = random.randint(0, 100)
             if spawn_chance == 0:
                 if len(shop_group) < MAX_SHOP:
                     shop = Shop(platform_x + platform_width/2, platform.rect.y - 85)
                     shop_group.add(shop)
-            if spawn_chance > 5:
+            if spawn_chance > 60:
                 if len(enemy_group) < MAX_ENEMY:         
                     enemy = Enemy('Swordsman', platform_x + platform_width/2, platform.rect.y - 85, 0.3, 5, screen, WIDTH, player, platform_group, platform_width, HEIGHT)
                     enemy_group.add(enemy)
+            if spawn_chance < 20:
+                if len(buff_group) < MAX_BUFF:
+                    buff = Buff(platform_x + platform_width/2, platform.rect.y - 85)
+                    buff_group.add(buff)
         
         if player.hit_box.colliderect(shop.rect) and key [pygame.K_f]:
             shop_open = True
             start_game = False
         else:
             shop_open = False
+
+        if player.hit_box.colliderect(buff.rect):
+            buff_group.remove(buff)
+            buff.healthBuff(player)
+          #ใส่ timer
+            # buff.clearBuff(player)
+            
+
         shop_group.draw(screen)
         shop_group.update(scroll)
+        buff_group.draw(screen)
+        buff_group.update(scroll)
 
         platform_group.update(scroll)
         platform_group.draw(screen)
