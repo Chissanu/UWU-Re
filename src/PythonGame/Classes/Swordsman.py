@@ -2,15 +2,12 @@ import pygame, os, random
 from pygame.locals import *
 from Classes.BaseClass import Character
 
-
 class Swordsman(Character):
     def __init__(self, type, x, y, scale, speed, screen, screen_width, target, platform_group):
         super().__init__(type, x, y, scale, speed, screen, screen_width, target, platform_group)
         self.atk_cd_val = 0
         self.atk_damage = 50
         self.health = 100
-        
-
 
     def attack(self):
         attacking_rect = pygame.Rect(self.hit_box.centerx - (2 * self.hit_box.width * self.flip), self.hit_box.y, 2 * self.hit_box.width, self.hit_box.height)
