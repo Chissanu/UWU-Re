@@ -2,6 +2,7 @@
 import time
 import json
 import random
+import sys
 from Database.DB import Database
 #from wsgiref.types import InputStream
 
@@ -13,18 +14,23 @@ class DispenseDrink:
         # for drink in self.drinkList:
         #     print(drink)
         
-    def dispense(self,drinkID):
+    def dispense(self,drinkID,userID):
         drinkData = list(self.db.getDrinkFromID(drinkID)[0])
         pumpArr = self.db.getPumpList()
         drinkCommand = ""
+        err = self.db.takeMoney(userID,drinkData[2])
+        print(err)
         #Generate pump string 31 22 12 means Pump3:1push and so on
-        for i in range(6):
-            for j in range(6):
-                if drinkData[4][i].lower() == pumpArr[j][0]:
-                    if pumpArr[j][1] > 0:
-                        drinkCommand += str(pumpArr[j][2]) + "" + str(drinkData[5][i])
-                    else:
-                        drinkCommand += str(pumpArr[j][2]) + "0"
+        if err == None:
+            for i in range(6):
+                for j in range(6):
+                    if drinkData[4][i].lower() == pumpArr[j][0]:
+                        if pumpArr[j][1] > 0:
+                            drinkCommand += str(pumpArr[j][2]) + "" + str(drinkData[5][i])
+                        else:
+                            drinkCommand += str(pumpArr[j][2]) + "0"
+        else:
+            print("Not enough money")
         
         #Update Pump
         for i in range(6):
@@ -36,7 +42,7 @@ class DispenseDrink:
     
 
 dis = DispenseDrink()
-dis.dispense(1)
+dis.dispense(1,10)
 
 """
 =======================================================
@@ -74,7 +80,7 @@ def genRandomDrink(val):
         arr[index] += 1
     return arr
 
-
+print(sys.argv[1],sys.argv[2])
 #sortDrink() 
 #print(genRandomDrink(10))
 # while True:

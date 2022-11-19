@@ -13,3 +13,4 @@ PG
 cookie-parser
 body-parser 
 jsonwebtoken
+socket.io

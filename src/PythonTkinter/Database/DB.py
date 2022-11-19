@@ -60,8 +60,14 @@ class Database:
    """
    def takeMoney(self,userID,price):
       cur = con.cursor()
-      sql = "UPDATE users SET usercoins = usercoins - {amount} where userid = {user};".format(user = userID,amount = price)
-      cur.execute(sql)
+      fetchSQL = "SELECT usercoins from users where userid = {user}".format(user = userID)
+      cur.execute(fetchSQL)
+      money = cur.fetchall()[0][0]
+      if money > price:
+         updateSQL = "UPDATE users SET usercoins = usercoins - {amount} where userid = {user};".format(user = userID,amount = price)
+         cur.execute(updateSQL)
+      else:
+         return "Failed"
       con.commit()
    
    def addFavorite(self,drinkID,userID):
@@ -105,5 +111,5 @@ class Database:
       cur.execute(sql)
       con.commit()
 
-# db = Database()
-# db.addFavorite(5,3)
+db = Database()
+db.takeMoney(2,10)
