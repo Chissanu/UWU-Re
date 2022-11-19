@@ -4,8 +4,7 @@ tk
 customtkinter
 pillow
 serial
-qrcode
-
+pygame_gui
 
 NPM:
 Express

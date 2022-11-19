@@ -6,6 +6,7 @@ from Classes.Archer import Archer
 from Classes.Preview import Preview
 from Classes.Platform import Platform
 from Classes.Buff import Buff
+from Classes.Leaderboard import Leaderboard
 
 pygame.init()
 
@@ -274,7 +275,12 @@ while running:
             start_game = False
             enemy_group.empty()
             arrow_group.empty()
-            print(name)
+            scoreboard = Leaderboard()
+            saveData = {
+                "name":name,
+                "score":score
+                }
+            scoreboard.saveScore(saveData)
         pygame.draw.line(screen, BLACK, (0,300),(WIDTH, 300))
 
         arrow_group.update()
