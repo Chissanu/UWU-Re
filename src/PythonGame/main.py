@@ -231,6 +231,7 @@ def start_game(player_seleted):
         if player.alive == False:
             enemy_group.empty()
             arrow_group.empty()
+            main_menu()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:   
