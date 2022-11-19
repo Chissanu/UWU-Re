@@ -6,6 +6,7 @@ from Classes.Archer import Archer
 from Classes.Preview import Preview
 from Classes.Platform import Platform
 from Classes.Buff import Buff
+from Classes.Leaderboard import Leaderboard
 
 pygame.init()
 
@@ -75,6 +76,9 @@ exit_button = Button(WIDTH/2 + WIDTH/4 - exit_img.get_width()/2, HEIGHT/2, exit_
 swordsman_button = Button(WIDTH - swordsman_btn_img.get_width()/1.5, HEIGHT/4, swordsman_btn_img, 0.5)
 archer_button = Button(WIDTH -  archer_btn_img.get_width()/1.5, HEIGHT/2, archer_btn_img, 0.5)
 accept_button = Button(WIDTH -  accept_img.get_width()/3.2, HEIGHT/1.3, accept_img, 0.2)
+
+#Classes Import
+scoreboard = Leaderboard()
 
 
 #Drawing the entire frame
@@ -274,7 +278,11 @@ while running:
             start_game = False
             enemy_group.empty()
             arrow_group.empty()
-            print(name)
+            saveData = {
+                "name":name,
+                "score":score
+                }
+            scoreboard.saveScore(saveData)
         pygame.draw.line(screen, BLACK, (0,300),(WIDTH, 300))
 
         arrow_group.update()
