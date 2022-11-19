@@ -70,4 +70,6 @@ class Leaderboard:
             return self.quickSort(less) + equal + self.quickSort(greater)
         else:
             return array
+        
+
             

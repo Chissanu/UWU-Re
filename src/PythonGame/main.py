@@ -111,6 +111,7 @@ def get_user_name():
         pygame.display.update()
 
 def start_game(player_seleted):
+    global name
     MAX_PLATFORMS = 20
     MAX_ENEMY = 10
     MAX_SHOP = 1
@@ -147,7 +148,7 @@ def start_game(player_seleted):
             bg_scroll = 0
         draw_game_bg(screen, bg_img, bg_scroll)
         #draw name 
-        # draw_text(name, font_big, BLACK, 1500, 0)
+        draw_text(name, font_big, BLACK, 1500, 0)
         
         #update platforms
         if len(platform_group) < MAX_PLATFORMS:
@@ -231,6 +232,13 @@ def start_game(player_seleted):
         if player.alive == False:
             enemy_group.empty()
             arrow_group.empty()
+            
+            newData = {
+                "name" : name,
+                "score": score
+            }
+            scoreboard.saveScore(newData)
+            print(scoreboard.getSortedScoreboard())
             main_menu()
 
         for event in pygame.event.get():
@@ -322,7 +330,8 @@ def select_char_mode():
                     
         pygame.display.update() 
 
-def main_menu(): 
+def main_menu():
+    global name
     run = True
     while run:
         draw_window(screen, bg_img)
@@ -337,7 +346,7 @@ def main_menu():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start_button.checkForInput(mouse_get_pos):
-                    # get_user_name()
+                    name = get_user_name()
                     select_char_mode()
                 # if exit_button.checkForInput(mouse_get_pos):
                 #     pass
