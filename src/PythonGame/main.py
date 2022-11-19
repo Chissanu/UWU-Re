@@ -29,7 +29,6 @@ bg_scroll = 0
 score = 0
 shop_open = False
 buff_hit = False
-ini = True
 manager = pygame_gui.UIManager((WIDTH, HEIGHT))
 text_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((350, 275), (900, 50)), manager=manager,
                                                object_id='#main_text_entry')
@@ -190,9 +189,6 @@ while running:
             shop_open = False
 
     if buff_hit:
-        if ini:
-            buff.setData(player)
-            ini = False
         buff_group.remove(buff)
         buff.healthBuff(player)
         tick = pygame.time.get_ticks()
@@ -202,7 +198,6 @@ while running:
             buff.clearBuff(player)
             timerArr = []
             buff_hit = False
-            ini = True
 
     if start_game:
         #draw bakground

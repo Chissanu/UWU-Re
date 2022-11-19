@@ -9,7 +9,7 @@ class Buff(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-        self.origiHealth = 0
+        self.origiHealth = 100
 
     def setData(self, player):
         self.origiHealth = player.health
@@ -24,6 +24,8 @@ class Buff(pygame.sprite.Sprite):
         player.health = 100000
     
     def clearBuff(self, player):
+        self.rect.x = 0
+        self.rect.y = 0
         player.health = self.origiHealth
         
         
