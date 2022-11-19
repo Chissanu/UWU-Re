@@ -6,6 +6,7 @@ from Classes.Archer import Archer
 from Classes.Preview import Preview
 from Classes.Platform import Platform
 from Classes.Buff import Buff
+from Classes.Leaderboard import Leaderboard
 
 pygame.init()
 
@@ -66,6 +67,9 @@ exit_button = Button((WIDTH/2 + WIDTH/4 - exit_img.get_width()/2, HEIGHT/2), exi
 swordsman_button = Button((WIDTH - swordsman_btn_img.get_width()/1.5, HEIGHT/4), swordsman_btn_img, 0.5, "Swordsman", font_big, BLACK, WHITE)
 archer_button = Button((WIDTH -  archer_btn_img.get_width()/1.5, HEIGHT/2), archer_btn_img, 0.5, "Archer", font_big, BLACK, WHITE)
 accept_button = Button((WIDTH -  accept_img.get_width()/3.2, HEIGHT/1.3), accept_img, 0.2, "Accept", font_big, BLACK, WHITE)
+
+#Classes Import
+scoreboard = Leaderboard()
 
 
 platform_group = pygame.sprite.Group() 
@@ -227,7 +231,6 @@ def start_game(player_seleted):
         if player.alive == False:
             enemy_group.empty()
             arrow_group.empty()
-            main_menu()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:   
