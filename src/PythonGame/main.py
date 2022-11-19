@@ -196,16 +196,21 @@ def start_game(player_seleted):
                 shop_open = False
 
         if buff_hit:
+            x_buff = 200
+            y_buff = 180
             buff_group.remove(buff)
             buff.setData(player)
             if buff_random:
                 mode = random.randint(1, 2)
                 buff_random = False
             if mode == 1:
-                buff.healthBuff()
+                buff.restore_health()
                 tick = pygame.time.get_ticks()
                 timerArr.append(tick)
-                timer = round((timerArr[-1] - timerArr[0])/1000)
+                timer = (timerArr[-1] - timerArr[0])/1000
+                if round(timer) == 0:
+                    timer = 0.00001
+                buff.draw_buff_bar(x_buff, y_buff, screen, timer * 80)
                 if timer > 5:
                     buff.clearBuff(mode)
                     timerArr = []
@@ -215,7 +220,10 @@ def start_game(player_seleted):
                 buff.superJump()
                 tick = pygame.time.get_ticks()
                 timerArr.append(tick)
-                timer = round((timerArr[-1] - timerArr[0])/1000)
+                timer = (timerArr[-1] - timerArr[0])/1000
+                if round(timer) == 0:
+                    timer = 0.00001
+                buff.draw_buff_bar(x_buff, y_buff, screen, timer * 80)
                 if timer > 5:
                     buff.clearBuff(mode)
                     timerArr = []

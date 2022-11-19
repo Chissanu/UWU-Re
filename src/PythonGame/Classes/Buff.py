@@ -22,11 +22,11 @@ class Buff(pygame.sprite.Sprite):
         if self.rect.top > 1080:
             self.kill()
 
-    def healthBuff(self):
-        self.player.health = 100000
-
     def superJump(self):
         self.player.gravity = 0.1
+
+    def restore_health(self):
+        self.player.health = 100
     
     def clearBuff(self, num):
         self.rect.x = 0
@@ -35,3 +35,10 @@ class Buff(pygame.sprite.Sprite):
             self.player.health = 100
         elif num == 2:
             self.player.gravity = 0.75
+
+    def draw_buff_bar(self, x, y, screen, ratio):
+        GREEN = (0, 255, 0)
+        BLACK = (0, 0, 0)
+        pygame.draw.rect(screen, BLACK, (x - 2, y - 2, 404, 34))
+        pygame.draw.rect(screen, BLACK, (x, y, 400, 30)) 
+        pygame.draw.rect(screen, GREEN, (x, y, 400 - ratio, 30))
