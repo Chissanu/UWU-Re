@@ -10,8 +10,10 @@ class Buff(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.origiHealth = 100
+        self.player = 0
 
     def setData(self, player):
+        self.player = player
         self.origiHealth = player.health
 
     def update(self, scroll):
@@ -20,12 +22,16 @@ class Buff(pygame.sprite.Sprite):
         if self.rect.top > 1080:
             self.kill()
 
-    def healthBuff(self, player):
-        player.health = 100000
+    def healthBuff(self):
+        self.player.health = 100000
+
+    def superJump(self):
+        self.player.gravity = 0.1
     
-    def clearBuff(self, player):
+    def clearBuff(self, num):
         self.rect.x = 0
         self.rect.y = 0
-        player.health = self.origiHealth
-        
-        
+        if num == 1:
+            self.player.health = 100
+        elif num == 2:
+            self.player.gravity = 0.75

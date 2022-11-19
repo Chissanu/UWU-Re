@@ -121,6 +121,7 @@ def start_game(player_seleted):
     score = 0
     shop_open = False
     buff_hit = False
+    buff_random = True
     timerArr = []
     shop = Shop(0, 0)
     buff = Buff(0, 0)
@@ -196,15 +197,30 @@ def start_game(player_seleted):
 
         if buff_hit:
             buff_group.remove(buff)
-            buff.healthBuff(player)
-            tick = pygame.time.get_ticks()
-            timerArr.append(tick)
-            timer = round((timerArr[-1] - timerArr[0])/1000)
-            if timer > 5:
-                buff.clearBuff(player)
-                timerArr = []
-                buff_hit = False
-
+            buff.setData(player)
+            if buff_random:
+                mode = random.randint(1, 2)
+                buff_random = False
+            if mode == 1:
+                buff.healthBuff()
+                tick = pygame.time.get_ticks()
+                timerArr.append(tick)
+                timer = round((timerArr[-1] - timerArr[0])/1000)
+                if timer > 5:
+                    buff.clearBuff(mode)
+                    timerArr = []
+                    buff_hit = False
+                    buff_random = True
+            elif mode == 2:
+                buff.superJump()
+                tick = pygame.time.get_ticks()
+                timerArr.append(tick)
+                timer = round((timerArr[-1] - timerArr[0])/1000)
+                if timer > 5:
+                    buff.clearBuff(mode)
+                    timerArr = []
+                    buff_hit = False
+                    buff_random = True
         # update enemy
         for enemy in enemy_group:
             enemy.draw_health_bar(enemy.hit_box.centerx - 50, enemy.hit_box.y -10) 
