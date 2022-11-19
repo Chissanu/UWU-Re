@@ -28,6 +28,8 @@ scroll = 0
 bg_scroll = 0
 score = 0
 shop_open = False
+buff_hit = False
+ini = True
 manager = pygame_gui.UIManager((WIDTH, HEIGHT))
 text_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((350, 275), (900, 50)), manager=manager,
                                                object_id='#main_text_entry')
@@ -143,7 +145,7 @@ buff = Buff(0, 0)
 # player = Archer('Archer', WIDTH/3, 800, 0.3, 10, screen, WIDTH, enemy_group, arrow_group, platform_group)
 
 #=====INITIALIZE======  
-
+timerArr = []
 running = True 
 while running:
     clock.tick(FPS)
@@ -186,6 +188,21 @@ while running:
         if accept_button.draw(screen):
             start_game = True
             shop_open = False
+
+    if buff_hit:
+        if ini:
+            buff.setData(player)
+            ini = False
+        buff_group.remove(buff)
+        buff.healthBuff(player)
+        tick = pygame.time.get_ticks()
+        timerArr.append(tick)
+        timer = round((timerArr[-1] - timerArr[0])/1000)
+        if timer > 5:
+            buff.clearBuff(player)
+            timerArr = []
+            buff_hit = False
+            ini = True
 
     if start_game:
         #draw bakground
@@ -234,10 +251,7 @@ while running:
             shop_open = False
 
         if player.hit_box.colliderect(buff.rect):
-            buff_group.remove(buff)
-            buff.healthBuff(player)
-          #ใส่ timer
-            # buff.clearBuff(player)
+            buff_hit = True
             
 
         shop_group.draw(screen)

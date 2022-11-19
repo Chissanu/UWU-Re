@@ -11,6 +11,9 @@ class Buff(pygame.sprite.Sprite):
         self.rect.y = y
         self.origiHealth = 0
 
+    def setData(self, player):
+        self.origiHealth = player.health
+
     def update(self, scroll):
         self.rect.y += scroll
         #check if platform has gone off
@@ -18,9 +21,9 @@ class Buff(pygame.sprite.Sprite):
             self.kill()
 
     def healthBuff(self, player):
-        self.origiHealth = player.health
         player.health = 100000
     
     def clearBuff(self, player):
+        print(self.origiHealth)
         player.health = self.origiHealth
         
