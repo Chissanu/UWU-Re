@@ -110,6 +110,7 @@ class Character(pygame.sprite.Sprite):
                         self.vel_y = 0
                         dy = 0
                         self.in_air = False
+                        
 
         #check if the player has bounced to the top of the screen
         if self.hit_box.top <= SCROLL_THRESHOLD:
@@ -153,7 +154,7 @@ class Character(pygame.sprite.Sprite):
         elif self.attacking == True:
             self.update_action(3)#3: attack
         else:
-            self.update_action(0)#0: idlำ
+            self.update_action(0)#0: idle
         return self.scroll
 
 
