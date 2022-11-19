@@ -115,8 +115,6 @@ class Enemy(Character):
                 if self.idling_counter <= 0:
                     self.idling = False
         
-        if self.attack_cooldown > 0:
-            self.attack_cooldown -= 1
         return score
 
 
