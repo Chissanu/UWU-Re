@@ -131,9 +131,9 @@ def start_game(player_seleted):
     platform = Platform(swordsman_btn_img, WIDTH//2 - 300, HEIGHT - 150, 500, HEIGHT)
     platform_group.add(platform)
     if player_seleted == "Swordsman":
-        player = Swordsman('Swordsman', WIDTH/2, 800, 0.3, 10, screen, WIDTH, enemy_group, platform_group)
+        player = Swordsman('Swordsman', WIDTH/2, 800, 0.3, 10, screen, SIZE, enemy_group, platform_group)
     else:
-        player = Archer('Archer', WIDTH/2, 800, 0.3, 10, screen, WIDTH, enemy_group, arrow_group, platform_group)
+        player = Archer('Archer', WIDTH/2, 800, 0.3, 10, screen, SIZE, enemy_group, arrow_group, platform_group)
         
     while True:
         clock.tick(FPS)
@@ -166,7 +166,7 @@ def start_game(player_seleted):
                     shop_group.add(shop)
             if spawn_chance > 60:
                 if len(enemy_group) < MAX_ENEMY:         
-                    enemy = Enemy('Swordsman', platform_x + platform_width/2, platform.rect.y - 85, 0.3, 5, screen, WIDTH, player, platform_group, platform_width, HEIGHT)
+                    enemy = Enemy('Swordsman', platform_x + platform_width/2, platform.rect.y - 85, 0.3, 5, screen, SIZE, player, platform_group, platform_width)
                     enemy_group.add(enemy)
             if spawn_chance < 20:
                 if len(buff_group) < MAX_BUFF:
@@ -259,10 +259,10 @@ def start_game(player_seleted):
 
 
 def select_char_mode():
-    # global sword_selected
-    # global archer_selected
+    global sword_selected
+    global archer_selected
     # global platform_group
-    player = Preview('Swordsman', WIDTH/3 - 100, 670, 1, 10, screen, WIDTH, enemy_group, platform_group)
+    player = Preview('Swordsman', WIDTH/3 - 100, 670, 1, 10, screen, SIZE, enemy_group, platform_group)
     while True:
         clock.tick(FPS)
         
@@ -281,11 +281,11 @@ def select_char_mode():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if swordsman_button.checkForInput(mouse_get_pos):
-                    player = Preview('Swordsman', WIDTH/3 - 100, 670, 1, 10, screen, WIDTH, enemy_group, platform_group)
+                    player = Preview('Swordsman', WIDTH/3 - 100, 670, 1, 10, screen, SIZE, enemy_group, platform_group)
                     sword_selected = True
                     archer_selected = not sword_selected
                 if archer_button.checkForInput(mouse_get_pos):
-                    player = Preview('Archer', WIDTH/3 - 100, 670, 1, 10, screen, WIDTH, enemy_group, platform_group)
+                    player = Preview('Archer', WIDTH/3 - 100, 670, 1, 10, screen, SIZE, enemy_group, platform_group)
                     archer_selected = True
                     sword_selected = not archer_selected
                 if accept_button.checkForInput(mouse_get_pos) and (sword_selected or archer_selected):

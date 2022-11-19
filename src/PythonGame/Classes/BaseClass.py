@@ -11,12 +11,13 @@ BLACK = (0, 0, 0)
 
 #class for all character
 class Character(pygame.sprite.Sprite):
-    def __init__(self, type, x, y, scale, speed, screen, screen_width, target, platform_group):
+    def __init__(self, type, x, y, scale, speed, screen, screen_size, target, platform_group):
         super().__init__()
         CURRENT_PATH = os.getcwd()
         self.scroll = 0
         self.screen = screen
-        self.screen_width = screen_width
+        self.screen_width = screen_size[0]
+        self.screen_height = screen_size[1]
         self.platform_group = platform_group
         self.alive = True
         self.jump = False
@@ -170,7 +171,7 @@ class Character(pygame.sprite.Sprite):
         #if the animation has run out the reset back to the start
         if self.frame_index >= len(self.animation_list[self.action]):
             #after animation death done
-            if self.frame_index == 5:
+            if self.action == 5:
                 self.frame_index = len(self.animation_list[self.action]) - 1
                 self.alive = False
                 self.kill()
