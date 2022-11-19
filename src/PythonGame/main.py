@@ -210,7 +210,7 @@ def start_game(player_seleted):
                 timer = (timerArr[-1] - timerArr[0])/1000
                 if round(timer) == 0:
                     timer = 0.00001
-                buff.draw_buff_bar(x_buff, y_buff, screen, timer * 80)
+                buff.draw_buff_bar(x_buff, y_buff, screen, timer * 60, mode)
                 if timer > 5:
                     buff.clearBuff(mode)
                     timerArr = []
@@ -223,7 +223,7 @@ def start_game(player_seleted):
                 timer = (timerArr[-1] - timerArr[0])/1000
                 if round(timer) == 0:
                     timer = 0.00001
-                buff.draw_buff_bar(x_buff, y_buff, screen, timer * 80)
+                buff.draw_buff_bar(x_buff, y_buff, screen, timer * 60, mode)
                 if timer > 5:
                     buff.clearBuff(mode)
                     timerArr = []
