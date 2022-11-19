@@ -3,10 +3,9 @@ from pygame.locals import *
 from Classes.BaseClass import Character
 
 class Preview(Character):
-    def __init__(self, type, x, y, scale, speed, screen, WIDTH, target, platform_group):
-        super().__init__(type, x, y, scale, speed, screen, WIDTH, target, platform_group)
+    def __init__(self, type, x, y, scale, speed, screen, screen_size, target, platform_group):
+        super().__init__(type, x, y, scale, speed, screen, screen_size, target, platform_group)
         self.gravity = 0.10
-        self.moving_right = True
 
     def move(self):
         #reset movement variables
@@ -14,10 +13,10 @@ class Preview(Character):
         dy = 0
 
         #assign movement variables if moving left or right
-        if self.moving_left and self.hit == False:
+        if self.moving_left:
             self.flip = True
             self.direction = -1
-        if self.moving_right and self.hit == False:
+        if self.moving_right:
             self.flip = False
             self.direction = 1
 

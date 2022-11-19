@@ -9,8 +9,8 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
 class Enemy(Character):
-    def __init__(self, type, x, y, scale, speed, screen, screen_width, target, platform_group, platform_width, screen_height):
-        super().__init__(type, x, y, scale, speed, screen, screen_width, target, platform_group)
+    def __init__(self, type, x, y, scale, speed, screen, screen_size, target, platform_group, platform_width):
+        super().__init__(type, x, y, scale, speed, screen, screen_size, target, platform_group)
         self.health = 100
         self.move_counter = 0
         self.platform_width = platform_width
@@ -24,7 +24,6 @@ class Enemy(Character):
         self.increase_speed = 5
         self.atk_damage = 10
         self.gravity = 0.05
-        self.screen_height = screen_height
         self.kill_score = 50
         self.atk_cd_val = 100
         self.moving_right = True
@@ -115,8 +114,6 @@ class Enemy(Character):
                 if self.idling_counter <= 0:
                     self.idling = False
         
-        if self.attack_cooldown > 0:
-            self.attack_cooldown -= 1
         return score
 
 
