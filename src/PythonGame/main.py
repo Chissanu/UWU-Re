@@ -77,6 +77,9 @@ swordsman_button = Button(WIDTH - swordsman_btn_img.get_width()/1.5, HEIGHT/4, s
 archer_button = Button(WIDTH -  archer_btn_img.get_width()/1.5, HEIGHT/2, archer_btn_img, 0.5)
 accept_button = Button(WIDTH -  accept_img.get_width()/3.2, HEIGHT/1.3, accept_img, 0.2)
 
+#Classes Import
+scoreboard = Leaderboard()
+
 
 #Drawing the entire frame
 def draw_window(display, background):
@@ -275,7 +278,6 @@ while running:
             start_game = False
             enemy_group.empty()
             arrow_group.empty()
-            scoreboard = Leaderboard()
             saveData = {
                 "name":name,
                 "score":score
