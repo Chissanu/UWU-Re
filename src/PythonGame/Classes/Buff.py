@@ -24,6 +24,6 @@ class Buff(pygame.sprite.Sprite):
         player.health = 100000
     
     def clearBuff(self, player):
-        print(self.origiHealth)
         player.health = self.origiHealth
+        
         
