@@ -20,15 +20,6 @@ start_game = False
 select_char_mode = False
 sword_selected = True
 archer_selected = False
-MAX_PLATFORMS = 20
-MAX_ENEMY = 10
-MAX_SHOP = 1
-MAX_BUFF = 1
-scroll = 0 
-bg_scroll = 0
-score = 0
-shop_open = False
-buff_hit = False
 manager = pygame_gui.UIManager((WIDTH, HEIGHT))
 text_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((350, 275), (900, 50)), manager=manager,
                                                object_id='#main_text_entry')
@@ -70,12 +61,16 @@ archer_btn_img = pygame.image.load(os.path.join(BTN_PATH, "archer_btn.png")).con
 accept_img = pygame.image.load(os.path.join(BTN_PATH, "accept_btn.png")).convert_alpha()
 
 #create buttons
-start_button = Button(WIDTH/4 - start_img.get_width()/2, HEIGHT/2, start_img, 1.5)
-exit_button = Button(WIDTH/2 + WIDTH/4 - exit_img.get_width()/2, HEIGHT/2, exit_img, 1.5)
-swordsman_button = Button(WIDTH - swordsman_btn_img.get_width()/1.5, HEIGHT/4, swordsman_btn_img, 0.5)
-archer_button = Button(WIDTH -  archer_btn_img.get_width()/1.5, HEIGHT/2, archer_btn_img, 0.5)
-accept_button = Button(WIDTH -  accept_img.get_width()/3.2, HEIGHT/1.3, accept_img, 0.2)
+start_button = Button((WIDTH/4 - start_img.get_width()/2, HEIGHT/2), start_img, 1.5, "start", font_big, BLACK, WHITE)
+exit_button = Button((WIDTH/2 + WIDTH/4 - exit_img.get_width()/2, HEIGHT/2), exit_img, 1.5, "exit", font_big, BLACK, WHITE)
+swordsman_button = Button((WIDTH - swordsman_btn_img.get_width()/1.5, HEIGHT/4), swordsman_btn_img, 0.5, "Swordsman", font_big, BLACK, WHITE)
+archer_button = Button((WIDTH -  archer_btn_img.get_width()/1.5, HEIGHT/2), archer_btn_img, 0.5, "Archer", font_big, BLACK, WHITE)
+accept_button = Button((WIDTH -  accept_img.get_width()/3.2, HEIGHT/1.3), accept_img, 0.2, "Accept", font_big, BLACK, WHITE)
 
+
+platform_group = pygame.sprite.Group() 
+enemy_group = pygame.sprite.Group() 
+arrow_group = pygame.sprite.Group()
 
 #Drawing the entire frame
 def draw_window(display, background):
@@ -110,106 +105,45 @@ def get_user_name():
         manager.draw_ui(screen)
 
         pygame.display.update()
-    
 
-#create sprite groups
-platform_group = pygame.sprite.Group() 
-enemy_group = pygame.sprite.Group() 
-arrow_group = pygame.sprite.Group()
-shop_group = pygame.sprite.Group()
-buff_group = pygame.sprite.Group()
+def start_game(player_seleted):
+    MAX_PLATFORMS = 20
+    MAX_ENEMY = 10
+    MAX_SHOP = 1
+    MAX_BUFF = 1
+    scroll = 0 
+    bg_scroll = 0
+    score = 0
+    shop_open = False
+    buff_hit = False
+    timerArr = []
+    shop = Shop(0, 0)
+    buff = Buff(0, 0)
 
-#create starting platform
-platform = Platform(swordsman_btn_img, WIDTH//2 - 300, HEIGHT - 150, 500, HEIGHT)
-platform_group.add(platform)
+    #create sprite groups
+    platform_group = pygame.sprite.Group() 
+    enemy_group = pygame.sprite.Group() 
+    arrow_group = pygame.sprite.Group()
+    shop_group = pygame.sprite.Group()
+    buff_group = pygame.sprite.Group()
 
-
-class Shop(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load(os.path.join(CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'Background', 'shop.png')).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (int(self.image.get_width() * 0.05), int(self.image.get_height() * 0.05)))
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-    
-    def update(self, scroll):
-        self.rect.y += scroll
-        #check if platform has gone off
-        if self.rect.top > HEIGHT:
-            self.kill()
-shop = Shop(0, 0)
-buff = Buff(0, 0)
-
-# player = Archer('Archer', WIDTH/3, 800, 0.3, 10, screen, WIDTH, enemy_group, arrow_group, platform_group)
-
-#=====INITIALIZE======  
-timerArr = []
-running = True 
-while running:
-    clock.tick(FPS)
-
-    #Home
-    if select_char_mode == False and start_game == False:
-        draw_window(screen, bg_img)        
-        if start_button.draw(screen):
-            #Create starting preview player
-            player = Preview('Swordsman', WIDTH/3 - 100, 670, 1, 10, screen, WIDTH, enemy_group, platform_group) 
-            select_char_mode = True
-            name = get_user_name()
-        if exit_button.draw(screen):
-            running = False
-    
-    if select_char_mode == True and start_game == False:
-        draw_window(screen, bg_img)
-        draw_text(name, font_big, BLACK, 1500, 0)
-        player.draw()
-        player.update()
-        if swordsman_button.draw(screen):
-            player = Preview('Swordsman', WIDTH/3 - 100, 670, 1, 10, screen, WIDTH, enemy_group, platform_group)
-            sword_selected = True
-            archer_selected = False
-        if archer_button.draw(screen):
-            player = Preview('Archer', WIDTH/3 - 100, 670, 1, 10, screen, WIDTH, enemy_group, platform_group)
-            archer_selected = True
-            sword_selected = False
-        if accept_button.draw(screen) and (sword_selected or archer_selected):
-            if sword_selected:
-                player = Swordsman('Swordsman', WIDTH/2, 800, 0.3, 10, screen, WIDTH, enemy_group, platform_group)
-            if archer_selected:
-                player = Archer('Archer', WIDTH/2, 800, 0.3, 10, screen, WIDTH, enemy_group, arrow_group, platform_group)
-            start_game, select_char_mode = True, False
-
-    key = pygame.key.get_pressed()
-    if shop_open:
-        draw_window(screen, bg_img)  
-        draw_text("shop open!!!", font_big, BLACK, WIDTH/2, HEIGHT/2)
-        if accept_button.draw(screen):
-            start_game = True
-            shop_open = False
-
-    if buff_hit:
-        buff_group.remove(buff)
-        buff.healthBuff(player)
-        tick = pygame.time.get_ticks()
-        timerArr.append(tick)
-        timer = round((timerArr[-1] - timerArr[0])/1000)
-        if timer > 5:
-            buff.clearBuff(player)
-            timerArr = []
-            buff_hit = False
-
-    if start_game:
+    #create starting platform
+    platform = Platform(swordsman_btn_img, WIDTH//2 - 300, HEIGHT - 150, 500, HEIGHT)
+    platform_group.add(platform)
+    if player_seleted == "Swordsman":
+        player = Swordsman('Swordsman', WIDTH/2, 800, 0.3, 10, screen, WIDTH, enemy_group, platform_group)
+    else:
+        player = Archer('Archer', WIDTH/2, 800, 0.3, 10, screen, WIDTH, enemy_group, arrow_group, platform_group)
+        
+    while True:
+        clock.tick(FPS)
         #draw bakground
         bg_scroll += scroll
         if bg_scroll >= 500:
             bg_scroll = 0
         draw_game_bg(screen, bg_img, bg_scroll)
         #draw name 
-        draw_text(name, font_big, BLACK, 1500, 0)
-
-        #draw player
-        player.draw()
+        # draw_text(name, font_big, BLACK, 1500, 0)
         
         #update platforms
         if len(platform_group) < MAX_PLATFORMS:
@@ -241,22 +175,30 @@ while running:
         
         if player.hit_box.colliderect(shop.rect) and key [pygame.K_f]:
             shop_open = True
-            start_game = False
         else:
             shop_open = False
 
         if player.hit_box.colliderect(buff.rect):
             buff_hit = True
-            
 
-        shop_group.draw(screen)
-        shop_group.update(scroll)
-        buff_group.draw(screen)
-        buff_group.update(scroll)
+        key = pygame.key.get_pressed()
 
-        platform_group.update(scroll)
-        platform_group.draw(screen)
+        if shop_open:
+            draw_window(screen, bg_img)  
+            draw_text("shop open!!!", font_big, BLACK, WIDTH/2, HEIGHT/2)
+            if accept_button.draw():
+                shop_open = False
 
+        if buff_hit:
+            buff_group.remove(buff)
+            buff.healthBuff(player)
+            tick = pygame.time.get_ticks()
+            timerArr.append(tick)
+            timer = round((timerArr[-1] - timerArr[0])/1000)
+            if timer > 5:
+                buff.clearBuff(player)
+                timerArr = []
+                buff_hit = False
 
         # update enemy
         for enemy in enemy_group:
@@ -265,46 +207,159 @@ while running:
             if enemy.update(scroll):
                 score += 50
 
-
-        draw_text('SCORE: ' + str(score), font_small, BLACK, 0, 0)
-        #draw player health bar
+        shop_group.draw(screen)
+        shop_group.update(scroll)
+        buff_group.draw(screen)
+        buff_group.update(scroll)
+        arrow_group.update()
+        #draw player
+        player.draw()
+        scroll = player.update()
         player.draw_health_bar(100, 100)
-        #restart game to main menu
-        if player.alive == False:
-            start_game = False
-            enemy_group.empty()
-            arrow_group.empty()
-            print(name)
+        platform_group.update(scroll)
+        platform_group.draw(screen)
+
         pygame.draw.line(screen, BLACK, (0,300),(WIDTH, 300))
 
-        arrow_group.update()
-        scroll = player.update()
-    
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:   
-                running = False
-        #keyboard presses
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                running = False
-            elif player.attacking == False and player.alive:
+        draw_text('SCORE: ' + str(score), font_small, BLACK, 0, 0)
+        
+        #restart game to main menu
+        if player.alive == False:
+            enemy_group.empty()
+            arrow_group.empty()
+            main_menu()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:   
+                    pygame.quit()
+                    sys.exit()
+            #keyboard presses
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+                elif player.attacking == False and player.alive:
+                    if event.key == pygame.K_a:
+                        player.moving_left = True
+                    if event.key == pygame.K_d:
+                        player.moving_right = True
+                    if event.key == pygame.K_w and player.in_air == False:
+                        player.jump = True
+                    if event.key == pygame.K_SPACE and player.attack_cooldown == 0:
+                        player.attacking = True
+
+            #keyboard button released
+            if event.type == pygame.KEYUP:
                 if event.key == pygame.K_a:
-                    player.moving_left = True
+                    player.moving_left = False
                 if event.key == pygame.K_d:
-                    player.moving_right = True
-                if event.key == pygame.K_w and player.in_air == False:
-                    player.jump = True
-                if event.key == pygame.K_SPACE and player.attack_cooldown == 0:
-                    player.attacking = True
+                    player.moving_right = False
+                      
+        pygame.display.update()
 
-        #keyboard button released
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_a:
-                player.moving_left = False
-            if event.key == pygame.K_d:
-                player.moving_right = False
-                
-               
-    pygame.display.update()
 
-pygame.quit()
+def select_char_mode():
+    # global sword_selected
+    # global archer_selected
+    # global platform_group
+    player = Preview('Swordsman', WIDTH/3 - 100, 670, 1, 10, screen, WIDTH, enemy_group, platform_group)
+    while True:
+        clock.tick(FPS)
+        
+        draw_window(screen, bg_img)
+        mouse_get_pos = pygame.mouse.get_pos()
+        player.draw()
+        player.update()
+
+        for button in (swordsman_button, archer_button, accept_button):
+            button.changeColor(mouse_get_pos)
+            button.update(screen)
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if swordsman_button.checkForInput(mouse_get_pos):
+                    player = Preview('Swordsman', WIDTH/3 - 100, 670, 1, 10, screen, WIDTH, enemy_group, platform_group)
+                    sword_selected = True
+                    archer_selected = not sword_selected
+                if archer_button.checkForInput(mouse_get_pos):
+                    player = Preview('Archer', WIDTH/3 - 100, 670, 1, 10, screen, WIDTH, enemy_group, platform_group)
+                    archer_selected = True
+                    sword_selected = not archer_selected
+                if accept_button.checkForInput(mouse_get_pos) and (sword_selected or archer_selected):
+                    if sword_selected:
+                        player_selected = "Swordsman"
+                    if archer_selected:
+                        player_selected = "Archer"
+                    start_game(player_selected)
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+                elif player.attacking == False and player.alive:
+                    if event.key == pygame.K_a:
+                        player.moving_left = True
+                    if event.key == pygame.K_d:
+                        player.moving_right = True
+                    if event.key == pygame.K_w and player.in_air == False:
+                        player.jump = True
+                    if event.key == pygame.K_SPACE and player.attack_cooldown == 0:
+                        player.attacking = True
+
+                #keyboard button released
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_a:
+                    player.moving_left = False
+                if event.key == pygame.K_d:
+                    player.moving_right = False
+                    
+        pygame.display.update() 
+
+def main_menu(): 
+    run = True
+    while run:
+        draw_window(screen, bg_img)
+        mouse_get_pos = pygame.mouse.get_pos()
+        for button in (start_button, exit_button):
+            button.changeColor(mouse_get_pos)
+            button.update(screen)
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if start_button.checkForInput(mouse_get_pos):
+                    # get_user_name()
+                    select_char_mode()
+                # if exit_button.checkForInput(mouse_get_pos):
+                #     pass
+                if exit_button.checkForInput(mouse_get_pos):
+                    pygame.quit()
+                    sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+
+        pygame.display.update()
+
+
+class Shop(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load(os.path.join(CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'Background', 'shop.png')).convert_alpha()
+        self.image = pygame.transform.scale(self.image, (int(self.image.get_width() * 0.05), int(self.image.get_height() * 0.05)))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+    
+    def update(self, scroll):
+        self.rect.y += scroll
+        #check if platform has gone off
+        if self.rect.top > HEIGHT:
+            self.kill()
+
+main_menu()
