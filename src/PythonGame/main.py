@@ -22,7 +22,7 @@ select_char_mode = False
 sword_selected = True
 archer_selected = False
 manager = pygame_gui.UIManager((WIDTH, HEIGHT))
-text_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((350, 275), (900, 100)), manager=manager,
+text_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((350, 275), (900, 50)), manager=manager,
                                                object_id='#main_text_entry')
 #set framerate
 clock = pygame.time.Clock()
@@ -74,6 +74,8 @@ archer_button = Button((WIDTH/1.3 , HEIGHT/2), archer_btn_img, 0.5, "Archer", fo
 accept_button = Button((WIDTH -  accept_img.get_width()/3.2, HEIGHT/1.3), accept_img, 0.3, "ACCEPT", font_big, WHITE, GRAY)
 restart_button = Button((WIDTH/2, HEIGHT/2 + 250), restart_img, 0.25, "RESTART", font_small, BLACK, GRAY)
 main_menu_button = Button((WIDTH/2 - 100, HEIGHT/2 + 400), exit_img, 0.25, "main menu", font_small, WHITE, GRAY)
+back_button = Button((WIDTH - 200, HEIGHT-200), None, 0.25, "back", font_small, BLACK, GRAY)
+sort_button = Button((WIDTH - 400, HEIGHT-200), None, 0.25, "sort", font_small, BLACK, GRAY)
 
 #Classes Import
 scoreboard = Leaderboard()
@@ -97,6 +99,9 @@ def draw_text(text, font, text_col, x, y):
 
 
 def get_user_name():
+    manager = pygame_gui.UIManager((WIDTH, HEIGHT))
+    text_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((350, 275), (900, 50)), manager=manager,
+                                               object_id='#main_text_entry')
     while True:
         UI_REFRESH_RATE = clock.tick(60)/1000
         for event in pygame.event.get():
@@ -114,7 +119,7 @@ def get_user_name():
         
         manager.update(UI_REFRESH_RATE)
 
-        # screen.fill("white")
+        screen.fill("white")
 
         manager.draw_ui(screen)
 
@@ -155,17 +160,30 @@ def restart(score, player_selected):
         pygame.display.update()
 
 def leader_board_page():
+    manager = pygame_gui.UIManager((WIDTH, HEIGHT))
+    text_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((WIDTH / 2 + 500, 100), (300, 50)), manager=manager,
+                                               object_id='#main_text_entry')
+    leaderboard = Leaderboard()
+    players = leaderboard.getSortedScoreboard() 
+    
     while True:
         UI_REFRESH_RATE = clock.tick(60)/1000
-        screen.fill(GRAY)
+        screen.fill(WHITE)
         mouse_get_pos = pygame.mouse.get_pos()
-
-        draw_text("YOURE SCORE:", font_big, BLACK, WIDTH/2 - 200, 200)
-        draw_text("", font_big, WHITE, WIDTH/2, 300)
-        
-        for button in (restart_button, exit_button_restart, main_menu_button):
+        index = 1
+        for button in (back_button, sort_button):
             button.changeColor(mouse_get_pos)
             button.update(screen)
+
+        for item in players:
+            if index == 1:
+                draw_text(item["name"], font_big, RED, WIDTH/2 - 200, 100)
+                draw_text(str(item["score"]), font_big, RED, WIDTH/2 + 200, 100)
+            else:
+                draw_text(item["name"], font_small, BLACK, WIDTH/2 - 200, 100 + 50 * index)
+                draw_text(str(item["score"]), font_small, BLACK, WIDTH/2 + 200, 100 + 50 * index)
+                
+            index += 1
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -173,10 +191,12 @@ def leader_board_page():
                 sys.exit()
             if (event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED and
                 event.ui_object_id == '#main_text_entry'):
-                return event.text
+                print(event.text)
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if main_menu_button.checkForInput(mouse_get_pos):
+                if back_button.checkForInput(mouse_get_pos):
                     main_menu()
+                if sort_button.checkForInput(mouse_get_pos):
+                    players = leaderboard.getSortedScoreboard()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
@@ -185,7 +205,6 @@ def leader_board_page():
         manager.draw_ui(screen)
 
         pygame.display.update()
-
 
 def start_game(player_selected):
     global name
