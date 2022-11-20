@@ -56,7 +56,19 @@ class Leaderboard:
                     break
         self.sortedScoreboard = sortedArrDict
         return sortedArrDict
-
+    
+    def findPlayer(self,playerName):
+        """Linear search"""
+        self.getSortedScoreboard()
+        playerArr = []
+        for player in self.sortedScoreboard:
+            if playerName.lower() == player["name"].lower():
+                playerArr.append({
+                    "name":  player["name"],
+                    "score": player["score"],
+                    "position": player["position"]
+                })
+        return playerArr
     
     def quickSort(self,array):
         """Sort the array by using quicksort."""
@@ -76,4 +88,3 @@ class Leaderboard:
             return self.quickSort(less) + equal + self.quickSort(greater)
         else:
             return array
-        
