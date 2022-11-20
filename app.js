@@ -5,6 +5,8 @@ var logger = require('morgan');
 const { Client } = require('pg')
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const { spawn } = require('child_process');
+var socket = require('socket.io');
 
 const client = new Client({
     host: "localhost",
@@ -19,6 +21,11 @@ let userList;
 let users = [];
 const apiRoute = express.Router();
 var app = express();
+var user;
+
+var server = app.listen(4000, function() {
+    console.log('listening for requests on port 4000,');
+});
 
 
 // API
@@ -35,7 +42,7 @@ app.get('/', function(req, res, next) {
 });
 
 app.get('/browse', function(req, res, next) {
-    res.render('browse', { drinks: drinkList });
+    res.render('browse', { drinks: drinkList, userObj: user});
 });
 
 app.get('/favorite', function(req, res, next) {
@@ -50,9 +57,50 @@ app.get('/register', function(req, res, next) {
     res.render('register');
 });
 
-app.get('/test', function(req, res, next) {
-    console.log(drinkList)
-    res.render('test', { drinks: drinkList });
+app.get('/complete', function(req, res, next) {
+    res.render('complete');
+});
+
+app.get('/test', function(req, res) {
+    var dataToSend;
+    var path = require('path');
+    var x = path.join('src', 'PythonTkinter', 'dispense_drink.py');
+    // spawn new child process to call the python script
+
+    const python = spawn('python', [x, 14, "hello"]);
+    // collect data from script
+    python.stdout.on('data', function (data) {
+     console.log('Pipe data from python script ...');
+     dataToSend = data.toString();
+    });
+    // in close event we are sure that stream from child process is closed
+    python.on('close', (code) => {
+    console.log(`child process close all stdio with code ${code}`);
+    // send data to browser
+    res.send(dataToSend)
+    });
+ 
+});
+
+apiRoute.post("/test2", (req, res) => {
+    var dataToSend;
+    var path = require('path');
+    var x = path.join('src', 'PythonTkinter', 'dispense_drink.py');
+    // spawn new child process to call the python script
+
+    const python = spawn('python', [x, 14, "hello"]);
+    // collect data from script
+    python.stdout.on('data', function (data) {
+     console.log('Pipe data from python script ...');
+     dataToSend = data.toString();
+    });
+    // in close event we are sure that stream from child process is closed
+    python.on('close', (code) => {
+    console.log(`child process close all stdio with code ${code}`);
+    // send data to browser
+    console.log(res)
+    res.send(dataToSend)
+    });
 });
 
 const setDrinkList = (rows) => {
@@ -114,7 +162,6 @@ apiRoute.post("/register", (req, res) => {
 
 apiRoute.post("/login", (req, res) => {
     const { username, userpass } = req.body;
-    let user;
     console.log("Loggin in with this data")
         //console.log(userList.find)
     if (!username || !userpass)
@@ -132,5 +179,17 @@ apiRoute.post("/login", (req, res) => {
 apiRoute.get("/logout", (req, res) => {
     res.redirect("/");
 });
+
+var io = socket(server);
+io.on('connection', (socket) => {
+    console.log('a user connected');
+    socket.on('disconnect', () => {
+      console.log('user disconnected');
+    });
+
+    socket.on('order', function(data) {
+        console.log(data);
+    });
+  });
 
 module.exports = app;

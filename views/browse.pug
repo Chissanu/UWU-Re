@@ -2,11 +2,16 @@ doctype html
 html
   head
     title Browse
+    script(type='text/javascript', src='http://code.jquery.com/jquery-latest.min.js')
+    script(src='./js/bootstrap.min.js')
+    script(src='./socket.io/socket.io.js')
     script
       include js/orderDrink.js
+
   body
-    mixin drinkItems(drinkData,itemID,top)
+    mixin drinkItems(drinkData,itemID,top,userID)
         .item(id="item" + itemID style="top:" + top + "px")
+            form(action='/api/orderDrink' method='post')
             h1.h1=drinkData.drinkname
             h1.h1(style='left:590px')="THB:" + drinkData.price
             h2.h2="Created by:" + drinkData.creator
@@ -16,14 +21,16 @@ html
             h2.h2(style='top:270px')="Ingredient 4: " + drinkData.ingredientlist[3]
             h2.h2(style='top:320px')="Ingredient 5: " + drinkData.ingredientlist[4]
             h2.h2(style='top:370px')="Ingredient 6: " + drinkData.ingredientlist[5]
-            button(id="order" + itemID onClick='orderDrink('+ itemID +')') Order
+            //- button(id="order" + itemID onClick='orderDrink('+ itemID +')') Order
+            button(id="order" + itemID type="submit" onClick='orderDrink(' + '"' + itemID + '"' + ',' + '"' + userID + '"' + ')') Order
     #main-rec
         h1#browseLabel Browse
         #inner-rec
             input#searchBox(type='text', placeholder='Search')
             - var top=100
+            - var userID=userObj.userid
             - for (var i = 0; i < drinks.length; ++i) {
-            +drinkItems(drinks[i],i+1,top)
+            +drinkItems(drinks[i],i+1,top,userID)
             - top += 550
             - }
 

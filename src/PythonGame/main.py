@@ -154,7 +154,9 @@ def restart(score, player_selected):
 
         pygame.display.update()
 
-def start_game(player_selected):
+
+def start_game(player_seleted):
+    global name
     MAX_PLATFORMS = 20
     MAX_ENEMY = 5
     MAX_SHOP = 1
@@ -164,6 +166,7 @@ def start_game(player_selected):
     score = 0
     shop_open = False
     buff_hit = False
+    buff_random = True
     timerArr = []
     shop = Shop(0, 0)
     buff = Buff(0, 0)
@@ -191,7 +194,7 @@ def start_game(player_selected):
             bg_scroll = 0
         draw_game_bg(screen, bg_img, bg_scroll)
         #draw name 
-        # draw_text(name, font_big, BLACK, 1500, 0)
+        draw_text(name, font_big, BLACK, 1500, 0)
         
         #update platforms
         if len(platform_group) < MAX_PLATFORMS:
@@ -238,16 +241,39 @@ def start_game(player_selected):
                 shop_open = False
 
         if buff_hit:
+            x_buff = 200
+            y_buff = 180
             buff_group.remove(buff)
-            buff.healthBuff(player)
-            tick = pygame.time.get_ticks()
-            timerArr.append(tick)
-            timer = round((timerArr[-1] - timerArr[0])/1000)
-            if timer > 5:
-                buff.clearBuff(player)
-                timerArr = []
-                buff_hit = False
-
+            buff.setData(player)
+            if buff_random:
+                mode = random.randint(1, 2)
+                buff_random = False
+            if mode == 1:
+                buff.restore_health()
+                tick = pygame.time.get_ticks()
+                timerArr.append(tick)
+                timer = (timerArr[-1] - timerArr[0])/1000
+                if round(timer) == 0:
+                    timer = 0.00001
+                buff.draw_buff_bar(x_buff, y_buff, screen, timer * 60, mode)
+                if timer > 5:
+                    buff.clearBuff(mode)
+                    timerArr = []
+                    buff_hit = False
+                    buff_random = True
+            elif mode == 2:
+                buff.superJump()
+                tick = pygame.time.get_ticks()
+                timerArr.append(tick)
+                timer = (timerArr[-1] - timerArr[0])/1000
+                if round(timer) == 0:
+                    timer = 0.00001
+                buff.draw_buff_bar(x_buff, y_buff, screen, timer * 60, mode)
+                if timer > 5:
+                    buff.clearBuff(mode)
+                    timerArr = []
+                    buff_hit = False
+                    buff_random = True
         # update enemy
         for enemy in enemy_group:
             enemy.draw_health_bar(enemy.hit_box.centerx - 50, enemy.hit_box.y -10) 
@@ -275,7 +301,15 @@ def start_game(player_selected):
         if player.alive == False:
             enemy_group.empty()
             arrow_group.empty()
-            restart(score, player_selected)
+            restart(score, player_selected) 
+            newData = {
+                "name" : name,
+                "score": score
+            }
+            scoreboard.saveScore(newData)
+            print(scoreboard.getSortedScoreboard())
+            main_menu()
+
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:   
@@ -371,8 +405,10 @@ def select_char_mode():
                     
         pygame.display.update() 
 
-def main_menu(): 
-    while True:
+def main_menu():
+    global name
+    run = True
+    while run:
         draw_window(screen, bg_img)
         mouse_get_pos = pygame.mouse.get_pos()
         for button in (start_button, exit_button, leaderBoard_button):
@@ -385,7 +421,7 @@ def main_menu():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start_button.checkForInput(mouse_get_pos):
-                    # get_user_name()
+                    name = get_user_name()
                     select_char_mode()
                 if leaderBoard_button.checkForInput(mouse_get_pos):
                     pass
