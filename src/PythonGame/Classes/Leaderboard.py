@@ -46,13 +46,10 @@ class Leaderboard:
         
         sortedArr = self.quickSort(tempArr)
         userList = self.users
-        print(userList)
-        print(sortedArr)
         index = 1
         while sortedArr:
             val = sortedArr.pop()
             for item in userList:
-                print(item["name"])
                 if val == item["score"]:
                     sortedArrDict.append({
                         "name" : item["name"],
@@ -60,6 +57,7 @@ class Leaderboard:
                         "position": index
                     })
                     index += 1
+                    userList.remove(item)
                     break
         self.sortedScoreboard = sortedArrDict
         return sortedArrDict
@@ -95,8 +93,3 @@ class Leaderboard:
             return self.quickSort(less) + equal + self.quickSort(greater)
         else:
             return array
-
-# t = Leaderboard()
-# t.getSortedScoreboard()
-# for i in t.getSortedScoreboard():
-#     print(i)
