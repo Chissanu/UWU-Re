@@ -155,7 +155,7 @@ def restart(score, player_selected):
         pygame.display.update()
 
 
-def start_game(player_seleted):
+def start_game(player_selected):
     global name
     MAX_PLATFORMS = 20
     MAX_ENEMY = 5
@@ -301,7 +301,7 @@ def start_game(player_seleted):
         if player.alive == False:
             enemy_group.empty()
             arrow_group.empty()
-            restart(score, player_selected) 
+            restart(score,player_selected) 
             newData = {
                 "name" : name,
                 "score": score
