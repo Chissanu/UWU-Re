@@ -58,7 +58,7 @@ class Leaderboard:
         return sortedArrDict
     
     def findPlayer(self,playerName):
-        """Linear search"""
+        """Find player in array by using linear search"""
         self.getSortedScoreboard()
         playerArr = []
         for player in self.sortedScoreboard:
