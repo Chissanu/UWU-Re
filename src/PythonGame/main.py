@@ -7,6 +7,7 @@ from Classes.Preview import Preview
 from Classes.Platform import Platform
 from Classes.Buff import Buff
 from Classes.Leaderboard import Leaderboard
+from Classes.Shop import Shop
 
 pygame.init()
 
@@ -125,6 +126,34 @@ def get_user_name():
 
         pygame.display.update()
 
+def shopOpen(screen, shop, score):
+    while True:
+        bar_arr = [350, 450, 550, 650, 750]
+        screen.fill(BLACK)
+        draw_text("Shop", font_big, WHITE, WIDTH/2 - 100, 50)
+        currentScore = f"Current Score: {score}"
+        draw_text(currentScore, font_small, WHITE, WIDTH/2 + 400, 50)
+        health_img = pygame.image.load(os.path.join(CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'shop_img', 'healthIcon.png')).convert_alpha()
+        health_img = pygame.transform.scale(health_img, (int(health_img.get_width() * 0.1), int(health_img.get_height() * 0.1)))
+        strength_img = pygame.image.load(os.path.join(CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'shop_img', 'strengthIcon.png')).convert_alpha()
+        strength_img = pygame.transform.scale(strength_img, (int(strength_img.get_width() * 0.1), int(strength_img.get_height() * 0.1)))
+        booster_img = pygame.image.load(os.path.join(CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'shop_img', 'booster.png')).convert_alpha()
+        booster_img = pygame.transform.scale(booster_img, (int(booster_img.get_width() * 0.05), int(booster_img.get_height() * 0.05)))
+        for i in bar_arr:
+            pygame.draw.rect(screen, GRAY, (i, 210, 30, 70))
+            pygame.draw.rect(screen, GRAY, (i, 360, 30, 70))
+            pygame.draw.rect(screen, GRAY, (i, 515, 30, 70))
+        screen.blit(health_img, (200, 200))
+        screen.blit(strength_img, (200, 350))
+        screen.blit(booster_img, (200, 500))
+
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+        #pygame.draw.rect()
+        pygame.display.update()
+
 def restart(score, player_selected):
     ANIMATION_PATH = os.path.join(CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'Character_img')
     img = pygame.image.load(ANIMATION_PATH + "\\{}\\{}\\{}".format(player_selected, "Death",4) + ".png").convert_alpha()
@@ -147,7 +176,7 @@ def restart(score, player_selected):
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if restart_button.checkForInput(mouse_get_pos):
-                    start_game(player_selected)
+                    start_game(player_selected, name)
                 if main_menu_button.checkForInput(mouse_get_pos):
                     main_menu()
                 if exit_button_restart.checkForInput(mouse_get_pos):
@@ -263,7 +292,7 @@ def start_game(player_selected, name):
             platform_group.add(platform)
 
             spawn_chance = random.randint(0, 100)
-            if spawn_chance == 0:
+            if spawn_chance > 0:
                 if len(shop_group) < MAX_SHOP:
                     shop = Shop(platform_x + platform_width/2, platform.rect.y - 85)
                     shop_group.add(shop)
@@ -278,8 +307,6 @@ def start_game(player_selected, name):
         
         if player.hit_box.colliderect(shop.rect) and key [pygame.K_f]:
             shop_open = True
-        else:
-            shop_open = False
 
         if player.hit_box.colliderect(buff.rect):
             buff_hit = True
@@ -287,10 +314,8 @@ def start_game(player_selected, name):
         key = pygame.key.get_pressed()
 
         if shop_open:
-            draw_window(screen, bg_img)  
+            shopOpen(screen, shop, score)
             draw_text("shop open!!!", font_big, BLACK, WIDTH/2, HEIGHT/2)
-            if accept_button.draw():
-                shop_open = False
 
         if buff_hit:
             x_buff = 200
@@ -485,21 +510,5 @@ def main_menu():
                     pygame.quit()
 
         pygame.display.update()
-
-
-class Shop(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load(os.path.join(CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'Background', 'shop.png')).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (int(self.image.get_width() * 0.05), int(self.image.get_height() * 0.05)))
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-    
-    def update(self, scroll):
-        self.rect.y += scroll
-        #check if platform has gone off
-        if self.rect.top > HEIGHT:
-            self.kill()
 
 main_menu()
