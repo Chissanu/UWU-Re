@@ -4,6 +4,7 @@ class Leaderboard:
     def __init__(self):
         self.saveFilePath = os.path.join(os.getcwd(),'src','PythonGame','gameData.json')
         self.users = ""
+        self.sortedScoreboard = []
         self.getUser()
     
     def getUser(self):
@@ -41,18 +42,21 @@ class Leaderboard:
         for data in self.users:
             tempArr.append(data["score"])
         sortedArr = self.quickSort(tempArr)
-        
+        index = 1
         while sortedArr:
             val = sortedArr.pop()
             for item in self.users:
                 if val == item["score"]:
                     sortedArrDict.append({
                         "name" : item["name"],
-                        "score": item["score"]
+                        "score": item["score"],
+                        "position": index
                     })
+                    index += 1
                     break
-        
+        self.sortedScoreboard = sortedArrDict
         return sortedArrDict
+
     
     def quickSort(self,array):
         """Sort the array by using quicksort."""
