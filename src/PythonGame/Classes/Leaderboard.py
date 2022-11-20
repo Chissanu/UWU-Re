@@ -32,20 +32,27 @@ class Leaderboard:
             
         except Exception as e:
             #When file data is not found
+            print("Error")
             json_object = json.dumps(newData, indent=2)
             with open(self.saveFilePath, "w") as outfile:
                 outfile.write(json_object)
 
     def getSortedScoreboard(self):
+        self.getUser()
         tempArr = []
         sortedArrDict = []
         for data in self.users:
             tempArr.append(data["score"])
+        
         sortedArr = self.quickSort(tempArr)
+        userList = self.users
+        print(userList)
+        print(sortedArr)
         index = 1
         while sortedArr:
             val = sortedArr.pop()
-            for item in self.users:
+            for item in userList:
+                print(item["name"])
                 if val == item["score"]:
                     sortedArrDict.append({
                         "name" : item["name"],
@@ -88,3 +95,8 @@ class Leaderboard:
             return self.quickSort(less) + equal + self.quickSort(greater)
         else:
             return array
+
+# t = Leaderboard()
+# t.getSortedScoreboard()
+# for i in t.getSortedScoreboard():
+#     print(i)

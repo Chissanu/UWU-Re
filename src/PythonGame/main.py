@@ -75,7 +75,7 @@ accept_button = Button((WIDTH -  accept_img.get_width()/3.2, HEIGHT/1.3), accept
 restart_button = Button((WIDTH/2, HEIGHT/2 + 250), restart_img, 0.25, "RESTART", font_small, BLACK, GRAY)
 main_menu_button = Button((WIDTH/2 - 100, HEIGHT/2 + 400), exit_img, 0.25, "main menu", font_small, WHITE, GRAY)
 back_button = Button((WIDTH - 200, HEIGHT-200), None, 0.25, "back", font_small, BLACK, GRAY)
-sort_button = Button((WIDTH - 400, HEIGHT-200), None, 0.25, "sort", font_small, BLACK, GRAY)
+search_button = Button((WIDTH - 400, HEIGHT-200), None, 0.25, "search", font_small, BLACK, GRAY)
 
 #Classes Import
 scoreboard = Leaderboard()
@@ -163,15 +163,15 @@ def leader_board_page():
     manager = pygame_gui.UIManager((WIDTH, HEIGHT))
     text_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((WIDTH / 2 + 500, 100), (300, 50)), manager=manager,
                                                object_id='#main_text_entry')
-    leaderboard = Leaderboard()
-    players = leaderboard.getSortedScoreboard() 
+    scoreboard = Leaderboard()
+    players = scoreboard.getSortedScoreboard() 
     
     while True:
         UI_REFRESH_RATE = clock.tick(60)/1000
         screen.fill(WHITE)
         mouse_get_pos = pygame.mouse.get_pos()
         index = 1
-        for button in (back_button, sort_button):
+        for button in (back_button, search_button):
             button.changeColor(mouse_get_pos)
             button.update(screen)
 
@@ -179,9 +179,11 @@ def leader_board_page():
             if index == 1:
                 draw_text(item["name"], font_big, RED, WIDTH/2 - 200, 100)
                 draw_text(str(item["score"]), font_big, RED, WIDTH/2 + 200, 100)
+                draw_text(str(item["position"]), font_big, RED, WIDTH/2 - 400, 100)
             else:
                 draw_text(item["name"], font_small, BLACK, WIDTH/2 - 200, 100 + 50 * index)
                 draw_text(str(item["score"]), font_small, BLACK, WIDTH/2 + 200, 100 + 50 * index)
+                draw_text(str(item["position"]), font_small, BLACK, WIDTH/2 -400, 100 + 50 * index)
                 
             index += 1
         
@@ -191,12 +193,12 @@ def leader_board_page():
                 sys.exit()
             if (event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED and
                 event.ui_object_id == '#main_text_entry'):
-                print(event.text)
+                players = scoreboard.findPlayer(event.text)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.checkForInput(mouse_get_pos):
                     main_menu()
-                if sort_button.checkForInput(mouse_get_pos):
-                    players = leaderboard.getSortedScoreboard()
+                if search_button.checkForInput(mouse_get_pos):
+                    players = scoreboard.getSortedScoreboard()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
@@ -206,8 +208,7 @@ def leader_board_page():
 
         pygame.display.update()
 
-def start_game(player_selected):
-    global name
+def start_game(player_selected, name):
     MAX_PLATFORMS = 20
     MAX_ENEMY = 5
     MAX_SHOP = 1
@@ -352,14 +353,13 @@ def start_game(player_selected):
         if player.alive == False:
             enemy_group.empty()
             arrow_group.empty()
-            restart(score,player_selected) 
             newData = {
                 "name" : name,
                 "score": score
             }
             scoreboard.saveScore(newData)
             print(scoreboard.getSortedScoreboard())
-            main_menu()
+            restart(score,player_selected) 
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:   
@@ -390,7 +390,7 @@ def start_game(player_selected):
         pygame.display.update()
 
 
-def select_char_mode():
+def select_char_mode(name):
     global sword_selected
     global archer_selected
     # global platform_group
@@ -400,6 +400,7 @@ def select_char_mode():
     while True:
         clock.tick(FPS)
         draw_window(screen, bg_img)
+        draw_text(name, font_small, BLACK, WIDTH/2 + 500, 100)
         draw_text(char_name, font_small, BLACK, x, 200)
         mouse_get_pos = pygame.mouse.get_pos()
         player.draw()
@@ -427,10 +428,10 @@ def select_char_mode():
                 if accept_button.checkForInput(mouse_get_pos) and (sword_selected or archer_selected):
                     if sword_selected:
                         player_selected = "Swordsman"
-                        start_game(player_selected)
+                        start_game(player_selected, name)
                     if archer_selected:
                         player_selected = "Archer"
-                        start_game(player_selected)
+                        start_game(player_selected, name)
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -472,7 +473,7 @@ def main_menu():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start_button.checkForInput(mouse_get_pos):
                     name = get_user_name()
-                    select_char_mode()
+                    select_char_mode(name)
                 if leaderBoard_button.checkForInput(mouse_get_pos):
                     leader_board_page()
                     pass
