@@ -28,6 +28,67 @@ class Archer(Character):
         self.atk_damage
         )
         self.arrow_gruop.add(arrow)
+    
+    #update character actions
+    def update(self):
+        self.update_animation()
+        self.scroll = self.move()
+        if self.health <= 0:
+            self.health = 0
+            self.speed = 0
+            self.update_action(5)#5: death
+        elif self.hit == True:
+            self.update_action(4)#4: hit
+        elif self.attacking == True:
+            self.update_action(3)#3: attack
+        elif self.in_air:
+            self.update_action(2)#2: jump
+        elif self.moving_left or self.moving_right:
+            self.update_action(1)#1: run
+        else:
+            self.update_action(0)#0: idle
+        return self.scroll
+
+
+    def update_animation(self):
+        if self.attack_cooldown > 0:
+            self.attack_cooldown -= 1
+		#update animation
+        if self.action == 3:
+            ANIMATION_COOLDOWN = 30
+        else:
+            ANIMATION_COOLDOWN = 100
+        #update image depending on current frame
+        self.image = self.animation_list[self.action][self.frame_index]
+        #check if enough time has passed since the last update
+        if pygame.time.get_ticks() - self.update_time > ANIMATION_COOLDOWN:
+            self.update_time = pygame.time.get_ticks()
+            self.frame_index += 1
+        #if the animation has run out the reset back to the start
+        if self.frame_index >= len(self.animation_list[self.action]):
+            #after animation death done
+            if self.action == 5:
+                self.frame_index = len(self.animation_list[self.action]) - 1
+                self.alive = False
+                self.kill()
+                return True
+            else:
+                self.frame_index = 0
+                #check if an attack was executed
+                if self.action == 1 or self.action == 2:
+                    self.attacking = False
+                if self.action == 3:
+                    self.attack()            
+                    self.attacking = False
+                    self.attack_cooldown = self.atk_cd_val
+                #check if damage was taken
+                if self.action == 4:
+                    self.hit = False
+                    #if the player was in the middle of an attack, then the attack is stopped
+                    self.attacking = False
+                    self.attack_cooldown = self.atk_cd_val
+        return False
+
 
 
 class Arrow(pygame.sprite.Sprite):
@@ -49,8 +110,9 @@ class Arrow(pygame.sprite.Sprite):
         self.atk_damage = atk_damage
 
 
-    def update(self):
+    def update(self, scroll):
         self.screen.blit(pygame.transform.flip(self.arrow_image, self.flip, False), self.rect)
+        self.rect.y += scroll
         self.rect.x += (self.direction * self.arrow_speed)
         for enemy in self.target_group:
             if self.rect.colliderect(enemy.hit_box):
