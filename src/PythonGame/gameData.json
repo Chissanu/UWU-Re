@@ -1,5 +1,4 @@
-[
-    {
+[{
         "name": "Ruj",
         "score": 0
     },
@@ -38,25 +37,5 @@
     {
         "name": "gay",
         "score": 50
-    },
-    {
-        "name": "gay",
-        "score": 250
-    },
-    {
-        "name": "OA",
-        "score": 1100
-    },
-    {
-        "name": "gay",
-        "score": 900
-    },
-    {
-        "name": "gay",
-        "score": 0
-    },
-    {
-        "name": "gay",
-        "score": 0
     }
 ]

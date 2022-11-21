@@ -10,13 +10,15 @@ class Buff(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.origiHealth = 100
+        self.origiAtk = 50
         self.player = 0
         self.health_icon = 0
         self.health_icon_rect = 0
-
+        
     def setData(self, player):
         self.player = player
         self.origiHealth = player.max_health
+        self.origiAtk = player.origiAtk
 
     def update(self, scroll):
         self.rect.y += scroll
@@ -29,6 +31,10 @@ class Buff(pygame.sprite.Sprite):
 
     def restore_health(self):
         self.player.health = self.player.max_health
+        
+    def berserk(self):
+        val = (self.player.origiAtk * 5)
+        self.player.setAttack(val)
     
     def clearBuff(self, num):
         self.rect.x = 0
@@ -37,6 +43,8 @@ class Buff(pygame.sprite.Sprite):
             self.player.health = self.player.max_health
         elif num == 2:
             self.player.gravity = 0.75
+        elif num == 3:
+            self.player.setAttack(self.origiAtk)
 
     def draw_buff_bar(self, x, y, screen, ratio, num):
         GREEN = (0, 255, 0)
@@ -46,11 +54,15 @@ class Buff(pygame.sprite.Sprite):
             self.health_icon = pygame.image.load(os.path.join(self.CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'Buff_img', 'healthIcon.png')).convert_alpha()
             self.health_icon = pygame.transform.scale(self.health_icon, (int(self.health_icon.get_width() * 0.3), int(self.health_icon.get_height() * 0.3)))
             screen.blit(self.health_icon, (x - 150, y - 50))
+        #Icon 2
         elif num == 2:
             self.health_icon = pygame.image.load(os.path.join(self.CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'Buff_img', 'jumpIcon.png')).convert_alpha()
             self.health_icon = pygame.transform.scale(self.health_icon, (int(self.health_icon.get_width() * 0.3), int(self.health_icon.get_height() * 0.3)))
             screen.blit(self.health_icon, (x - 150, y - 60))
-        #Icon 2
+        elif num == 3:
+            self.health_icon = pygame.image.load(os.path.join(self.CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'Buff_img', 'atkIcon.png')).convert_alpha()
+            self.health_icon = pygame.transform.scale(self.health_icon, (int(self.health_icon.get_width() * 0.3), int(self.health_icon.get_height() * 0.3)))
+            screen.blit(self.health_icon, (x - 150, y - 60))
         pygame.draw.rect(screen, BLACK, (x - 2, y - 2, 304, 34))
         pygame.draw.rect(screen, BLACK, (x, y, 300, 30)) 
         pygame.draw.rect(screen, GREEN, (x, y, 300 - ratio, 30))

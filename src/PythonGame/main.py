@@ -357,7 +357,7 @@ def start_game(player_selected, name):
             buff_group.remove(buff)
             buff.setData(player)
             if buff_random:
-                mode = random.randint(1, 2)
+                mode = random.randint(3, 3)
                 buff_random = False
             if mode == 1:
                 buff.restore_health()
@@ -382,6 +382,19 @@ def start_game(player_selected, name):
                 buff.draw_buff_bar(x_buff, y_buff, screen, timer * 60, mode)
                 if timer > 5:
                     buff.clearBuff(mode)
+                    timerArr = []
+                    buff_hit = False
+                    buff_random = True
+            elif mode == 3:
+                buff.berserk()
+                tick = pygame.time.get_ticks()
+                timerArr.append(tick)
+                timer = (timerArr[-1] - timerArr[0])/1000
+                if round(timer) == 0:
+                    timer = 0.00001
+                buff.draw_buff_bar(x_buff, y_buff, screen, timer * 30, mode)
+                if timer > 10:
+                    buff.clearBuff(mode)  
                     timerArr = []
                     buff_hit = False
                     buff_random = True

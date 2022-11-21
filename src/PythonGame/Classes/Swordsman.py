@@ -12,6 +12,7 @@ class Swordsman(Character):
         super().__init__(type, x, y, scale, speed, screen, screen_size, target, platform_group)
         self.atk_cd_val = 0
         self.atk_damage = 50
+        self.origiAtk = 50
         self.health = 100
 
     def attack(self):
@@ -26,6 +27,9 @@ class Swordsman(Character):
     
     def getAttack(self):
         return self.atk_damage
+    
+    def setAttack(self,newVal):
+        self.atk_damage = newVal
     
     def getHp(self):
         return self.health

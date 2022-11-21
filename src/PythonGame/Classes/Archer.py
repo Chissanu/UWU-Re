@@ -13,6 +13,7 @@ class Archer(Character):
         super().__init__(type, x, y, scale, speed, screen, screen_width, target, platform_group)
         self.health = 100
         self.atk_cd_val = 10
+        self.origiAtk = 100
         self.atk_damage = 100
         self.arrow_gruop = arrow_group
     
@@ -97,6 +98,9 @@ class Archer(Character):
     
     def getHp(self):
         return self.health
+    
+    def setAttack(self,newVal):
+        self.atk_damage = newVal
 
 
 
