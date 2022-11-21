@@ -333,7 +333,6 @@ def start_game(player_selected, name):
                     buff_group.add(buff)
         
         if player.hit_box.colliderect(shop.rect) and key [pygame.K_f]:
-            print("hello")
             output = shopOpen(screen, shop, coin, player, coin_add_rate)
             coin_add_rate = output[1]
             coin = output[2]
