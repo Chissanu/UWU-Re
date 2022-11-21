@@ -10,7 +10,7 @@ class Archer(Character):
     def __init__(self, type, x, y, scale, speed, screen, screen_width, target, arrow_group, platform_group):
         super().__init__(type, x, y, scale, speed, screen, screen_width, target, platform_group)
         self.health = 100
-        self.atk_cd_val = 0
+        self.atk_cd_val = 10
         self.atk_damage = 100
         self.arrow_gruop = arrow_group
     

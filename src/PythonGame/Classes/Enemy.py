@@ -9,9 +9,9 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
 class Enemy(Character):
-    def __init__(self, type, x, y, scale, speed, screen, screen_size, target, platform_group, platform_width):
+    def __init__(self, type, x, y, scale, speed, screen, screen_size, target, platform_group, platform_width,score):
         super().__init__(type, x, y, scale, speed, screen, screen_size, target, platform_group)
-        self.health = 100
+        self.health = 100 + (score * 0.1)
         self.move_counter = 0
         self.platform_width = platform_width
         self.idling = False
@@ -19,14 +19,14 @@ class Enemy(Character):
         self.vision = pygame.Rect(0, 0, 350, 20)
         self.vision_x = self.vision.x
         self.attack_box_multiplier = 1.5
-        self.atk_cd_val = 50
         self.original_speed = self.speed
-        self.increase_speed = 5
-        self.atk_damage = 10
+        self.increase_speed = 5 + (score * 0.1)
+        self.atk_damage = 10 + (score * 0.2)
         self.gravity = 0.05
-        self.kill_score = 50
-        self.atk_cd_val = 100
+        self.kill_score = 50 + (score * 0.05)
+        self.atk_cd_val = 100 - (score * 0.2)
         self.moving_right = True
+        self.score = score
 
     
     def move(self):
@@ -47,7 +47,7 @@ class Enemy(Character):
             self.flip = False
             self.direction = 1
             
-        if self.move_counter > self.platform_width/15:
+        if self.move_counter > self.platform_width/ (self.score - 75):
             self.direction *= -1
             self.move_counter *= -1
         
