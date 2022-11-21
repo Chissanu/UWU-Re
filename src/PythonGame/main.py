@@ -105,6 +105,9 @@ def draw_game_bg(display, background, bg_scroll):
 def draw_text(text, font, text_col, x, y):
 	img = font.render(text, True, text_col)
 	screen.blit(img, (x, y))
+ 
+def play_click():
+    pygame.mixer.Sound(os.path.join(soundPath,"click.wav")).play()
 
 def shopOpen(screen, shop, coins, player, coin_rate):
     returnToGame = False
