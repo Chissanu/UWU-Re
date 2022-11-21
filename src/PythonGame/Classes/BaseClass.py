@@ -213,8 +213,8 @@ class Character(pygame.sprite.Sprite):
     
     def draw_health_bar(self, x, y):
         ratio = self.health / self.max_health
-        pygame.draw.rect(self.screen, BLACK, (x - 2, y - 2, 404 + self.max_health - 100, 34))
-        pygame.draw.rect(self.screen, RED, (x, y, 400  + self.max_health - 100, 30)) 
+        pygame.draw.rect(self.screen, BLACK, (x - 2, y - 2, 404, 34))
+        pygame.draw.rect(self.screen, RED, (x, y, 400, 30)) 
         pygame.draw.rect(self.screen, YELLOW, (x, y, 400 * ratio, 30))
 
 

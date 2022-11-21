@@ -305,7 +305,7 @@ def start_game(player_selected, name):
         draw_text(name, font_big, BLACK, 1500, 0)
         
         #draw stats
-        hp = "HP:" + str(player.getHp())
+        hp = "HP:" + str(player.getHp()) + "/" + str(player.max_health)
         atk = "ATK:" + str(player.getAttack())
         
         draw_text(hp, font_small, BLACK, 70, 310)

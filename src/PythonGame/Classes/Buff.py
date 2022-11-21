@@ -28,7 +28,6 @@ class Buff(pygame.sprite.Sprite):
         self.player.gravity = 0.1
 
     def restore_health(self):
-        print(f"The current hp is {self.player.health} and max health is {self.player.max_health}")
         self.player.health = self.player.max_health
     
     def clearBuff(self, num):
