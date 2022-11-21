@@ -82,7 +82,7 @@ restart_button = Button((WIDTH/2, HEIGHT/2 + 250), restart_img, 0.25, "RESTART",
 main_menu_button = Button((WIDTH/2 - 100, HEIGHT/2 + 400), exit_img, 0.25, "main menu", font_small, WHITE, GRAY)
 back_button = Button((WIDTH - 200, HEIGHT-200), None, 0.25, "back", font_small, BLACK, GRAY)
 search_button = Button((WIDTH - 400, HEIGHT-200), None, 0.25, "search", font_small, BLACK, GRAY)
-return_button = Button((WIDTH - 200, HEIGHT-200), None, 0.25, "Return", font_small, WHITE, GRAY)
+return_button = Button((WIDTH - 500, HEIGHT-200), None, 0.25, "Return", font_small, WHITE, GRAY)
 
 #Classes Import
 scoreboard = Leaderboard()
