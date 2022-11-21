@@ -69,7 +69,7 @@ archer_btn_img = pygame.image.load(os.path.join(BTN_PATH, "archer_btn.png")).con
 accept_img = pygame.image.load(os.path.join(BTN_PATH, "accept_btn.png")).convert_alpha()
 restart_img = pygame.image.load(os.path.join(BTN_PATH, "restart_btn.png")).convert_alpha()
 #load music and sound
-soundPath = os.path.join(CURRENT_PATH,"src","PythonGame", "BgSound")
+soundPath = os.path.join(CURRENT_PATH,"src","PythonGame", "Assets","Sound")
 
 #create buttons
 start_button = Button((WIDTH/2, HEIGHT/2 - 200), start_img, 0.3, "START", font_big, WHITE, GRAY)
@@ -105,8 +105,11 @@ def draw_game_bg(display, background, bg_scroll):
 def draw_text(text, font, text_col, x, y):
 	img = font.render(text, True, text_col)
 	screen.blit(img, (x, y))
+ 
+def play_click():
+    pygame.mixer.Sound(os.path.join(soundPath,"click.wav")).play()
 
-def shopOpen(screen, shop, coins, player):
+def shopOpen(screen, shop, coins, player, coin_rate):
     returnToGame = False
     #add button
     health_add_button = Button((900, 240), None, 0.25, str(shop.costArr[0]), font_small, WHITE, GRAY)
@@ -139,6 +142,7 @@ def shopOpen(screen, shop, coins, player):
             button.update(screen)
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
+                play_click()
                 if health_add_button.checkForInput(mouse_get_pos):
                     output = shop.health_upgrade(coins, player)
                     if output < 0:
@@ -152,7 +156,7 @@ def shopOpen(screen, shop, coins, player):
                     else:
                         coins = output
                 if booster_button.checkForInput(mouse_get_pos):
-                    output = shop.booster(coins, player)
+                    output = shop.booster(coins, coin_rate)
                     if output < 0:
                         draw_text("Not enough coins!!", font_big, WHITE, WIDTH/2, HEIGHT/2)
                     else:
@@ -163,7 +167,7 @@ def shopOpen(screen, shop, coins, player):
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
         if returnToGame:
-            break
+            return (False, coin_rate, coins)
         #pygame.draw.rect()
         pygame.display.update()
 
@@ -190,6 +194,7 @@ def restart(score, player_selected, name):
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
+                play_click()
                 if restart_button.checkForInput(mouse_get_pos):
                     start_game(player_selected, name)
                 if main_menu_button.checkForInput(mouse_get_pos):
@@ -242,6 +247,7 @@ def leader_board_page():
                 event.ui_object_id == '#main_text_entry'):
                 players = scoreboard.findPlayer(event.text)
             if event.type == pygame.MOUSEBUTTONDOWN:
+                play_click()
                 if back_button.checkForInput(mouse_get_pos):
                     main_menu()
                 if search_button.checkForInput(mouse_get_pos):
@@ -264,6 +270,7 @@ def start_game(player_selected, name):
     bg_scroll = 0
     score = 0
     coin = 0
+    coin_add_rate = 20
     shop_open = False
     buff_hit = False
     buff_random = True
@@ -333,7 +340,10 @@ def start_game(player_selected, name):
         key = pygame.key.get_pressed()
 
         if shop_open:
-            shop_open = shopOpen(screen, shop, coin, player)
+            output = shopOpen(screen, shop, coin, player, coin_add_rate)
+            shop_open = output[0]
+            coin_add_rate = output[1]
+            coin = output[2]
             
         if buff_hit:
             x_buff = 200
@@ -375,7 +385,7 @@ def start_game(player_selected, name):
             enemy.draw()
             if enemy.update(scroll):
                 score += 50
-                coin += 20
+                coin += coin_add_rate
 
         shop_group.draw(screen)
         shop_group.update(scroll)
@@ -474,6 +484,7 @@ def select_char_mode():
                 name = event.text
                 show_accept = True
             if event.type == pygame.MOUSEBUTTONDOWN:
+                play_click()
                 if swordsman_button.checkForInput(mouse_get_pos):
                     player = Preview('Swordsman', WIDTH/3 - 100, 670, 1.5, 10, screen, SIZE, enemy_group, platform_group)
                     char_name, x = "-The Swordsman-", 350
@@ -534,6 +545,7 @@ def main_menu():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
+                play_click()
                 if start_button.checkForInput(mouse_get_pos):
                     select_char_mode()
                 if leaderBoard_button.checkForInput(mouse_get_pos):

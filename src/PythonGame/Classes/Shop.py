@@ -28,7 +28,7 @@ class Shop(pygame.sprite.Sprite):
         for i in range(self.strength_lvl):
             pygame.draw.rect(screen, color, (bar_arr[i], 370, 30, 70))
         for i in range(self.multiplier):
-            pygame.draw.rect(screen, color, (bar_arr[i], 600, 30, 70))
+            pygame.draw.rect(screen, color, (bar_arr[i], 550, 30, 70))
 
     def health_upgrade(self, coin, player):
         if coin >= self.costArr[0]:
@@ -43,19 +43,19 @@ class Shop(pygame.sprite.Sprite):
     def strength_upgrade(self, coin, player):
         if coin >= self.costArr[1]:
             coin -= self.costArr[1]
-            self.costArr[0] = self.costArr[1] + 100 * self.strength_lvl
+            self.costArr[1] = self.costArr[1] + 100 * self.strength_lvl
             player.atk_damage += 25
             self.strength_lvl += 1
             return coin
         else:
             return -1
     
-    def booster(self, coin, player):
-        if coin >= self.costArr[0]:
-            coin -= self.costArr[0]
-            self.costArr[0] = self.costArr[0] + 100 * self.health_lvl
-            player.max_health += 50
-            self.health_lvl += 1
+    def booster(self, coin, coinRate):
+        if coin >= self.costArr[2]:
+            coin -= self.costArr[2]
+            self.costArr[2] = self.costArr[2] + 100 * self.health_lvl
+            coinRate += 10
+            self.multiplier += 1
             return coin
         else:
             return -1
