@@ -91,6 +91,12 @@ class Archer(Character):
                     self.attacking = False
                     self.attack_cooldown = self.atk_cd_val
         return False
+    
+    def getAttack(self):
+        return self.atk_damage
+    
+    def getHp(self):
+        return self.health
 
 
 

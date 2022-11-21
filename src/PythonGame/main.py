@@ -303,6 +303,13 @@ def start_game(player_selected, name):
         #draw name 
         draw_text(name, font_big, BLACK, 1500, 0)
         
+        #draw stats
+        hp = "HP:" + str(player.getHp())
+        atk = "ATK:" + str(player.getAttack())
+        
+        draw_text(hp, font_small, BLACK, 70, 310)
+        draw_text(atk, font_small, BLACK, 70, 360)
+        
         #update platforms
         if len(platform_group) < MAX_PLATFORMS:
             platform_random = random.randint(0, 1)

@@ -23,3 +23,9 @@ class Swordsman(Character):
                 if enemy.alive:
                     enemy.health -= self.atk_damage
                     enemy.hit = True
+    
+    def getAttack(self):
+        return self.atk_damage
+    
+    def getHp(self):
+        return self.health
