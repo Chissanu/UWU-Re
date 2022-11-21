@@ -42,6 +42,7 @@ class Shop(pygame.sprite.Sprite):
             coin -= self.costArr[1]
             self.costArr[1] += 100 * player.strength_lvl
             player.origiAtk += 25
+            player.atk_damage += 25
             player.strength_lvl += 1
             return coin
         else:
