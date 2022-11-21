@@ -167,7 +167,7 @@ def shopOpen(screen, shop, coins, player, coin_rate):
         #pygame.draw.rect()
         pygame.display.update()
 
-def restart(score, player_selected):
+def restart(score, player_selected, name):
     ANIMATION_PATH = os.path.join(CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'Character_img')
     img = pygame.image.load(ANIMATION_PATH + "\\{}\\{}\\{}".format(player_selected, "Death",4) + ".png").convert_alpha()
     img = pygame.transform.scale(img, (int(img.get_width() * 0.8), int(img.get_height() * 0.8)))
@@ -176,7 +176,9 @@ def restart(score, player_selected):
         mouse_get_pos = pygame.mouse.get_pos()
 
         draw_text("YOURE SCORE:", font_big, BLACK, WIDTH/2 - 200, 200)
+        draw_text(str(name), font_big, BLACK, WIDTH/2 - 100, 100)
         draw_text(str(score), font_big, WHITE, WIDTH/2, 300)
+        
         screen.blit(img, (450,200))
         
         for button in (restart_button, exit_button_restart, main_menu_button):
@@ -404,8 +406,7 @@ def start_game(player_selected, name):
                 "score": score
             }
             scoreboard.saveScore(newData)
-            print(scoreboard.getSortedScoreboard())
-            restart(score,player_selected) 
+            restart(score,player_selected, name) 
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:   
@@ -447,6 +448,7 @@ def select_char_mode():
     sword_selected = True
     char_name, x = "-The Swordsman-", 350
     name = None
+    show_accept = False
     while True:
         UI_REFRESH_RATE = clock.tick(60)/1000
         clock.tick(FPS)
@@ -458,9 +460,13 @@ def select_char_mode():
         player.draw()
         player.update()
 
-        for button in (swordsman_button, archer_button, accept_button):
+        for button in (swordsman_button, archer_button):
             button.changeColor(mouse_get_pos)
             button.update(screen)
+        
+        if show_accept:
+            accept_button.changeColor(mouse_get_pos)
+            accept_button.update(screen)
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -469,6 +475,7 @@ def select_char_mode():
             if (event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED and
                 event.ui_object_id == '#main_text_entry') and name == None:
                 name = event.text
+                show_accept = True
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if swordsman_button.checkForInput(mouse_get_pos):
                     player = Preview('Swordsman', WIDTH/3 - 100, 670, 1.5, 10, screen, SIZE, enemy_group, platform_group)
@@ -480,13 +487,14 @@ def select_char_mode():
                     char_name, x = "-The Archer-", 400
                     archer_selected = True
                     sword_selected = not archer_selected
-                if accept_button.checkForInput(mouse_get_pos) and (sword_selected or archer_selected) and name != None:
-                    if sword_selected:
-                        player_selected = "Swordsman"
-                        start_game(player_selected, name)
-                    if archer_selected:
-                        player_selected = "Archer"
-                        start_game(player_selected, name)
+                if show_accept:
+                    if accept_button.checkForInput(mouse_get_pos) and (sword_selected or archer_selected) and name != None:
+                        if sword_selected:
+                            player_selected = "Swordsman"
+                            start_game(player_selected, name)
+                        if archer_selected:
+                            player_selected = "Archer"
+                            start_game(player_selected, name)
 
             if event.type == pygame.KEYDOWN and name != None:
                 if event.key == pygame.K_ESCAPE:
