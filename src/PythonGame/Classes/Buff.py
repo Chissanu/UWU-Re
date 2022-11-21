@@ -61,8 +61,8 @@ class Buff(pygame.sprite.Sprite):
             screen.blit(self.health_icon, (x - 150, y - 60))
         elif num == 3:
             self.health_icon = pygame.image.load(os.path.join(self.CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'Buff_img', 'atkIcon.png')).convert_alpha()
-            self.health_icon = pygame.transform.scale(self.health_icon, (int(self.health_icon.get_width() * 0.3), int(self.health_icon.get_height() * 0.3)))
-            screen.blit(self.health_icon, (x - 150, y - 60))
+            self.health_icon = pygame.transform.scale(self.health_icon, (int(self.health_icon.get_width() * 0.2), int(self.health_icon.get_height() * 0.2)))
+            screen.blit(self.health_icon, (x - 150, y - 20))
         pygame.draw.rect(screen, BLACK, (x - 2, y - 2, 304, 34))
         pygame.draw.rect(screen, BLACK, (x, y, 300, 30)) 
         pygame.draw.rect(screen, GREEN, (x, y, 300 - ratio, 30))

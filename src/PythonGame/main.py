@@ -76,9 +76,9 @@ start_button = Button((WIDTH/2, HEIGHT/2 - 200), start_img, 0.3, "START", font_b
 exit_button = Button((WIDTH/2, HEIGHT/2 + 200), None, 0.3, "EXIT", font_big, BLACK, GRAY)
 exit_button_restart = Button((WIDTH/2 + 200, HEIGHT/2 + 400), None, 0.2, "EXIT", font_small, WHITE, BLACK)
 leaderBoard_button = Button((WIDTH/2, HEIGHT/2), leaderBoard_img, 0.4, "LEADER BOARD", font_big, WHITE, GRAY)
-swordsman_button = Button((WIDTH/1.3, HEIGHT/4), swordsman_btn_img, 0.5, "Swordsman", font_big, WHITE, GRAY)
-archer_button = Button((WIDTH/1.3 , HEIGHT/2), archer_btn_img, 0.5, "Archer", font_big, WHITE, GRAY)
-accept_button = Button((WIDTH -  accept_img.get_width()/3.2, HEIGHT/1.3), accept_img, 0.3, "ACCEPT", font_big, WHITE, GRAY)
+swordsman_button = Button((WIDTH/1.3, HEIGHT/2.5), swordsman_btn_img, 0.5, "Swordsman", font_big, WHITE, GRAY)
+archer_button = Button((WIDTH/1.3 , HEIGHT/1.7), archer_btn_img, 0.5, "Archer", font_big, WHITE, GRAY)
+accept_button = Button((WIDTH -  accept_img.get_width()/3.2, HEIGHT/1.2), accept_img, 0.3, "ACCEPT", font_big, WHITE, GRAY)
 restart_button = Button((WIDTH/2, HEIGHT/2 + 250), restart_img, 0.25, "RESTART", font_small, BLACK, GRAY)
 main_menu_button = Button((WIDTH/2 - 100, HEIGHT/2 + 400), exit_img, 0.25, "main menu", font_small, WHITE, GRAY)
 back_button = Button((WIDTH - 200, HEIGHT-200), None, 0.25, "back", font_small, BLACK, GRAY)
@@ -195,7 +195,7 @@ def restart(score, player_selected, name):
         screen.fill(GRAY)
         mouse_get_pos = pygame.mouse.get_pos()
 
-        draw_text("Your score:", font_small, BLACK, WIDTH/2 - 200, 200)
+        draw_text("Your score:", font_small, BLACK, WIDTH/2 - 100, 200)
         draw_text(str(name), font_big, BLACK, WIDTH/2 - 100, 100)
         draw_text(str(score), font_big, WHITE, WIDTH/2, 300)
         
@@ -317,16 +317,12 @@ def start_game(player_selected, name):
         bg_scroll += scroll
         if bg_scroll >= 500:
             bg_scroll = 0
-        draw_game_bg(screen, bg_img, bg_scroll)
-        #draw name 
-        draw_text(name, font_big, BLACK, 1500, 0)
-        
+        draw_game_bg(screen, bg_img, bg_scroll) 
+    
         #draw stats
         hp = "HP:" + str(int(player.getHp())) + "/" + str(player.max_health)
         atk = "ATK:" + str(player.getAttack())
         
-        draw_text(hp, font_small, BLACK, 70, 310)
-        draw_text(atk, font_small, BLACK, 70, 360)
         
         #update platforms
         if len(platform_group) < MAX_PLATFORMS:
@@ -337,7 +333,7 @@ def start_game(player_selected, name):
                 platform_x = random.randint(platform.rect.x + platform.rect.width + 100, WIDTH - platform_width)
             else:
                 platform_y = platform.rect.y - 200
-                platform_width = random.randint(400, 500)
+                platform_width = random.randint(500, 600)
                 platform_x = random.randint(0, WIDTH - platform_width - 400)
             platform = Platform(platform_img, platform_x, platform_y, platform_width, HEIGHT)
             platform_group.add(platform)
@@ -355,7 +351,7 @@ def start_game(player_selected, name):
                 if len(enemy_group) < MAX_ENEMY:         
                     enemy = Range_enemy('Archer', platform_x + platform_width/2, platform.rect.y - 85, 0.3, 5, screen, SIZE, player, platform_group, platform, score, arrow_group)
                     enemy_group.add(enemy)
-            if spawn_chance >= 95:
+            if spawn_chance >= 0:
                 if len(buff_group) < MAX_BUFF:
                     buff = Buff(platform_x + platform_width/2, platform.rect.y - 85)
                     buff_group.add(buff)
@@ -369,6 +365,18 @@ def start_game(player_selected, name):
             buff_hit = True
 
         key = pygame.key.get_pressed()
+        
+        shop_group.draw(screen)
+        shop_group.update(scroll)
+        buff_group.draw(screen)
+        buff_group.update(scroll)
+        arrow_group.update(scroll)
+        #draw player
+        player.draw()
+        scroll = player.update()
+        player.draw_health_bar(50, 200)
+        platform_group.update(scroll)
+        platform_group.draw(screen)
         
         debuffArr = []
         debuffQueue = player.getQueue()
@@ -410,8 +418,8 @@ def start_game(player_selected, name):
                     player.clearDebuff(3)
         
         if buff_hit:
-            x_buff = 200
-            y_buff = 180
+            x_buff = WIDTH - 400 
+            y_buff = 50
             buff_group.remove(buff)
             buff.setData(player)
             if buff_random:
@@ -464,22 +472,11 @@ def start_game(player_selected, name):
                 score += 25  + ( 25 * player.multiplier)
                 coin += coin_add_rate
 
-        shop_group.draw(screen)
-        shop_group.update(scroll)
-        buff_group.draw(screen)
-        buff_group.update(scroll)
-        arrow_group.update(scroll)
-        #draw player
-        player.draw()
-        scroll = player.update()
-        player.draw_health_bar(100, 100)
-        platform_group.update(scroll)
-        platform_group.draw(screen)
-
         # pygame.draw.line(screen, BLACK, (0,300),(WIDTH, 300))
-
-        draw_text('SCORE:' + str(score) + '  COINS:' + str(coin), font_small, BLACK, 0, 0)
-        # draw_text('COINS:' + str(coin), font_small, BLACK, 330, 0)
+        draw_text(name, font_big, BLACK, 50, 100)
+        draw_text(hp, very_small, BLACK, 55, 202)
+        draw_text(atk, font_small, BLACK, 50, 250)
+        draw_text('SCORE:' + str(score) + '  COINS:' + str(coin), font_small, BLACK, 50, 20)
         
         #restart game to main menu
         if player.alive == False:
@@ -524,7 +521,7 @@ def start_game(player_selected, name):
 
 def select_char_mode():
     manager = pygame_gui.UIManager((WIDTH, HEIGHT))
-    text_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((1250, 100), (500, 50)), manager=manager,
+    text_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((1250, 250), (500, 50)), manager=manager,
                                                object_id='#main_text_entry')
     global sword_selected
     global archer_selected
@@ -540,7 +537,7 @@ def select_char_mode():
         draw_window(screen, bg_img)
         # draw_text(name, font_small, BLACK, WIDTH/2 + 500, 100)
         draw_text(char_name, font_small, BLACK, x, 200)
-        draw_text("Put your name here, then please press [Enter]!", very_small, BLACK, 1250, 70)
+        draw_text("Put your name here, then please press [Enter]!", very_small, BLACK, 1250, 220)
         mouse_get_pos = pygame.mouse.get_pos()
         player.draw()
         player.update()
