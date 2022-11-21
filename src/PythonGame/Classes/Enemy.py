@@ -58,7 +58,7 @@ class Enemy(Character):
         self.move_counter += 1
         #update enemy vision as its moves
         self.vision.center = (self.rect.centerx + self.vision.width/2 * self.direction, self.rect.centery +50)
-        pygame.draw.rect(self.screen, (255, 0, 0), self.vision)
+        #pygame.draw.rect(self.screen, (255, 0, 0), self.vision)
 
 
     def update(self, scroll):

@@ -29,23 +29,33 @@ class Leaderboard:
             
             with open(self.saveFilePath, 'w') as outfile:
                 json.dump(data, outfile, indent=4)
+                
+            self.users = data
             
         except Exception as e:
             #When file data is not found
-            print("Error")
-            json_object = json.dumps(newData, indent=2)
+            print(e)
+            json_object = json.dumps(newData, indent=4)
             with open(self.saveFilePath, "w") as outfile:
                 outfile.write(json_object)
+            
 
     def getSortedScoreboard(self):
         self.getUser()
         tempArr = []
         sortedArrDict = []
-        for data in self.users:
-            tempArr.append(data["score"])
+        userList = []
+        if len(self.users) == 2:
+            tempArr.append(self.users["score"])
+        else:
+            for data in self.users:
+                tempArr.append(data["score"])
         
         sortedArr = self.quickSort(tempArr)
-        userList = self.users
+        if len(self.users) == 2:
+            userList.append(self.users)
+        else:
+            userList = self.users
         index = 1
         while sortedArr:
             val = sortedArr.pop()

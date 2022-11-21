@@ -383,7 +383,6 @@ def start_game(player_selected, name):
                 "score": score
             }
             scoreboard.saveScore(newData)
-            print(scoreboard.getSortedScoreboard())
             restart(score,player_selected) 
 
         for event in pygame.event.get():
