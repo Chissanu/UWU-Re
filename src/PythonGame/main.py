@@ -69,7 +69,7 @@ archer_btn_img = pygame.image.load(os.path.join(BTN_PATH, "archer_btn.png")).con
 accept_img = pygame.image.load(os.path.join(BTN_PATH, "accept_btn.png")).convert_alpha()
 restart_img = pygame.image.load(os.path.join(BTN_PATH, "restart_btn.png")).convert_alpha()
 #load music and sound
-soundPath = os.path.join(CURRENT_PATH,"src","PythonGame", "BgSound")
+soundPath = os.path.join(CURRENT_PATH,"src","PythonGame", "Assets","Sound")
 
 #create buttons
 start_button = Button((WIDTH/2, HEIGHT/2 - 200), start_img, 0.3, "START", font_big, WHITE, GRAY)
@@ -139,6 +139,7 @@ def shopOpen(screen, shop, coins, player, coin_rate):
             button.update(screen)
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
+                play_click()
                 if health_add_button.checkForInput(mouse_get_pos):
                     output = shop.health_upgrade(coins, player)
                     if output < 0:
@@ -190,6 +191,7 @@ def restart(score, player_selected, name):
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
+                play_click()
                 if restart_button.checkForInput(mouse_get_pos):
                     start_game(player_selected, name)
                 if main_menu_button.checkForInput(mouse_get_pos):
@@ -242,6 +244,7 @@ def leader_board_page():
                 event.ui_object_id == '#main_text_entry'):
                 players = scoreboard.findPlayer(event.text)
             if event.type == pygame.MOUSEBUTTONDOWN:
+                play_click()
                 if back_button.checkForInput(mouse_get_pos):
                     main_menu()
                 if search_button.checkForInput(mouse_get_pos):
@@ -478,6 +481,7 @@ def select_char_mode():
                 name = event.text
                 show_accept = True
             if event.type == pygame.MOUSEBUTTONDOWN:
+                play_click()
                 if swordsman_button.checkForInput(mouse_get_pos):
                     player = Preview('Swordsman', WIDTH/3 - 100, 670, 1.5, 10, screen, SIZE, enemy_group, platform_group)
                     char_name, x = "-The Swordsman-", 350
@@ -538,6 +542,7 @@ def main_menu():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
+                play_click()
                 if start_button.checkForInput(mouse_get_pos):
                     select_char_mode()
                 if leaderBoard_button.checkForInput(mouse_get_pos):
