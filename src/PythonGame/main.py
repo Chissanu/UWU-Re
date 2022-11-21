@@ -179,7 +179,7 @@ def restart(score, player_selected, name):
         screen.fill(GRAY)
         mouse_get_pos = pygame.mouse.get_pos()
 
-        draw_text("YOURE SCORE:", font_big, BLACK, WIDTH/2 - 200, 200)
+        draw_text("YOUR SCORE:", font_big, BLACK, WIDTH/2 - 200, 200)
         draw_text(str(name), font_big, BLACK, WIDTH/2 - 100, 100)
         draw_text(str(score), font_big, WHITE, WIDTH/2, 300)
         
