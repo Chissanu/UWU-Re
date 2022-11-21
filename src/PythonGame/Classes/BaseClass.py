@@ -8,7 +8,10 @@ YELLOW = (255,255,0)
 RED = (255, 0, 0)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+CURRENT_PATH = os.getcwd()
+SOUND_PATH = os.path.join(CURRENT_PATH,"src","PythonGame","Assets","Sound")
 
+pygame.mixer.init()
 #class for all character
 class Character(pygame.sprite.Sprite):
     def __init__(self, type, x, y, scale, speed, screen, screen_size, target, platform_group):
@@ -84,6 +87,7 @@ class Character(pygame.sprite.Sprite):
             self.direction = 1
 		#jump
         if self.jump == True:
+            jump = pygame.mixer.Sound(os.path.join(SOUND_PATH,"jump.wav")).play()
             self.vel_y = -20
             self.jump = False
             self.in_air = True
