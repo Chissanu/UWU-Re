@@ -163,7 +163,7 @@ def shopOpen(screen, shop, coins, player, coin_rate):
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
         if returnToGame:
-            return (False, coin_rate)
+            return (False, coin_rate, coins)
         #pygame.draw.rect()
         pygame.display.update()
 
@@ -337,6 +337,7 @@ def start_game(player_selected, name):
             output = shopOpen(screen, shop, coin, player, coin_add_rate)
             shop_open = output[0]
             coin_add_rate = output[1]
+            coin = output[2]
             
         if buff_hit:
             x_buff = 200
