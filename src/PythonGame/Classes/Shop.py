@@ -30,7 +30,8 @@ class Shop(pygame.sprite.Sprite):
         if coin >= self.costArr[0]:
             coin -= self.costArr[0]
             self.costArr[0] += 100 * player.health_lvl
-            player.max_health += 50
+            player.increaseMaxHp(50)
+            player.increaseHp(50)
             player.health_lvl += 1
             return coin
         else:

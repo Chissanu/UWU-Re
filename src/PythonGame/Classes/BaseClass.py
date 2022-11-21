@@ -205,12 +205,14 @@ class Character(pygame.sprite.Sprite):
                     self.attack_cooldown = self.atk_cd_val
         return False
 
-    def attack(self):
-        return
+    def increaseHp(self,hp):
+        self.health += hp
         
+    def increaseMaxHp(self,hp):
+        self.max_health += hp
     
     def draw_health_bar(self, x, y):
-        ratio = self.health / 100
+        ratio = self.health / self.max_health
         pygame.draw.rect(self.screen, BLACK, (x - 2, y - 2, 404 + self.max_health - 100, 34))
         pygame.draw.rect(self.screen, RED, (x, y, 400  + self.max_health - 100, 30)) 
         pygame.draw.rect(self.screen, YELLOW, (x, y, 400 * ratio, 30))

@@ -276,7 +276,7 @@ def start_game(player_selected, name):
     buff_random = True
     timerArr = []
     clicked = True
-    shop = Shop(0, 0)
+    # shop = Shop(0, 0)
     buff = Buff(0, 0)
 
     #create sprite groups

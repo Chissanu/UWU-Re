@@ -16,7 +16,7 @@ class Buff(pygame.sprite.Sprite):
 
     def setData(self, player):
         self.player = player
-        self.origiHealth = player.health
+        self.origiHealth = player.max_health
 
     def update(self, scroll):
         self.rect.y += scroll
@@ -28,19 +28,21 @@ class Buff(pygame.sprite.Sprite):
         self.player.gravity = 0.1
 
     def restore_health(self):
+        print(f"The current hp is {self.player.health} and max health is {self.player.max_health}")
         self.player.health = self.player.max_health
     
     def clearBuff(self, num):
         self.rect.x = 0
         self.rect.y = 0
         if num == 1:
-            self.player.health = 100
+            self.player.health = self.player.max_health
         elif num == 2:
             self.player.gravity = 0.75
 
     def draw_buff_bar(self, x, y, screen, ratio, num):
         GREEN = (0, 255, 0)
         BLACK = (0, 0, 0)
+        #Icon 1
         if num == 1:
             self.health_icon = pygame.image.load(os.path.join(self.CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'Buff_img', 'healthIcon.png')).convert_alpha()
             self.health_icon = pygame.transform.scale(self.health_icon, (int(self.health_icon.get_width() * 0.3), int(self.health_icon.get_height() * 0.3)))
@@ -49,6 +51,7 @@ class Buff(pygame.sprite.Sprite):
             self.health_icon = pygame.image.load(os.path.join(self.CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'Buff_img', 'jumpIcon.png')).convert_alpha()
             self.health_icon = pygame.transform.scale(self.health_icon, (int(self.health_icon.get_width() * 0.3), int(self.health_icon.get_height() * 0.3)))
             screen.blit(self.health_icon, (x - 150, y - 60))
+        #Icon 2
         pygame.draw.rect(screen, BLACK, (x - 2, y - 2, 304, 34))
         pygame.draw.rect(screen, BLACK, (x, y, 300, 30)) 
         pygame.draw.rect(screen, GREEN, (x, y, 300 - ratio, 30))
