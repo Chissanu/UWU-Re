@@ -275,6 +275,7 @@ def start_game(player_selected, name):
     buff_hit = False
     buff_random = True
     timerArr = []
+    clicked = True
     shop = Shop(0, 0)
     buff = Buff(0, 0)
 
@@ -332,18 +333,15 @@ def start_game(player_selected, name):
                     buff_group.add(buff)
         
         if player.hit_box.colliderect(shop.rect) and key [pygame.K_f]:
-            shop_open = True
+            print("hello")
+            output = shopOpen(screen, shop, coin, player, coin_add_rate)
+            coin_add_rate = output[1]
+            coin = output[2]
 
         if player.hit_box.colliderect(buff.rect):
             buff_hit = True
 
         key = pygame.key.get_pressed()
-
-        if shop_open:
-            output = shopOpen(screen, shop, coin, player, coin_add_rate)
-            shop_open = output[0]
-            coin_add_rate = output[1]
-            coin = output[2]
             
         if buff_hit:
             x_buff = 200
