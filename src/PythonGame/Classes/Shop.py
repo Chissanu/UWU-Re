@@ -10,10 +10,6 @@ class Shop(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.bg = pygame.image.load(os.path.join(self.CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'Background', 'white.jpg'))
-        self.health_lvl = 0
-        self.strength_lvl = 0
-        self.multiplier = 0
-        self.baseCost = 500
         self.costArr = [50, 50, 100]
     
     def update(self, scroll):
@@ -22,20 +18,20 @@ class Shop(pygame.sprite.Sprite):
         if self.rect.top > 1080:
             self.kill()
 
-    def load_upgrade(self, screen, bar_arr, color):
-        for i in range(self.health_lvl):
+    def load_upgrade(self, screen, bar_arr, color, player):
+        for i in range(player.health_lvl):
             pygame.draw.rect(screen, color, (bar_arr[i], 210, 30, 70))
-        for i in range(self.strength_lvl):
+        for i in range(player.strength_lvl):
             pygame.draw.rect(screen, color, (bar_arr[i], 360, 30, 70))
-        for i in range(self.multiplier):
+        for i in range(player.multiplier):
             pygame.draw.rect(screen, color, (bar_arr[i], 515, 30, 70))
 
     def health_upgrade(self, coin, player):
         if coin >= self.costArr[0]:
             coin -= self.costArr[0]
-            self.costArr[0] = self.costArr[0] + 100 * self.health_lvl
+            self.costArr[0] += 100 * player.health_lvl
             player.max_health += 50
-            self.health_lvl += 1
+            player.health_lvl += 1
             return coin
         else:
             return -1
@@ -43,19 +39,19 @@ class Shop(pygame.sprite.Sprite):
     def strength_upgrade(self, coin, player):
         if coin >= self.costArr[1]:
             coin -= self.costArr[1]
-            self.costArr[1] = self.costArr[1] + 100 * self.strength_lvl
+            self.costArr[1] += 100 * player.strength_lvl
             player.atk_damage += 25
-            self.strength_lvl += 1
+            player.strength_lvl += 1
             return coin
         else:
             return -1
     
-    def booster(self, coin, coinRate):
+    def booster(self, coin, coinRate, player):
         if coin >= self.costArr[2]:
             coin -= self.costArr[2]
-            self.costArr[2] = self.costArr[2] + 100 * self.health_lvl
+            self.costArr[2] += + 100 * player.multiplier
             coinRate += 10
-            self.multiplier += 1
+            player.multiplier += 1
             return coin
         else:
             return -1

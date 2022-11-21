@@ -131,7 +131,7 @@ def shopOpen(screen, shop, coins, player, coin_rate):
             pygame.draw.rect(screen, GRAY, (i, 210, 30, 70))
             pygame.draw.rect(screen, GRAY, (i, 360, 30, 70))
             pygame.draw.rect(screen, GRAY, (i, 515, 30, 70))
-        shop.load_upgrade(screen, bar_arr, GREEN)
+        shop.load_upgrade(screen, bar_arr, GREEN, player)
         screen.blit(health_img, (200, 200))
         screen.blit(strength_img, (200, 350))
         screen.blit(booster_img, (200, 500))
@@ -148,6 +148,7 @@ def shopOpen(screen, shop, coins, player, coin_rate):
                         draw_text("Not enough coins!!", font_big, WHITE, WIDTH/2, HEIGHT/2)
                     else:
                         coins = output
+                        health_add_button.text_input = str(shop.costArr[0])
                 if strength_button.checkForInput(mouse_get_pos):
                     output = shop.strength_upgrade(coins, player)
                     if output < 0:
@@ -155,7 +156,7 @@ def shopOpen(screen, shop, coins, player, coin_rate):
                     else:
                         coins = output
                 if booster_button.checkForInput(mouse_get_pos):
-                    output = shop.booster(coins, coin_rate)
+                    output = shop.booster(coins, coin_rate, player)
                     if output < 0:
                         draw_text("Not enough coins!!", font_big, WHITE, WIDTH/2, HEIGHT/2)
                     else:
@@ -172,7 +173,7 @@ def shopOpen(screen, shop, coins, player, coin_rate):
 
 def restart(score, player_selected, name):
     ANIMATION_PATH = os.path.join(CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'Character_img')
-    img = pygame.image.load(ANIMATION_PATH + "\\{}\\{}\\{}".format(player_selected, "Death",4) + ".png").convert_alpha()
+    img = pygame.image.load(os.path.join(ANIMATION_PATH, player_selected, "Death",(str(4) + ".png"))).convert_alpha()
     img = pygame.transform.scale(img, (int(img.get_width() * 0.8), int(img.get_height() * 0.8)))
     while True:
         screen.fill(GRAY)

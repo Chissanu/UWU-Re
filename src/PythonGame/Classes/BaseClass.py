@@ -45,6 +45,9 @@ class Character(pygame.sprite.Sprite):
         self.update_time = pygame.time.get_ticks()
         self.target = target
         self.max_health = 100
+        self.health_lvl = 0
+        self.strength_lvl = 0
+        self.multiplier = 0
 
 
         #load all images for the players
