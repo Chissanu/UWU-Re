@@ -461,7 +461,7 @@ def start_game(player_selected, name):
             enemy.draw_health_bar(enemy.hit_box.centerx - 50, enemy.hit_box.y -10) 
             enemy.draw()
             if enemy.update(scroll):
-                score += 50
+                score += 25  + ( 25 * player.multiplier)
                 coin += coin_add_rate
 
         shop_group.draw(screen)
