@@ -112,7 +112,7 @@ def shopOpen(screen, shop, score, player):
     #add button
     health_add_button = Button((900, 240), None, 0.25, str(shop.costArr[0]), font_small, WHITE, GRAY)
     strength_button = Button((900, 390), None, 0.25, str(shop.costArr[0]), font_small, WHITE, GRAY)
-    booster_button = Button((900, 515), None, 0.25, str(shop.costArr[0]), font_small, WHITE, GRAY)
+    booster_button = Button((900, 550), None, 0.25, str(shop.costArr[0]), font_small, WHITE, GRAY)
     while True:
         bar_arr = [350, 450, 550, 650, 750]
         screen.fill(BLACK)
