@@ -14,7 +14,7 @@ class Shop(pygame.sprite.Sprite):
         self.strength_lvl = 0
         self.multiplier = 0
         self.baseCost = 500
-        self.costArr = [50, 500, 500]
+        self.costArr = [50, 50, 100]
     
     def update(self, scroll):
         self.rect.y += scroll
@@ -30,11 +30,12 @@ class Shop(pygame.sprite.Sprite):
         for i in range(self.multiplier):
             pygame.draw.rect(screen, color, (bar_arr[i], 600, 30, 70))
 
-    def health_upgrade(self, score, player):
-        if score >= self.costArr[0]:
-            score -= self.costArr[0]
-            self.costArr[0] = self.costArr[0] + 250 * self.health_lvl
+    def health_upgrade(self, coin, player):
+        if coin >= self.costArr[0]:
+            coin -= self.costArr[0]
+            self.costArr[0] = self.costArr[0] + 100 * self.health_lvl
             player.max_health += 50
             self.health_lvl += 1
+            return coin
         else:
-            return 0
+            return -1

@@ -24,6 +24,7 @@ class Enemy(Character):
         self.atk_damage = 10 + (score * 0.2)
         self.gravity = 0.05
         self.kill_score = 50 + (score * 0.05)
+        self.coin_gained = 50
         self.atk_cd_val = 100 - (score * 0.2)
         self.moving_right = True
         self.score = score

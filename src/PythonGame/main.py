@@ -142,7 +142,11 @@ def shopOpen(screen, shop, coins, player):
                 if return_button.checkForInput(mouse_get_pos):
                     returnToGame = True
                 if health_add_button.checkForInput(mouse_get_pos):
-                    score = shop.health_upgrade(score, player)
+                    output = shop.health_upgrade(coins, player)
+                    if output < 0:
+                        draw_text("Not enough coins!!", font_big, WHITE, WIDTH/2 - 100, 50)
+                    else:
+                        coins = output
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
@@ -245,6 +249,7 @@ def start_game(player_selected, name):
     scroll = 0 
     bg_scroll = 0
     score = 0
+    coin = 0
     shop_open = False
     buff_hit = False
     buff_random = True
@@ -314,7 +319,7 @@ def start_game(player_selected, name):
         key = pygame.key.get_pressed()
 
         if shop_open:
-            shop_open = shopOpen(screen, shop, score, player)
+            shop_open = shopOpen(screen, shop, coin, player)
             
         if buff_hit:
             x_buff = 200
@@ -356,6 +361,7 @@ def start_game(player_selected, name):
             enemy.draw()
             if enemy.update(scroll):
                 score += 50
+                coin += 20
 
         shop_group.draw(screen)
         shop_group.update(scroll)
@@ -372,6 +378,7 @@ def start_game(player_selected, name):
         # pygame.draw.line(screen, BLACK, (0,300),(WIDTH, 300))
 
         draw_text('SCORE: ' + str(score), font_small, BLACK, 0, 0)
+        draw_text('COINS: ' + str(coin), font_small, BLACK, 300, 0)
         
         #restart game to main menu
         if player.alive == False:
