@@ -129,8 +129,10 @@ def get_user_name():
 
         pygame.display.update()
 
-def shopOpen(screen, shop, score):
+def shopOpen(screen, shop, score, player):
     returnToGame = False
+    #add button
+    health_add_button = Button((900, 240), None, 0.25, str(shop.costArr[0]), font_small, WHITE, GRAY)
     while True:
         mouse_get_pos = pygame.mouse.get_pos()
         bar_arr = [350, 450, 550, 650, 750]
@@ -148,15 +150,20 @@ def shopOpen(screen, shop, score):
             pygame.draw.rect(screen, GRAY, (i, 210, 30, 70))
             pygame.draw.rect(screen, GRAY, (i, 360, 30, 70))
             pygame.draw.rect(screen, GRAY, (i, 515, 30, 70))
+        shop.load_upgrade(screen, bar_arr, GREEN)
         screen.blit(health_img, (200, 200))
         screen.blit(strength_img, (200, 350))
         screen.blit(booster_img, (200, 500))
+        health_add_button.changeColor(mouse_get_pos)
+        health_add_button.update(screen)
         return_button.changeColor(mouse_get_pos)
         return_button.update(screen)
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if return_button.checkForInput(mouse_get_pos):
                     returnToGame = True
+                if health_add_button.checkForInput(mouse_get_pos):
+                    score = shop.health_upgrade(score, player)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
@@ -329,7 +336,7 @@ def start_game(player_selected, name,score):
         key = pygame.key.get_pressed()
 
         if shop_open:
-            shop_open = shopOpen(screen, shop, score)
+            shop_open = shopOpen(screen, shop, score, player)
             
 
         if buff_hit:

@@ -28,7 +28,7 @@ class Buff(pygame.sprite.Sprite):
         self.player.gravity = 0.1
 
     def restore_health(self):
-        self.player.health = 100
+        self.player.health = self.player.max_health
     
     def clearBuff(self, num):
         self.rect.x = 0

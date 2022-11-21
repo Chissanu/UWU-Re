@@ -44,6 +44,7 @@ class Character(pygame.sprite.Sprite):
         self.atk_cd_val = 50
         self.update_time = pygame.time.get_ticks()
         self.target = target
+        self.max_health = 100
 
 
         #load all images for the players
@@ -204,8 +205,8 @@ class Character(pygame.sprite.Sprite):
     
     def draw_health_bar(self, x, y):
         ratio = self.health / 100
-        pygame.draw.rect(self.screen, BLACK, (x - 2, y - 2, 404, 34))
-        pygame.draw.rect(self.screen, RED, (x, y, 400, 30)) 
+        pygame.draw.rect(self.screen, BLACK, (x - 2, y - 2, 404 + self.max_health - 100, 34))
+        pygame.draw.rect(self.screen, RED, (x, y, 400  + self.max_health - 100, 30)) 
         pygame.draw.rect(self.screen, YELLOW, (x, y, 400 * ratio, 30))
 
 
