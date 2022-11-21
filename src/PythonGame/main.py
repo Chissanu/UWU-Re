@@ -115,6 +115,7 @@ def shopOpen(screen, shop, coins, player, coin_rate):
     health_add_button = Button((WIDTH/2, HEIGHT/2 - 300), None, 0.25, "X", font_big, WHITE, GRAY)
     strength_button = Button((WIDTH/2, HEIGHT/2 - 150), None, 0.25, "X", font_big, WHITE, GRAY)
     booster_button = Button((WIDTH/2, HEIGHT/2 + 15), None, 0.25, "X", font_big, WHITE, GRAY)
+    hp_heal_button = Button((WIDTH/2, HEIGHT/2 + 165), None, 0.25, "X", font_big, WHITE, GRAY)
     while True:
         mouse_get_pos = pygame.mouse.get_pos()
         bar_arr = [350, 450, 550, 650, 750]
@@ -128,19 +129,25 @@ def shopOpen(screen, shop, coins, player, coin_rate):
         strength_img = pygame.transform.scale(strength_img, (int(strength_img.get_width() * 0.1), int(strength_img.get_height() * 0.1)))
         booster_img = pygame.image.load(os.path.join(CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'shop_img', 'booster.png')).convert_alpha()
         booster_img = pygame.transform.scale(booster_img, (int(booster_img.get_width() * 0.05), int(booster_img.get_height() * 0.05)))
-        draw_text(str(50 + 100 * player.health_lvl), font_big, WHITE, WIDTH/2 - 160, HEIGHT/2 - 320) #ยิ่งลบยิ่งขึ้น
-        draw_text(str(50 + 100 * player.strength_lvl), font_big, WHITE, WIDTH/2 - 160, HEIGHT/2 - 175)
-        draw_text(str(100 + 100 * player.multiplier), font_big, WHITE, WIDTH/2 - 160, HEIGHT/2 - 10)
+        
+        hpPotion_img = pygame.image.load(os.path.join(CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'shop_img', 'hpPotion.png')).convert_alpha()
+        hpPotion_img = pygame.transform.scale(hpPotion_img, (int(hpPotion_img.get_width() * 0.5), int(hpPotion_img.get_height() * 0.5)))
+        draw_text(str(50 + 100 * player.health_lvl), font_big, WHITE, WIDTH/2 - 160, HEIGHT/2 - 330) #ยิ่งลบยิ่งขึ้น
+        draw_text(str(50 + 100 * player.strength_lvl), font_big, WHITE, WIDTH/2 - 160, HEIGHT/2 - 185)
+        draw_text(str(100 + 100 * player.multiplier), font_big, WHITE, WIDTH/2 - 160, HEIGHT/2 - 20)
+        draw_text(str(50), font_big, WHITE, WIDTH/2 - 160, HEIGHT/2 + 130)
         for i in bar_arr:
             pygame.draw.rect(screen, GRAY, (i, 210, 30, 70))
             pygame.draw.rect(screen, GRAY, (i, 360, 30, 70))
             pygame.draw.rect(screen, GRAY, (i, 515, 30, 70))
+            #pygame.draw.rect(screen, GRAY, (i, 665, 30, 70))
         shop.load_upgrade(screen, bar_arr, GREEN, player)
         screen.blit(health_img, (200, 200))
         screen.blit(strength_img, (200, 350))
         screen.blit(booster_img, (200, 500))
+        screen.blit(hpPotion_img, (200, 650))
         # button
-        for button in (health_add_button, strength_button, booster_button, return_button,):
+        for button in (health_add_button, strength_button, booster_button, hp_heal_button,return_button):
             button.changeColor(mouse_get_pos)
             button.update(screen)
         for event in pygame.event.get():
@@ -160,6 +167,12 @@ def shopOpen(screen, shop, coins, player, coin_rate):
                         coins = output
                 if booster_button.checkForInput(mouse_get_pos):
                     output = shop.booster(coins, coin_rate, player)
+                    if output < 0:
+                        draw_text("Not enough coins!!", font_big, WHITE, WIDTH/2, HEIGHT/2)
+                    else:
+                        coins = output
+                if hp_heal_button.checkForInput(mouse_get_pos):
+                    output = shop.heal(coins, player)
                     if output < 0:
                         draw_text("Not enough coins!!", font_big, WHITE, WIDTH/2, HEIGHT/2)
                     else:
@@ -394,7 +407,7 @@ def start_game(player_selected, name):
                 if timer > 5:
                     timerArr = []
                     debuffQueue.dequeue()
-                    player.clearDebuff(2)
+                    player.clearDebuff(3)
         
         if buff_hit:
             x_buff = 200

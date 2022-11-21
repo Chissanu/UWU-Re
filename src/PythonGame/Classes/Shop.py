@@ -10,7 +10,7 @@ class Shop(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.bg = pygame.image.load(os.path.join(self.CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'Background', 'white.jpg'))
-        self.costArr = [50, 50, 100]
+        self.costArr = [50, 50, 100,50]
     
     def update(self, scroll):
         self.rect.y += scroll
@@ -53,6 +53,18 @@ class Shop(pygame.sprite.Sprite):
             self.costArr[2] += + 100 * player.multiplier
             coinRate += 10
             player.multiplier += 1
+            return coin
+        else:
+            return -1
+        
+    def heal(self,coin,player):
+        print("hedsakmdsads")
+        if coin >= self.costArr[3]:
+            coin -= self.costArr[3]
+            if player.health + 50 > player.max_health:
+                player.health += player.max_health - player.health
+            else:
+                player.health += 50
             return coin
         else:
             return -1

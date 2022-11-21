@@ -186,6 +186,8 @@ class Character(pygame.sprite.Sprite):
             pass
         elif debuffID == 2:
             self.speed = 10
+        elif debuffID == 3:
+            self.gravity = 0.75
 
     #update character actions
     def update(self):

@@ -135,7 +135,7 @@ class Arrow(pygame.sprite.Sprite):
                     self.target_group.hit = True
                     debuff = self.target_group.getQueue()
                     self.kill()
-                    debuffChoice = random.randint(4,4)
+                    debuffChoice = random.randint(1,4)
                     if debuffChoice == 1:
                         self.target_group.health -= self.atk_damage
                     elif debuffChoice == 2:
