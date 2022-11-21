@@ -1,4 +1,5 @@
 import pygame, os, sys, random, pygame_gui, time
+from pygame import mixer
 from Classes.Button import Button
 from Classes.Swordsman import Swordsman
 from Classes.Enemy import Enemy
@@ -9,6 +10,7 @@ from Classes.Buff import Buff
 from Classes.Leaderboard import Leaderboard
 from Classes.Shop import Shop
 
+mixer.init()
 pygame.init()
 
 SIZE = WIDTH, HEIGHT = (1920, 1080)
@@ -32,6 +34,7 @@ FPS = 60
 #define font
 font_small = pygame.font.SysFont('Lucida Sans', 50)
 font_big = pygame.font.SysFont('Lucida Sans', 70)
+very_small = pygame.font.SysFont('Lucida Sans', 20)
 
 #define player action variables
 moving_left = False
@@ -64,6 +67,8 @@ swordsman_btn_img = pygame.image.load(os.path.join(BTN_PATH, "swordsman_btn.png"
 archer_btn_img = pygame.image.load(os.path.join(BTN_PATH, "archer_btn.png")).convert_alpha()
 accept_img = pygame.image.load(os.path.join(BTN_PATH, "accept_btn.png")).convert_alpha()
 restart_img = pygame.image.load(os.path.join(BTN_PATH, "restart_btn.png")).convert_alpha()
+#load music and sound
+soundPath = os.path.join(CURRENT_PATH,"src","PythonGame", "BgSound")
 
 #create buttons
 start_button = Button((WIDTH/2, HEIGHT/2 - 200), start_img, 0.3, "START", font_big, WHITE, GRAY)
@@ -77,7 +82,6 @@ restart_button = Button((WIDTH/2, HEIGHT/2 + 250), restart_img, 0.25, "RESTART",
 main_menu_button = Button((WIDTH/2 - 100, HEIGHT/2 + 400), exit_img, 0.25, "main menu", font_small, WHITE, GRAY)
 back_button = Button((WIDTH - 200, HEIGHT-200), None, 0.25, "back", font_small, BLACK, GRAY)
 search_button = Button((WIDTH - 400, HEIGHT-200), None, 0.25, "search", font_small, BLACK, GRAY)
-return_button = Button((WIDTH - 200, HEIGHT-200), None, 0.25, "Return", font_small, WHITE, GRAY)
 
 #Classes Import
 scoreboard = Leaderboard()
@@ -99,38 +103,14 @@ def draw_text(text, font, text_col, x, y):
 	img = font.render(text, True, text_col)
 	screen.blit(img, (x, y))
 
-
-def get_user_name():
-    manager = pygame_gui.UIManager((WIDTH, HEIGHT))
-    text_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((350, 275), (900, 50)), manager=manager,
-                                               object_id='#main_text_entry')
-    while True:
-        UI_REFRESH_RATE = clock.tick(60)/1000
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if (event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED and
-                event.ui_object_id == '#main_text_entry'):
-                return event.text
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-            
-            manager.process_events(event)
-        
-        manager.update(UI_REFRESH_RATE)
-
-        screen.fill("white")
-
-        manager.draw_ui(screen)
-
-        pygame.display.update()
+# bg music function
+def bg_music(music_name, volume, round):
+    music = mixer.Sound("BgSound/" + str(music_name))
+    music.set_volume(volume)
+    music.play(round)
 
 def shopOpen(screen, shop, score):
-    returnToGame = False
     while True:
-        mouse_get_pos = pygame.mouse.get_pos()
         bar_arr = [350, 450, 550, 650, 750]
         screen.fill(BLACK)
         draw_text("Shop", font_big, WHITE, WIDTH/2 - 100, 50)
@@ -149,20 +129,13 @@ def shopOpen(screen, shop, score):
         screen.blit(health_img, (200, 200))
         screen.blit(strength_img, (200, 350))
         screen.blit(booster_img, (200, 500))
-        return_button.changeColor(mouse_get_pos)
-        return_button.update(screen)
+
         for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if return_button.checkForInput(mouse_get_pos):
-                    returnToGame = True
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
         #pygame.draw.rect()
-        if returnToGame:
-            return False
         pygame.display.update()
-        
 
 def restart(score, player_selected):
     ANIMATION_PATH = os.path.join(CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'Character_img')
@@ -186,7 +159,7 @@ def restart(score, player_selected):
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if restart_button.checkForInput(mouse_get_pos):
-                    start_game(player_selected, name,score)
+                    start_game(player_selected, name)
                 if main_menu_button.checkForInput(mouse_get_pos):
                     main_menu()
                 if exit_button_restart.checkForInput(mouse_get_pos):
@@ -247,7 +220,7 @@ def leader_board_page():
 
         pygame.display.update()
 
-def start_game(player_selected, name,score):
+def start_game(player_selected, name):
     MAX_PLATFORMS = 20
     MAX_ENEMY = 5
     MAX_SHOP = 1
@@ -308,7 +281,7 @@ def start_game(player_selected, name,score):
                     shop_group.add(shop)
             if spawn_chance > 60:
                 if len(enemy_group) < MAX_ENEMY:         
-                    enemy = Enemy('Swordsman', platform_x + platform_width/2, platform.rect.y - 85, 0.3, 5, screen, SIZE, player, platform_group, platform_width,score)
+                    enemy = Enemy('Swordsman', platform_x + platform_width/2, platform.rect.y - 85, 0.3, 5, screen, SIZE, player, platform_group, platform_width, score)
                     enemy_group.add(enemy)
             if spawn_chance < 20:
                 if len(buff_group) < MAX_BUFF:
@@ -324,8 +297,8 @@ def start_game(player_selected, name,score):
         key = pygame.key.get_pressed()
 
         if shop_open:
-            shop_open = shopOpen(screen, shop, score)
-            
+            shopOpen(screen, shop, score)
+            draw_text("shop open!!!", font_big, BLACK, WIDTH/2, HEIGHT/2)
 
         if buff_hit:
             x_buff = 200
@@ -393,6 +366,7 @@ def start_game(player_selected, name,score):
                 "score": score
             }
             scoreboard.saveScore(newData)
+            print(scoreboard.getSortedScoreboard())
             restart(score,player_selected) 
 
         for event in pygame.event.get():
@@ -424,21 +398,26 @@ def start_game(player_selected, name,score):
         pygame.display.update()
 
 
-def select_char_mode(name):
+def select_char_mode():
+    manager = pygame_gui.UIManager((WIDTH, HEIGHT))
+    text_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((1250, 100), (500, 50)), manager=manager,
+                                               object_id='#main_text_entry')
     global sword_selected
     global archer_selected
     # global platform_group
     player = Preview('Swordsman', WIDTH/3 - 100, 670, 1.5, 10, screen, SIZE, enemy_group, platform_group)
     sword_selected = True
     char_name, x = "-The Swordsman-", 350
+    name = None
     while True:
+        UI_REFRESH_RATE = clock.tick(60)/1000
         clock.tick(FPS)
         draw_window(screen, bg_img)
-        draw_text(name, font_small, BLACK, WIDTH/2 + 500, 100)
+        # draw_text(name, font_small, BLACK, WIDTH/2 + 500, 100)
         draw_text(char_name, font_small, BLACK, x, 200)
+        draw_text("Put your name here, then please press [enter]!", very_small, BLACK, 1200, 70)
         mouse_get_pos = pygame.mouse.get_pos()
-        score = 0
-        player.draw() 
+        player.draw()
         player.update()
 
         for button in (swordsman_button, archer_button, accept_button):
@@ -449,6 +428,9 @@ def select_char_mode(name):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            if (event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED and
+                event.ui_object_id == '#main_text_entry') and name == None:
+                name = event.text
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if swordsman_button.checkForInput(mouse_get_pos):
                     player = Preview('Swordsman', WIDTH/3 - 100, 670, 1.5, 10, screen, SIZE, enemy_group, platform_group)
@@ -460,15 +442,15 @@ def select_char_mode(name):
                     char_name, x = "-The Archer-", 400
                     archer_selected = True
                     sword_selected = not archer_selected
-                if accept_button.checkForInput(mouse_get_pos) and (sword_selected or archer_selected):
+                if accept_button.checkForInput(mouse_get_pos) and (sword_selected or archer_selected) and name != None:
                     if sword_selected:
                         player_selected = "Swordsman"
-                        start_game(player_selected, name,score)
+                        start_game(player_selected, name)
                     if archer_selected:
                         player_selected = "Archer"
-                        start_game(player_selected, name,score)
+                        start_game(player_selected, name)
 
-            if event.type == pygame.KEYDOWN:
+            if event.type == pygame.KEYDOWN and name != None:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     sys.exit()
@@ -488,7 +470,10 @@ def select_char_mode(name):
                     player.moving_left = False
                 if event.key == pygame.K_d:
                     player.moving_right = False
-                    
+            manager.process_events(event)
+        manager.update(UI_REFRESH_RATE)
+        manager.draw_ui(screen)
+     
         pygame.display.update() 
 
 def main_menu():
@@ -507,8 +492,7 @@ def main_menu():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start_button.checkForInput(mouse_get_pos):
-                    name = get_user_name()
-                    select_char_mode(name)
+                    select_char_mode()
                 if leaderBoard_button.checkForInput(mouse_get_pos):
                     leader_board_page()
                     pass
