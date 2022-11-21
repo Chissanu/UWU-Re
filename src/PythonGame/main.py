@@ -77,6 +77,7 @@ restart_button = Button((WIDTH/2, HEIGHT/2 + 250), restart_img, 0.25, "RESTART",
 main_menu_button = Button((WIDTH/2 - 100, HEIGHT/2 + 400), exit_img, 0.25, "main menu", font_small, WHITE, GRAY)
 back_button = Button((WIDTH - 200, HEIGHT-200), None, 0.25, "back", font_small, BLACK, GRAY)
 search_button = Button((WIDTH - 400, HEIGHT-200), None, 0.25, "search", font_small, BLACK, GRAY)
+return_button = Button((WIDTH - 200, HEIGHT-200), None, 0.25, "Return", font_small, WHITE, GRAY)
 
 #Classes Import
 scoreboard = Leaderboard()
@@ -127,7 +128,9 @@ def get_user_name():
         pygame.display.update()
 
 def shopOpen(screen, shop, score):
+    returnToGame = False
     while True:
+        mouse_get_pos = pygame.mouse.get_pos()
         bar_arr = [350, 450, 550, 650, 750]
         screen.fill(BLACK)
         draw_text("Shop", font_big, WHITE, WIDTH/2 - 100, 50)
@@ -146,13 +149,20 @@ def shopOpen(screen, shop, score):
         screen.blit(health_img, (200, 200))
         screen.blit(strength_img, (200, 350))
         screen.blit(booster_img, (200, 500))
-
+        return_button.changeColor(mouse_get_pos)
+        return_button.update(screen)
         for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if return_button.checkForInput(mouse_get_pos):
+                    returnToGame = True
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
         #pygame.draw.rect()
+        if returnToGame:
+            return False
         pygame.display.update()
+        
 
 def restart(score, player_selected):
     ANIMATION_PATH = os.path.join(CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'Character_img')
@@ -314,8 +324,8 @@ def start_game(player_selected, name):
         key = pygame.key.get_pressed()
 
         if shop_open:
-            shopOpen(screen, shop, score)
-            draw_text("shop open!!!", font_big, BLACK, WIDTH/2, HEIGHT/2)
+            shop_open = shopOpen(screen, shop, score)
+            
 
         if buff_hit:
             x_buff = 200
