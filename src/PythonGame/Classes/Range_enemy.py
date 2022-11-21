@@ -51,11 +51,11 @@ class Range_enemy(Enemy):
         self.update_action(1)#1: run
         #update enemy vision as its moves
         self.vision.center = (self.rect.centerx + self.vision.width/2 * self.direction, self.rect.centery +50)
-        pygame.draw.rect(self.screen, (255, 0, 0), self.vision)
+        #pygame.draw.rect(self.screen, (255, 0, 0), self.vision)
 
         
     def update(self, scroll):
-        pygame.draw.rect(self.screen, (255, 0, 0), self.vision)
+        #pygame.draw.rect(self.screen, (255, 0, 0), self.vision)
         score = self.update_animation()
         self.rect.y += scroll
         self.hit_box.y += scroll

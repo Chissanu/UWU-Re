@@ -82,7 +82,7 @@ accept_button = Button((WIDTH -  accept_img.get_width()/3.2, HEIGHT/1.3), accept
 restart_button = Button((WIDTH/2, HEIGHT/2 + 250), restart_img, 0.25, "RESTART", font_small, BLACK, GRAY)
 main_menu_button = Button((WIDTH/2 - 100, HEIGHT/2 + 400), exit_img, 0.25, "main menu", font_small, WHITE, GRAY)
 back_button = Button((WIDTH - 200, HEIGHT-200), None, 0.25, "back", font_small, BLACK, GRAY)
-search_button = Button((WIDTH - 400, HEIGHT-200), None, 0.25, "search", font_small, BLACK, GRAY)
+sort_button = Button((WIDTH - 400, HEIGHT-200), None, 0.25, "sort", font_small, BLACK, GRAY)
 return_button = Button((WIDTH - 500, HEIGHT-200), None, 0.25, "Return", font_small, WHITE, GRAY)
 
 #Classes Import
@@ -226,7 +226,7 @@ def leader_board_page():
         screen.fill(WHITE)
         mouse_get_pos = pygame.mouse.get_pos()
         index = 1
-        for button in (back_button, search_button):
+        for button in (back_button, sort_button):
             button.changeColor(mouse_get_pos)
             button.update(screen)
 
@@ -253,7 +253,7 @@ def leader_board_page():
                 play_click()
                 if back_button.checkForInput(mouse_get_pos):
                     main_menu()
-                if search_button.checkForInput(mouse_get_pos):
+                if sort_button.checkForInput(mouse_get_pos):
                     players = scoreboard.getSortedScoreboard()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -279,7 +279,7 @@ def start_game(player_selected, name):
     buff_random = True
     timerArr = []
     clicked = True
-    # shop = Shop(0, 0)
+    shop = Shop(0, 0)
     buff = Buff(0, 0)
 
     #create sprite groups
@@ -329,19 +329,19 @@ def start_game(player_selected, name):
             platform_group.add(platform)
 
             spawn_chance = random.randint(0, 100)
-            if spawn_chance > 0:
+            if spawn_chance >= 0 and spawn_chance < 10 :
                 if len(shop_group) < MAX_SHOP:
                     shop = Shop(platform_x + platform_width/2, platform.rect.y - 85)
                     shop_group.add(shop)
-            # if spawn_chance > 60:
-            #     if len(enemy_group) < MAX_ENEMY:         
-            #         enemy = Enemy('Swordsman', platform_x + platform_width/2, platform.rect.y - 85, 0.3, 5, screen, SIZE, player, platform_group, platform, score)
-            #         enemy_group.add(enemy)
-            if spawn_chance > 60:
+            if spawn_chance >= 10 and spawn_chance < 55:
+                if len(enemy_group) < MAX_ENEMY:         
+                    enemy = Enemy('Swordsman', platform_x + platform_width/2, platform.rect.y - 85, 0.3, 5, screen, SIZE, player, platform_group, platform, score)
+                    enemy_group.add(enemy)
+            if spawn_chance >= 55 and spawn_chance < 95:
                 if len(enemy_group) < MAX_ENEMY:         
                     enemy = Range_enemy('Archer', platform_x + platform_width/2, platform.rect.y - 85, 0.3, 5, screen, SIZE, player, platform_group, platform, score, arrow_group)
                     enemy_group.add(enemy)
-            if spawn_chance < 20:
+            if spawn_chance >= 95:
                 if len(buff_group) < MAX_BUFF:
                     buff = Buff(platform_x + platform_width/2, platform.rect.y - 85)
                     buff_group.add(buff)
@@ -362,7 +362,7 @@ def start_game(player_selected, name):
             buff_group.remove(buff)
             buff.setData(player)
             if buff_random:
-                mode = random.randint(3, 3)
+                mode = random.randint(1, 3)
                 buff_random = False
             if mode == 1:
                 buff.restore_health()
@@ -425,8 +425,8 @@ def start_game(player_selected, name):
 
         # pygame.draw.line(screen, BLACK, (0,300),(WIDTH, 300))
 
-        draw_text('SCORE: ' + str(score), font_small, BLACK, 0, 0)
-        draw_text('COINS: ' + str(coin), font_small, BLACK, 300, 0)
+        draw_text('SCORE:' + str(score) + '  COINS:' + str(coin), font_small, BLACK, 0, 0)
+        # draw_text('COINS:' + str(coin), font_small, BLACK, 330, 0)
         
         #restart game to main menu
         if player.alive == False:

@@ -1,4 +1,5 @@
-[{
+[
+    {
         "name": "Ruj",
         "score": 0
     },
@@ -37,5 +38,17 @@
     {
         "name": "gay",
         "score": 50
+    },
+    {
+        "name": "Oak",
+        "score": 50
+    },
+    {
+        "name": "Oak",
+        "score": 600
+    },
+    {
+        "name": "awdd",
+        "score": 750
     }
 ]
