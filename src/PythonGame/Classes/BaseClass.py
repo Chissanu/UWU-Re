@@ -88,7 +88,9 @@ class Character(pygame.sprite.Sprite):
             self.direction = 1
 		#jump
         if self.jump == True:
-            jump = pygame.mixer.Sound(os.path.join(SOUND_PATH,"jump.wav")).play()
+            jump = pygame.mixer.Sound(os.path.join(SOUND_PATH,"jump.wav"))
+            jump.set_volume(0.1)
+            jump.play()
             self.vel_y = -20
             self.jump = False
             self.in_air = True

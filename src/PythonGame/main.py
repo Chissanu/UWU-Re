@@ -68,6 +68,7 @@ swordsman_btn_img = pygame.image.load(os.path.join(BTN_PATH, "swordsman_btn.png"
 archer_btn_img = pygame.image.load(os.path.join(BTN_PATH, "archer_btn.png")).convert_alpha()
 accept_img = pygame.image.load(os.path.join(BTN_PATH, "accept_btn.png")).convert_alpha()
 restart_img = pygame.image.load(os.path.join(BTN_PATH, "restart_btn.png")).convert_alpha()
+return_button = Button((WIDTH - 200, HEIGHT-200), None, 0.25, "Return", font_small, WHITE, GRAY)
 #load music and sound
 soundPath = os.path.join(CURRENT_PATH,"src","PythonGame", "BgSound")
 
@@ -106,6 +107,7 @@ def draw_text(text, font, text_col, x, y):
 	screen.blit(img, (x, y))
 
 def shopOpen(screen, shop, score, player):
+    mouse_get_pos = pygame.mouse.get_pos()
     returnToGame = False
     #add button
     health_add_button = Button((900, 240), None, 0.25, str(shop.costArr[0]), font_small, WHITE, GRAY)
