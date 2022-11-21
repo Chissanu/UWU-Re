@@ -64,7 +64,6 @@ class Leaderboard:
         else:
             userList = self.users
         index = 1
-        print(userList)
         while sortedArr:
             val = sortedArr.pop()
             for item in userList:
