@@ -68,7 +68,6 @@ swordsman_btn_img = pygame.image.load(os.path.join(BTN_PATH, "swordsman_btn.png"
 archer_btn_img = pygame.image.load(os.path.join(BTN_PATH, "archer_btn.png")).convert_alpha()
 accept_img = pygame.image.load(os.path.join(BTN_PATH, "accept_btn.png")).convert_alpha()
 restart_img = pygame.image.load(os.path.join(BTN_PATH, "restart_btn.png")).convert_alpha()
-return_button = Button((WIDTH - 200, HEIGHT-200), None, 0.25, "Return", font_small, WHITE, GRAY)
 #load music and sound
 soundPath = os.path.join(CURRENT_PATH,"src","PythonGame", "BgSound")
 
@@ -84,6 +83,7 @@ restart_button = Button((WIDTH/2, HEIGHT/2 + 250), restart_img, 0.25, "RESTART",
 main_menu_button = Button((WIDTH/2 - 100, HEIGHT/2 + 400), exit_img, 0.25, "main menu", font_small, WHITE, GRAY)
 back_button = Button((WIDTH - 200, HEIGHT-200), None, 0.25, "back", font_small, BLACK, GRAY)
 search_button = Button((WIDTH - 400, HEIGHT-200), None, 0.25, "search", font_small, BLACK, GRAY)
+return_button = Button((WIDTH - 200, HEIGHT-200), None, 0.25, "Return", font_small, WHITE, GRAY)
 
 #Classes Import
 scoreboard = Leaderboard()
@@ -106,19 +106,19 @@ def draw_text(text, font, text_col, x, y):
 	img = font.render(text, True, text_col)
 	screen.blit(img, (x, y))
 
-def shopOpen(screen, shop, score, player):
-    mouse_get_pos = pygame.mouse.get_pos()
+def shopOpen(screen, shop, coins, player):
     returnToGame = False
     #add button
     health_add_button = Button((900, 240), None, 0.25, str(shop.costArr[0]), font_small, WHITE, GRAY)
-    strength_button = Button((900, 390), None, 0.25, str(shop.costArr[0]), font_small, WHITE, GRAY)
-    booster_button = Button((900, 550), None, 0.25, str(shop.costArr[0]), font_small, WHITE, GRAY)
+    strength_button = Button((900, 390), None, 0.25, str(shop.costArr[1]), font_small, WHITE, GRAY)
+    booster_button = Button((900, 550), None, 0.25, str(shop.costArr[2]), font_small, WHITE, GRAY)
     while True:
+        mouse_get_pos = pygame.mouse.get_pos()
         bar_arr = [350, 450, 550, 650, 750]
         screen.fill(BLACK)
         draw_text("Shop", font_big, WHITE, WIDTH/2 - 100, 50)
-        currentScore = f"Current Score: {score}"
-        draw_text(currentScore, font_small, WHITE, WIDTH/2 + 400, 50)
+        currentCoin = f"Current coin: {coins}"
+        draw_text(currentCoin, font_small, WHITE, WIDTH/2 + 400, 50)
         health_img = pygame.image.load(os.path.join(CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'shop_img', 'healthIcon.png')).convert_alpha()
         health_img = pygame.transform.scale(health_img, (int(health_img.get_width() * 0.1), int(health_img.get_height() * 0.1)))
         strength_img = pygame.image.load(os.path.join(CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'shop_img', 'strengthIcon.png')).convert_alpha()
@@ -146,6 +146,8 @@ def shopOpen(screen, shop, score, player):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
+        if returnToGame:
+            break
         #pygame.draw.rect()
         pygame.display.update()
 
