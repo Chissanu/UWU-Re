@@ -33,9 +33,9 @@ clock = pygame.time.Clock()
 FPS = 60
 
 #define font
-font_small = pygame.font.SysFont('Lucida Sans', 50)
-font_big = pygame.font.SysFont('Lucida Sans', 70)
-very_small = pygame.font.SysFont('Lucida Sans', 20)
+font_small = pygame.font.SysFont('cambria', 50)
+font_big = pygame.font.SysFont('cambria', 70)
+very_small = pygame.font.SysFont('cambria', 20)
 
 #define player action variables
 moving_left = False
@@ -195,7 +195,7 @@ def restart(score, player_selected, name):
         screen.fill(GRAY)
         mouse_get_pos = pygame.mouse.get_pos()
 
-        draw_text("YOUR SCORE:", font_big, BLACK, WIDTH/2 - 200, 200)
+        draw_text("Your score:", font_small, BLACK, WIDTH/2 - 200, 200)
         draw_text(str(name), font_big, BLACK, WIDTH/2 - 100, 100)
         draw_text(str(score), font_big, WHITE, WIDTH/2, 300)
         
@@ -540,7 +540,7 @@ def select_char_mode():
         draw_window(screen, bg_img)
         # draw_text(name, font_small, BLACK, WIDTH/2 + 500, 100)
         draw_text(char_name, font_small, BLACK, x, 200)
-        draw_text("Put your name here, then please press [enter]!", very_small, BLACK, 1200, 70)
+        draw_text("Put your name here, then please press [Enter]!", very_small, BLACK, 1250, 70)
         mouse_get_pos = pygame.mouse.get_pos()
         player.draw()
         player.update()
