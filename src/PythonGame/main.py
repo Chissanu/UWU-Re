@@ -193,7 +193,7 @@ def restart(score, player_selected):
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if restart_button.checkForInput(mouse_get_pos):
-                    start_game(player_selected, name)
+                    start_game(player_selected, name,score)
                 if main_menu_button.checkForInput(mouse_get_pos):
                     main_menu()
                 if exit_button_restart.checkForInput(mouse_get_pos):
@@ -254,7 +254,7 @@ def leader_board_page():
 
         pygame.display.update()
 
-def start_game(player_selected, name):
+def start_game(player_selected, name,score):
     MAX_PLATFORMS = 20
     MAX_ENEMY = 5
     MAX_SHOP = 1
@@ -315,7 +315,7 @@ def start_game(player_selected, name):
                     shop_group.add(shop)
             if spawn_chance > 60:
                 if len(enemy_group) < MAX_ENEMY:         
-                    enemy = Enemy('Swordsman', platform_x + platform_width/2, platform.rect.y - 85, 0.3, 5, screen, SIZE, player, platform_group, platform_width)
+                    enemy = Enemy('Swordsman', platform_x + platform_width/2, platform.rect.y - 85, 0.3, 5, screen, SIZE, player, platform_group, platform_width,score)
                     enemy_group.add(enemy)
             if spawn_chance < 20:
                 if len(buff_group) < MAX_BUFF:
@@ -400,7 +400,6 @@ def start_game(player_selected, name):
                 "score": score
             }
             scoreboard.saveScore(newData)
-            print(scoreboard.getSortedScoreboard())
             restart(score,player_selected) 
 
         for event in pygame.event.get():
@@ -445,7 +444,8 @@ def select_char_mode(name):
         draw_text(name, font_small, BLACK, WIDTH/2 + 500, 100)
         draw_text(char_name, font_small, BLACK, x, 200)
         mouse_get_pos = pygame.mouse.get_pos()
-        player.draw()
+        score = 0
+        player.draw() 
         player.update()
 
         for button in (swordsman_button, archer_button, accept_button):
@@ -470,10 +470,10 @@ def select_char_mode(name):
                 if accept_button.checkForInput(mouse_get_pos) and (sword_selected or archer_selected):
                     if sword_selected:
                         player_selected = "Swordsman"
-                        start_game(player_selected, name)
+                        start_game(player_selected, name,score)
                     if archer_selected:
                         player_selected = "Archer"
-                        start_game(player_selected, name)
+                        start_game(player_selected, name,score)
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:

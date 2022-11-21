@@ -1,50 +1,30 @@
 [
     {
-        "name": "Oak",
-        "score": 500
-    },
-    {
         "name": "Ruj",
-        "score": 50
+        "score": 0
     },
     {
-        "name": "asd",
+        "name": "Oak",
+        "score": 850
+    },
+    {
+        "name": "Oaka",
+        "score": 100
+    },
+    {
+        "name": "OA",
         "score": 200
     },
     {
-        "name": "adddwdwad",
-        "score": 0
+        "name": "OA",
+        "score": 5000
     },
     {
-        "name": "dafaq",
-        "score": 50
-    },
-    {
-        "name": "dafaq",
-        "score": 50
-    },
-    {
-        "name": "RujMangKodGay",
+        "name": "Oaku",
         "score": 500
     },
     {
-        "name": "TYe",
-        "score": 100
-    },
-    {
-        "name": "LeaderBoard Test",
-        "score": 0
-    },
-    {
-        "name": "OakDabest",
-        "score": 100
-    },
-    {
-        "name": "OakDabest",
-        "score": 100
-    },
-    {
-        "name": "Oakasd",
-        "score": 100
+        "name": "asd",
+        "score": 350
     }
 ]
