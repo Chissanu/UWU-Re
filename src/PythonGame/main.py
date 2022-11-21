@@ -111,6 +111,8 @@ def shopOpen(screen, shop, score, player):
     returnToGame = False
     #add button
     health_add_button = Button((900, 240), None, 0.25, str(shop.costArr[0]), font_small, WHITE, GRAY)
+    strength_button = Button((900, 390), None, 0.25, str(shop.costArr[0]), font_small, WHITE, GRAY)
+    booster_button = Button((900, 515), None, 0.25, str(shop.costArr[0]), font_small, WHITE, GRAY)
     while True:
         bar_arr = [350, 450, 550, 650, 750]
         screen.fill(BLACK)
@@ -131,10 +133,10 @@ def shopOpen(screen, shop, score, player):
         screen.blit(health_img, (200, 200))
         screen.blit(strength_img, (200, 350))
         screen.blit(booster_img, (200, 500))
-        health_add_button.changeColor(mouse_get_pos)
-        health_add_button.update(screen)
-        return_button.changeColor(mouse_get_pos)
-        return_button.update(screen)
+        # button
+        for button in (health_add_button, strength_button, booster_button, return_button,):
+            button.changeColor(mouse_get_pos)
+            button.update(screen)
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if return_button.checkForInput(mouse_get_pos):
