@@ -139,7 +139,7 @@ class Enemy(Character):
                 
 
     def draw_health_bar(self, x, y):
-        ratio = self.health / 100
+        ratio = self.health / (100 + (self.score * 0.1))
         pygame.draw.rect(self.screen, BLACK, (x - 2, y - 2, 104, 14))
         pygame.draw.rect(self.screen, RED, (x, y, 100, 10)) 
         pygame.draw.rect(self.screen, YELLOW, (x, y, 100 * ratio, 10))
