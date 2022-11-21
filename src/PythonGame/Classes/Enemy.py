@@ -9,18 +9,17 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
 class Enemy(Character):
-    def __init__(self, type, x, y, scale, speed, screen, screen_size, target, platform_group, platform_width,score):
+    def __init__(self, type, x, y, scale, speed, screen, screen_size, target, platform_group, platform,score):
         super().__init__(type, x, y, scale, speed, screen, screen_size, target, platform_group)
         self.health = 100 + (score * 0.1)
-        self.move_counter = 0
-        self.platform_width = platform_width
+        self.platform = platform
         self.idling = False
         self.idling_counter = 0
         self.vision = pygame.Rect(0, 0, 350, 20)
         self.vision_x = self.vision.x
         self.attack_box_multiplier = 1.5
         self.original_speed = self.speed
-        self.increase_speed = 5 + (score * 0.1)
+        self.increase_speed = 15
         self.atk_damage = 10 + (score * 0.2)
         self.gravity = 0.05
         self.kill_score = 50 + (score * 0.05)
@@ -48,15 +47,17 @@ class Enemy(Character):
             self.flip = False
             self.direction = 1
             
-        if self.move_counter > self.platform_width/ 15:
+        if self.hit_box.x + self.hit_box.width > self.platform.rect.x + self.platform.rect.width:
             self.direction *= -1
-            self.move_counter *= -1
+            dx *= -1
+        if self.hit_box.x < self.platform.rect.x:
+            self.direction *= -1
+            dx *= -1
         
         self.rect.x += dx
         self.hit_box.x += dx
 
         self.update_action(1)#1: run
-        self.move_counter += 1
         #update enemy vision as its moves
         self.vision.center = (self.rect.centerx + self.vision.width/2 * self.direction, self.rect.centery +50)
         #pygame.draw.rect(self.screen, (255, 0, 0), self.vision)
@@ -77,11 +78,9 @@ class Enemy(Character):
             if self.target.rect.centerx > self.rect.centerx:
                 if self.direction == -1:
                     self.direction *= -1
-                    self.move_counter *= -1
             else:
                 if self.direction == 1:
                     self.direction *= -1
-                    self.move_counter *= -1
 
         elif self.attacking == True:
             if self.attack_cooldown == 0:
