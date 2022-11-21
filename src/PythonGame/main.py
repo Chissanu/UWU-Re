@@ -139,14 +139,26 @@ def shopOpen(screen, shop, coins, player):
             button.update(screen)
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if return_button.checkForInput(mouse_get_pos):
-                    returnToGame = True
                 if health_add_button.checkForInput(mouse_get_pos):
                     output = shop.health_upgrade(coins, player)
                     if output < 0:
-                        draw_text("Not enough coins!!", font_big, WHITE, WIDTH/2 - 100, 50)
+                        draw_text("Not enough coins!!", font_big, WHITE, WIDTH/2, HEIGHT/2)
                     else:
                         coins = output
+                if strength_button.checkForInput(mouse_get_pos):
+                    output = shop.strength_upgrade(coins, player)
+                    if output < 0:
+                        draw_text("Not enough coins!!", font_big, WHITE, WIDTH/2, HEIGHT/2)
+                    else:
+                        coins = output
+                if booster_button.checkForInput(mouse_get_pos):
+                    output = shop.booster(coins, player)
+                    if output < 0:
+                        draw_text("Not enough coins!!", font_big, WHITE, WIDTH/2, HEIGHT/2)
+                    else:
+                        coins = output
+                if return_button.checkForInput(mouse_get_pos):
+                    returnToGame = True
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
