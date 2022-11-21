@@ -111,9 +111,9 @@ def play_click():
 def shopOpen(screen, shop, coins, player, coin_rate):
     returnToGame = False
     #add button
-    health_add_button = Button((900, 240), None, 0.25, str(shop.costArr[0]), font_small, WHITE, GRAY)
-    strength_button = Button((900, 390), None, 0.25, str(shop.costArr[1]), font_small, WHITE, GRAY)
-    booster_button = Button((900, 550), None, 0.25, str(shop.costArr[2]), font_small, WHITE, GRAY)
+    health_add_button = Button((WIDTH/2, HEIGHT/2 - 300), None, 0.25, "X", font_big, WHITE, GRAY)
+    strength_button = Button((WIDTH/2, HEIGHT/2 - 150), None, 0.25, "X", font_big, WHITE, GRAY)
+    booster_button = Button((WIDTH/2, HEIGHT/2 + 15), None, 0.25, "X", font_big, WHITE, GRAY)
     while True:
         mouse_get_pos = pygame.mouse.get_pos()
         bar_arr = [350, 450, 550, 650, 750]
@@ -127,6 +127,9 @@ def shopOpen(screen, shop, coins, player, coin_rate):
         strength_img = pygame.transform.scale(strength_img, (int(strength_img.get_width() * 0.1), int(strength_img.get_height() * 0.1)))
         booster_img = pygame.image.load(os.path.join(CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'shop_img', 'booster.png')).convert_alpha()
         booster_img = pygame.transform.scale(booster_img, (int(booster_img.get_width() * 0.05), int(booster_img.get_height() * 0.05)))
+        draw_text(str(50 + 100 * player.health_lvl), font_big, WHITE, WIDTH/2 - 160, HEIGHT/2 - 320) #ยิ่งลบยิ่งขึ้น
+        draw_text(str(50 + 100 * player.strength_lvl), font_big, WHITE, WIDTH/2 - 160, HEIGHT/2 - 175)
+        draw_text(str(100 + 100 * player.multiplier), font_big, WHITE, WIDTH/2 - 160, HEIGHT/2 - 10)
         for i in bar_arr:
             pygame.draw.rect(screen, GRAY, (i, 210, 30, 70))
             pygame.draw.rect(screen, GRAY, (i, 360, 30, 70))
@@ -148,7 +151,6 @@ def shopOpen(screen, shop, coins, player, coin_rate):
                         draw_text("Not enough coins!!", font_big, WHITE, WIDTH/2, HEIGHT/2)
                     else:
                         coins = output
-                        health_add_button.text_input = str(shop.costArr[0])
                 if strength_button.checkForInput(mouse_get_pos):
                     output = shop.strength_upgrade(coins, player)
                     if output < 0:
