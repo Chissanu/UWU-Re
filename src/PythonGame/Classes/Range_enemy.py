@@ -7,7 +7,7 @@ SOUND_PATH = os.path.join(CURRENT_PATH,"src","PythonGame","Assets","Sound")
 class Range_enemy(Enemy):
     def __init__(self, type, x, y, scale, speed, screen, screen_size, target, platform_group, platform, score, arrow_group):
         super().__init__(type, x, y, scale, speed, screen, screen_size, target, platform_group, platform,score)
-        self.vision = pygame.Rect(0, 0, self.screen_height, 20)
+        self.vision = pygame.Rect(0, 0, self.screen_width, 20)
         self.arrow_gruop = arrow_group
     
     
