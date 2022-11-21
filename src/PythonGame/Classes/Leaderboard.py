@@ -67,7 +67,7 @@ class Leaderboard:
         self.getSortedScoreboard()
         playerArr = []
         for player in self.sortedScoreboard:
-            if playerName.lower() == player["name"].lower():
+            if playerName.lower() in player["name"].lower():
                 playerArr.append({
                     "name":  player["name"],
                     "score": player["score"],
