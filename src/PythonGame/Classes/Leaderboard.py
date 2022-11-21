@@ -46,25 +46,33 @@ class Leaderboard:
         sortedArrDict = []
         userList = []
         if len(self.users) == 2:
-            tempArr.append(self.users["score"])
+            if type(self.users) is list:
+                for data in self.users:
+                    tempArr.append(data['score'])
+            else:
+                tempArr.append(self.users["score"])
         else:
             for data in self.users:
-                tempArr.append(data["score"])
+                tempArr.append(data['score'])
         
         sortedArr = self.quickSort(tempArr)
         if len(self.users) == 2:
-            userList.append(self.users)
+            if type(self.users) is list:
+               userList = self.users
+            else:
+                userList.append(self.users)
         else:
             userList = self.users
         index = 1
+        print(userList)
         while sortedArr:
             val = sortedArr.pop()
             for item in userList:
-                if val == item["score"]:
+                if val == item['score']:
                     sortedArrDict.append({
-                        "name" : item["name"],
-                        "score": item["score"],
-                        "position": index
+                        'name' : item['name'],
+                        'score': item['score'],
+                        'position': index
                     })
                     index += 1
                     userList.remove(item)
