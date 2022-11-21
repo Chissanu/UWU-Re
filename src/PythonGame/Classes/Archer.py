@@ -127,11 +127,18 @@ class Arrow(pygame.sprite.Sprite):
         self.screen.blit(pygame.transform.flip(self.arrow_image, self.flip, False), self.rect)
         self.rect.y += scroll
         self.rect.x += (self.direction * self.arrow_speed)
-        for enemy in self.target_group:
-            if self.rect.colliderect(enemy.hit_box):
-                if enemy.alive:
-                    enemy.health -= self.atk_damage
-                    enemy.hit = True
+        if type(self.target_group) != pygame.sprite.Group:
+            if self.rect.colliderect(self.target_group.hit_box):
+                if self.target_group.alive:
+                    self.target_group.health -= self.atk_damage
+                    self.target_group.hit = True
                     self.kill()
+        else:
+            for enemy in self.target_group:
+                if self.rect.colliderect(enemy.hit_box):
+                    if enemy.alive:
+                        enemy.health -= self.atk_damage
+                        enemy.hit = True
+                        self.kill()
         if self.rect.right < 0 or self.rect.left > self.screen_width:
             self.kill()

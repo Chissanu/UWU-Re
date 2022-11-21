@@ -9,6 +9,7 @@ from Classes.Platform import Platform
 from Classes.Buff import Buff
 from Classes.Leaderboard import Leaderboard
 from Classes.Shop import Shop
+from Classes.Range_enemy import Range_enemy
 
 pygame.init()
 pygame.mixer.init()
@@ -332,9 +333,13 @@ def start_game(player_selected, name):
                 if len(shop_group) < MAX_SHOP:
                     shop = Shop(platform_x + platform_width/2, platform.rect.y - 85)
                     shop_group.add(shop)
+            # if spawn_chance > 60:
+            #     if len(enemy_group) < MAX_ENEMY:         
+            #         enemy = Enemy('Swordsman', platform_x + platform_width/2, platform.rect.y - 85, 0.3, 5, screen, SIZE, player, platform_group, platform, score)
+            #         enemy_group.add(enemy)
             if spawn_chance > 60:
                 if len(enemy_group) < MAX_ENEMY:         
-                    enemy = Enemy('Swordsman', platform_x + platform_width/2, platform.rect.y - 85, 0.3, 5, screen, SIZE, player, platform_group, platform, score)
+                    enemy = Range_enemy('Archer', platform_x + platform_width/2, platform.rect.y - 85, 0.3, 5, screen, SIZE, player, platform_group, platform, score, arrow_group)
                     enemy_group.add(enemy)
             if spawn_chance < 20:
                 if len(buff_group) < MAX_BUFF:
