@@ -12,6 +12,7 @@ from Classes.Shop import Shop
 
 mixer.init()
 pygame.init()
+pygame.mixer.init()
 
 SIZE = WIDTH, HEIGHT = (1920, 1080)
 SCROLL_THRESHOLD = 500
@@ -90,6 +91,7 @@ scoreboard = Leaderboard()
 platform_group = pygame.sprite.Group() 
 enemy_group = pygame.sprite.Group() 
 arrow_group = pygame.sprite.Group()
+
 
 #Drawing the entire frame
 def draw_window(display, background):
@@ -178,6 +180,9 @@ def restart(score, player_selected):
         pygame.display.update()
 
 def leader_board_page():
+    soundPath = os.path.join(CURRENT_PATH,"src","PythonGame","Assets","Sound","menu.wav")
+    pygame.mixer.Sound(soundPath).play()
+    
     manager = pygame_gui.UIManager((WIDTH, HEIGHT))
     text_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((WIDTH / 2 + 500, 100), (300, 50)), manager=manager,
                                                object_id='#main_text_entry')

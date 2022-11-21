@@ -47,7 +47,7 @@ class Enemy(Character):
             self.flip = False
             self.direction = 1
             
-        if self.move_counter > self.platform_width/ (self.score - 75):
+        if self.move_counter > self.platform_width/ 15:
             self.direction *= -1
             self.move_counter *= -1
         

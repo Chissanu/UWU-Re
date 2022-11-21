@@ -4,7 +4,9 @@ from Classes.BaseClass import Character
 
 
 CURRENT_PATH = os.getcwd()
+SOUND_PATH = os.path.join(CURRENT_PATH,"src","PythonGame","Assets","Sound")
 
+pygame.mixer.init()
 
 class Archer(Character):
     def __init__(self, type, x, y, scale, speed, screen, screen_width, target, arrow_group, platform_group):
@@ -15,6 +17,7 @@ class Archer(Character):
         self.arrow_gruop = arrow_group
     
     def attack(self):
+        pygame.mixer.Sound(os.path.join(SOUND_PATH,"shoot.wav")).play()
         arrow = Arrow(
         self.rect.centerx + (0.2 * self.rect.size[0] * self.direction), 
         self.rect.centery, 
