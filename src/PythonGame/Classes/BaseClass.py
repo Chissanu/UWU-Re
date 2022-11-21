@@ -213,5 +213,4 @@ class Character(pygame.sprite.Sprite):
 
 
     def draw(self):
-        pygame.draw.rect(self.screen, (255, 150, 100), self.hit_box)
         self.screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)

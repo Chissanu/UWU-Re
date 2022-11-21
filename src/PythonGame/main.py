@@ -10,7 +10,6 @@ from Classes.Buff import Buff
 from Classes.Leaderboard import Leaderboard
 from Classes.Shop import Shop
 
-mixer.init()
 pygame.init()
 pygame.mixer.init()
 

@@ -7,6 +7,10 @@ YELLOW = (255,255,0)
 RED = (255, 0, 0)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+CURRENT_PATH = os.getcwd()
+SOUND_PATH = os.path.join(CURRENT_PATH,"src","PythonGame","Assets","Sound")
+
+pygame.mixer.init()
 
 class Enemy(Character):
     def __init__(self, type, x, y, scale, speed, screen, screen_size, target, platform_group, platform,score):
@@ -20,11 +24,15 @@ class Enemy(Character):
         self.attack_box_multiplier = 1.5
         self.original_speed = self.speed
         self.increase_speed = 15
-        self.atk_damage = 10 + (score * 0.2)
+        self.atk_damage = 10 + (score * 0.05)
+        if self.atk_damage > 150:
+            self.atk_damage = 150
         self.gravity = 0.05
         self.kill_score = 50 + (score * 0.05)
         self.coin_gained = 50
         self.atk_cd_val = 100 - (score * 0.2)
+        if self.atk_cd_val < 0:
+            self.atk_cd_val = 0
         self.moving_right = True
         self.score = score
 
@@ -118,6 +126,7 @@ class Enemy(Character):
 
 
     def attack(self):
+        pygame.mixer.Sound(os.path.join(SOUND_PATH, "MostYah.wav")).play()
         attacking_rect = pygame.Rect(self.hit_box.centerx - (self.attack_box_multiplier* self.hit_box.width * self.flip), 
         self.hit_box.y, 
         self.attack_box_multiplier * self.hit_box.width, 
