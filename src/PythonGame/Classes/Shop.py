@@ -26,9 +26,9 @@ class Shop(pygame.sprite.Sprite):
         for i in range(self.health_lvl):
             pygame.draw.rect(screen, color, (bar_arr[i], 210, 30, 70))
         for i in range(self.strength_lvl):
-            pygame.draw.rect(screen, color, (bar_arr[i], 370, 30, 70))
+            pygame.draw.rect(screen, color, (bar_arr[i], 360, 30, 70))
         for i in range(self.multiplier):
-            pygame.draw.rect(screen, color, (bar_arr[i], 550, 30, 70))
+            pygame.draw.rect(screen, color, (bar_arr[i], 515, 30, 70))
 
     def health_upgrade(self, coin, player):
         if coin >= self.costArr[0]:
