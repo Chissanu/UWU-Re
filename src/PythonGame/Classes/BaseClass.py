@@ -11,7 +11,7 @@ BLACK = (0, 0, 0)
 CURRENT_PATH = os.getcwd()
 SOUND_PATH = os.path.join(CURRENT_PATH,"src","PythonGame","Assets","Sound")
 
-class queue:
+class Queue:
     def __init__(self):
         self.queue = []
     
@@ -72,6 +72,7 @@ class Character(pygame.sprite.Sprite):
         self.health_lvl = 0
         self.strength_lvl = 0
         self.multiplier = 0
+        self.debuffs = Queue()
 
 
         #load all images for the players
@@ -171,6 +172,20 @@ class Character(pygame.sprite.Sprite):
             self.frame_index = 0
             self.update_time = pygame.time.get_ticks()
     
+    def poison(self,score):
+        self.health -= 0.03 + (score / 100000)
+        
+    def slow(self):
+        self.speed = 1
+        
+    def fat(self):
+        self.gravity = 2
+        
+    def clearDebuff(self,debuffID):
+        if debuffID == 1:
+            pass
+        elif debuffID == 2:
+            self.speed = 10
 
     #update character actions
     def update(self):
@@ -234,6 +249,9 @@ class Character(pygame.sprite.Sprite):
         
     def increaseMaxHp(self,hp):
         self.max_health += hp
+    
+    def getQueue(self):
+        return self.debuffs
     
     def draw_health_bar(self, x, y):
         ratio = self.health / self.max_health

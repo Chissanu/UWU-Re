@@ -131,9 +131,23 @@ class Arrow(pygame.sprite.Sprite):
         if type(self.target_group) != pygame.sprite.Group:
             if self.rect.colliderect(self.target_group.hit_box):
                 if self.target_group.alive:
-                    self.target_group.health -= self.atk_damage
+                    # self.target_group.health -= self.atk_damage
                     self.target_group.hit = True
+                    debuff = self.target_group.getQueue()
                     self.kill()
+                    debuffChoice = random.randint(4,4)
+                    if debuffChoice == 1:
+                        self.target_group.health -= self.atk_damage
+                    elif debuffChoice == 2:
+                        self.target_group.health -= abs(self.atk_damage - 10) + 1
+                        debuff.enqueue({"poison":10})
+                    elif debuffChoice == 3:
+                        self.target_group.health -= abs(self.atk_damage - 5) + 1
+                        debuff.enqueue({"slow":10})
+                    elif debuffChoice == 4:
+                        self.target_group.health -= abs(self.atk_damage - 5) + 1
+                        debuff.enqueue({"fat":10})
+                    
                     
         else:
             for enemy in self.target_group:

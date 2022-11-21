@@ -264,6 +264,7 @@ def leader_board_page():
 
         pygame.display.update()
 
+
 def start_game(player_selected, name):
     MAX_PLATFORMS = 20
     MAX_ENEMY = 5
@@ -308,7 +309,7 @@ def start_game(player_selected, name):
         draw_text(name, font_big, BLACK, 1500, 0)
         
         #draw stats
-        hp = "HP:" + str(player.getHp()) + "/" + str(player.max_health)
+        hp = "HP:" + str(int(player.getHp())) + "/" + str(player.max_health)
         atk = "ATK:" + str(player.getAttack())
         
         draw_text(hp, font_small, BLACK, 70, 310)
@@ -355,7 +356,46 @@ def start_game(player_selected, name):
             buff_hit = True
 
         key = pygame.key.get_pressed()
-            
+        
+        debuffArr = []
+        debuffQueue = player.getQueue()
+        if debuffQueue.get_data():
+            frontDebuff = list(debuffQueue.get_front())
+            if frontDebuff[0] == "poison":
+                player.poison(score)
+                tick = pygame.time.get_ticks()
+                timerArr.append(tick)
+                timer = (timerArr[-1] - timerArr[0])/1000
+                if round(timer) == 0:
+                    timer = 0.00001
+                if timer > 10:
+                    timerArr = []
+                    debuffQueue.dequeue()
+            elif frontDebuff[0] == "slow":
+                tick = pygame.time.get_ticks()
+                timerArr.append(tick)
+                timer = (timerArr[-1] - timerArr[0])/1000
+                if round(timer) == 0:
+                    timer = 0.00001
+                    player.poison(score)
+                player.slow()
+                if timer > 5:
+                    timerArr = []
+                    debuffQueue.dequeue()
+                    player.clearDebuff(2)
+            elif frontDebuff[0] == "fat":
+                tick = pygame.time.get_ticks()
+                timerArr.append(tick)
+                timer = (timerArr[-1] - timerArr[0])/1000
+                if round(timer) == 0:
+                    timer = 0.00001
+                    player.poison(score)
+                player.fat()
+                if timer > 5:
+                    timerArr = []
+                    debuffQueue.dequeue()
+                    player.clearDebuff(2)
+        
         if buff_hit:
             x_buff = 200
             y_buff = 180
