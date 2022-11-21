@@ -106,11 +106,7 @@ def draw_text(text, font, text_col, x, y):
 	img = font.render(text, True, text_col)
 	screen.blit(img, (x, y))
 
-def play_click():
-    pygame.mixer.Sound(os.path.join(soundPath,"click.wav")).play()
-
-
-def shopOpen(screen, shop, coins, player):
+def shopOpen(screen, shop, coins, player, coin_rate):
     returnToGame = False
     #add button
     health_add_button = Button((900, 240), None, 0.25, str(shop.costArr[0]), font_small, WHITE, GRAY)
@@ -157,7 +153,7 @@ def shopOpen(screen, shop, coins, player):
                     else:
                         coins = output
                 if booster_button.checkForInput(mouse_get_pos):
-                    output = shop.booster(coins, player)
+                    output = shop.booster(coins, coin_rate)
                     if output < 0:
                         draw_text("Not enough coins!!", font_big, WHITE, WIDTH/2, HEIGHT/2)
                     else:
@@ -168,7 +164,7 @@ def shopOpen(screen, shop, coins, player):
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
         if returnToGame:
-            break
+            return (False, coin_rate)
         #pygame.draw.rect()
         pygame.display.update()
 
@@ -271,6 +267,7 @@ def start_game(player_selected, name):
     bg_scroll = 0
     score = 0
     coin = 0
+    coin_add_rate = 20
     shop_open = False
     buff_hit = False
     buff_random = True
@@ -340,7 +337,9 @@ def start_game(player_selected, name):
         key = pygame.key.get_pressed()
 
         if shop_open:
-            shop_open = shopOpen(screen, shop, coin, player)
+            output = shopOpen(screen, shop, coin, player, coin_add_rate)
+            shop_open = output[0]
+            coin_add_rate = output[1]
             
         if buff_hit:
             x_buff = 200
@@ -382,7 +381,7 @@ def start_game(player_selected, name):
             enemy.draw()
             if enemy.update(scroll):
                 score += 50
-                coin += 20
+                coin += coin_add_rate
 
         shop_group.draw(screen)
         shop_group.update(scroll)
