@@ -103,13 +103,10 @@ def draw_text(text, font, text_col, x, y):
 	img = font.render(text, True, text_col)
 	screen.blit(img, (x, y))
 
-# bg music function
-def bg_music(music_name, volume, round):
-    music = mixer.Sound("BgSound/" + str(music_name))
-    music.set_volume(volume)
-    music.play(round)
-
-def shopOpen(screen, shop, score):
+def shopOpen(screen, shop, score, player):
+    returnToGame = False
+    #add button
+    health_add_button = Button((900, 240), None, 0.25, str(shop.costArr[0]), font_small, WHITE, GRAY)
     while True:
         bar_arr = [350, 450, 550, 650, 750]
         screen.fill(BLACK)
@@ -126,11 +123,20 @@ def shopOpen(screen, shop, score):
             pygame.draw.rect(screen, GRAY, (i, 210, 30, 70))
             pygame.draw.rect(screen, GRAY, (i, 360, 30, 70))
             pygame.draw.rect(screen, GRAY, (i, 515, 30, 70))
+        shop.load_upgrade(screen, bar_arr, GREEN)
         screen.blit(health_img, (200, 200))
         screen.blit(strength_img, (200, 350))
         screen.blit(booster_img, (200, 500))
-
+        health_add_button.changeColor(mouse_get_pos)
+        health_add_button.update(screen)
+        return_button.changeColor(mouse_get_pos)
+        return_button.update(screen)
         for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if return_button.checkForInput(mouse_get_pos):
+                    returnToGame = True
+                if health_add_button.checkForInput(mouse_get_pos):
+                    score = shop.health_upgrade(score, player)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
@@ -297,9 +303,8 @@ def start_game(player_selected, name):
         key = pygame.key.get_pressed()
 
         if shop_open:
-            shopOpen(screen, shop, score)
-            draw_text("shop open!!!", font_big, BLACK, WIDTH/2, HEIGHT/2)
-
+            shop_open = shopOpen(screen, shop, score, player)
+            
         if buff_hit:
             x_buff = 200
             y_buff = 180
