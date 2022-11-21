@@ -408,6 +408,7 @@ def start_game(player_selected, name):
                 "name" : name,
                 "score": score
             }
+            pygame.mixer.Sound(os.path.join(soundPath,"death.wav")).play()
             scoreboard.saveScore(newData)
             restart(score,player_selected, name) 
 

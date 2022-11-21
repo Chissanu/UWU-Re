@@ -126,6 +126,7 @@ class Enemy(Character):
 
 
     def attack(self):
+        pygame.mixer.Sound(os.path.join(SOUND_PATH,"swing.wav")).play()
         pygame.mixer.Sound(os.path.join(SOUND_PATH, "MostYah.wav")).play()
         attacking_rect = pygame.Rect(self.hit_box.centerx - (self.attack_box_multiplier* self.hit_box.width * self.flip), 
         self.hit_box.y, 
