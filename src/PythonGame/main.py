@@ -162,6 +162,7 @@ def shopOpen(screen, shop, score):
         if returnToGame:
             return False
         pygame.display.update()
+        
 
 def restart(score, player_selected):
     ANIMATION_PATH = os.path.join(CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'Character_img')
