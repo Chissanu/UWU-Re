@@ -292,6 +292,7 @@ def start_game(player_selected, name):
     buff_hit = False
     buff_random = True
     timerArr = []
+    debuffArr = []
     clicked = True
     shop = Shop(0, 0)
     buff = Buff(0, 0)
@@ -386,38 +387,38 @@ def start_game(player_selected, name):
             if frontDebuff[0] == "poison":
                 player.poison(score)
                 tick = pygame.time.get_ticks()
-                timerArr.append(tick)
-                timer = (timerArr[-1] - timerArr[0])/1000
-                if round(timer) == 0:
-                    timer = 0.00001
-                player.draw_debuff_bar(x_debuff, y_debuff, screen, timer * 30, 1)
-                if timer > 10:
-                    timerArr = []
+                debuffArr.append(tick)
+                dtimer = (debuffArr[-1] - debuffArr[0])/1000
+                if round(dtimer) == 0:
+                    dtimer = 0.00001
+                player.draw_debuff_bar(x_debuff, y_debuff, screen, dtimer * 30, 1)
+                if dtimer > 10:
+                    debuffArr = []
                     debuffQueue.dequeue()
             elif frontDebuff[0] == "slow":
                 tick = pygame.time.get_ticks()
-                timerArr.append(tick)
-                timer = (timerArr[-1] - timerArr[0])/1000
-                if round(timer) == 0:
-                    timer = 0.00001
+                debuffArr.append(tick)
+                dtimer = (debuffArr[-1] - debuffArr[0])/1000
+                if round(dtimer) == 0:
+                    dtimer = 0.00001
                     player.poison(score)
-                player.draw_debuff_bar(x_debuff, y_debuff, screen, timer * 30, 2)
+                player.draw_debuff_bar(x_debuff, y_debuff, screen, dtimer * 30, 2)
                 player.slow()
-                if timer > 5:
-                    timerArr = []
+                if dtimer > 5:
+                    debuffArr = []
                     debuffQueue.dequeue()
                     player.clearDebuff(2)
             elif frontDebuff[0] == "fat":
                 tick = pygame.time.get_ticks()
-                timerArr.append(tick)
-                timer = (timerArr[-1] - timerArr[0])/1000
-                if round(timer) == 0:
-                    timer = 0.00001
+                debuffArr.append(tick)
+                dtimer = (debuffArr[-1] - debuffArr[0])/1000
+                if round(dtimer) == 0:
+                    dtimer = 0.00001
                     player.poison(score)
                 player.fat()
-                player.draw_debuff_bar(x_debuff, y_debuff, screen, timer * 30, 3)
-                if timer > 5:
-                    timerArr = []
+                player.draw_debuff_bar(x_debuff, y_debuff, screen, dtimer * 30, 3)
+                if dtimer > 5:
+                    debuffArr = []
                     debuffQueue.dequeue()
                     player.clearDebuff(3)
         
