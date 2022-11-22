@@ -401,7 +401,7 @@ def start_game(player_selected, name):
                 if round(timer) == 0:
                     timer = 0.00001
                     player.poison(score)
-                player.draw_debuff_bar(x_buff, y_buff, screen, timer * 30, 2)
+                player.draw_debuff_bar(x_debuff, y_debuff, screen, timer * 30, 2)
                 player.slow()
                 if timer > 5:
                     timerArr = []
@@ -415,7 +415,7 @@ def start_game(player_selected, name):
                     timer = 0.00001
                     player.poison(score)
                 player.fat()
-                player.draw_debuff_bar(x_buff, y_buff, screen, timer * 30, 3)
+                player.draw_debuff_bar(x_debuff, y_debuff, screen, timer * 30, 3)
                 if timer > 5:
                     timerArr = []
                     debuffQueue.dequeue()
