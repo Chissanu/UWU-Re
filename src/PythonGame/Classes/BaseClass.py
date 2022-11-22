@@ -72,6 +72,7 @@ class Character(pygame.sprite.Sprite):
         self.health_lvl = 0
         self.strength_lvl = 0
         self.multiplier = 0
+        self.CURRENT_PATH = os.getcwd()
         self.debuffs = Queue()
 
 
@@ -265,3 +266,24 @@ class Character(pygame.sprite.Sprite):
     def draw(self):
         # pygame.draw.rect(self.screen, (255, 150, 100), self.hit_box)
         self.screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
+        
+    def draw_debuff_bar(self, x, y, screen, ratio, num):
+        GREEN = (0, 255, 0)
+        BLACK = (0, 0, 0)
+        #Icon 1
+        if num == 1:
+            self.health_icon = pygame.image.load(os.path.join(self.CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'Buff_img', 'poison.png')).convert_alpha()
+            self.health_icon = pygame.transform.scale(self.health_icon, (int(self.health_icon.get_width() * 0.3), int(self.health_icon.get_height() * 0.3)))
+            screen.blit(self.health_icon, (x - 100, y + 80))
+        #Icon 2
+        elif num == 2:
+            self.health_icon = pygame.image.load(os.path.join(self.CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'Buff_img', 'slow.png')).convert_alpha()
+            self.health_icon = pygame.transform.scale(self.health_icon, (int(self.health_icon.get_width() * 0.3), int(self.health_icon.get_height() * 0.3)))
+            screen.blit(self.health_icon, (x - 150, y - 60))
+        elif num == 3:
+            self.health_icon = pygame.image.load(os.path.join(self.CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'Buff_img', 'badomen.png')).convert_alpha()
+            self.health_icon = pygame.transform.scale(self.health_icon, (int(self.health_icon.get_width() * 0.2), int(self.health_icon.get_height() * 0.2)))
+            screen.blit(self.health_icon, (x - 150, y - 60))
+        pygame.draw.rect(screen, BLACK, (x - 2, 150, 304, 34))
+        pygame.draw.rect(screen, BLACK, (x, 150, 300, 30)) 
+        pygame.draw.rect(screen, RED, (x, 150, 300 - ratio, 30))

@@ -378,9 +378,10 @@ def start_game(player_selected, name):
         platform_group.update(scroll)
         platform_group.draw(screen)
         
-        debuffArr = []
         debuffQueue = player.getQueue()
         if debuffQueue.get_data():
+            x_debuff = WIDTH - 400 
+            y_debuff = 50
             frontDebuff = list(debuffQueue.get_front())
             if frontDebuff[0] == "poison":
                 player.poison(score)
@@ -389,6 +390,7 @@ def start_game(player_selected, name):
                 timer = (timerArr[-1] - timerArr[0])/1000
                 if round(timer) == 0:
                     timer = 0.00001
+                player.draw_debuff_bar(x_debuff, y_debuff, screen, timer * 30, 1)
                 if timer > 10:
                     timerArr = []
                     debuffQueue.dequeue()
@@ -399,6 +401,7 @@ def start_game(player_selected, name):
                 if round(timer) == 0:
                     timer = 0.00001
                     player.poison(score)
+                player.draw_debuff_bar(x_buff, y_buff, screen, timer * 30, 2)
                 player.slow()
                 if timer > 5:
                     timerArr = []
@@ -412,6 +415,7 @@ def start_game(player_selected, name):
                     timer = 0.00001
                     player.poison(score)
                 player.fat()
+                player.draw_debuff_bar(x_buff, y_buff, screen, timer * 30, 3)
                 if timer > 5:
                     timerArr = []
                     debuffQueue.dequeue()
