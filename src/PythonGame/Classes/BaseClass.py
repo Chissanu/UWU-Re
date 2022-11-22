@@ -279,11 +279,11 @@ class Character(pygame.sprite.Sprite):
         elif num == 2:
             self.health_icon = pygame.image.load(os.path.join(self.CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'Buff_img', 'slow.png')).convert_alpha()
             self.health_icon = pygame.transform.scale(self.health_icon, (int(self.health_icon.get_width() * 0.3), int(self.health_icon.get_height() * 0.3)))
-            screen.blit(self.health_icon, (x - 150, y - 60))
+            screen.blit(self.health_icon, (x - 100, y + 80))
         elif num == 3:
             self.health_icon = pygame.image.load(os.path.join(self.CURRENT_PATH, 'src', 'PythonGame', 'Assets', 'Buff_img', 'badomen.png')).convert_alpha()
             self.health_icon = pygame.transform.scale(self.health_icon, (int(self.health_icon.get_width() * 0.2), int(self.health_icon.get_height() * 0.2)))
-            screen.blit(self.health_icon, (x - 150, y - 60))
+            screen.blit(self.health_icon, (x - 100, y + 80))
         pygame.draw.rect(screen, BLACK, (x - 2, 150, 304, 34))
         pygame.draw.rect(screen, BLACK, (x, 150, 300, 30)) 
         pygame.draw.rect(screen, RED, (x, 150, 300 - ratio, 30))
