@@ -374,7 +374,7 @@ def start_game(player_selected, name):
         #draw player
         player.draw()
         scroll = player.update()
-        player.draw_health_bar(50, 200)
+        player.draw_health_bar(50, 120)
         platform_group.update(scroll)
         platform_group.draw(screen)
         
@@ -477,10 +477,10 @@ def start_game(player_selected, name):
                 coin += coin_add_rate
 
         # pygame.draw.line(screen, BLACK, (0,300),(WIDTH, 300))
-        draw_text(name, font_big, BLACK, 50, 100)
-        draw_text(hp, very_small, BLACK, 55, 202)
-        draw_text(atk, font_small, BLACK, 50, 250)
-        draw_text('SCORE:' + str(score) + '  COINS:' + str(coin), font_small, BLACK, 50, 20)
+        draw_text(name, font_big, BLACK, 50, 20)
+        draw_text(hp, very_small, BLACK, 55, 122)
+        draw_text(atk, font_small, BLACK, 50, 200)
+        draw_text('SCORE:' + str(score) + '  COINS:' + str(coin), font_small, BLACK, 50, 150)
         
         #restart game to main menu
         if player.alive == False:
