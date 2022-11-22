@@ -334,7 +334,7 @@ def start_game(player_selected, name):
                 platform_x = random.randint(platform.rect.x + platform.rect.width + 100, WIDTH - platform_width)
             else:
                 platform_y = platform.rect.y - 200
-                platform_width = random.randint(500, 600)
+                platform_width = random.randint(450, 550)
                 platform_x = random.randint(0, WIDTH - platform_width - 400)
             platform = Platform(platform_img, platform_x, platform_y, platform_width, HEIGHT)
             platform_group.add(platform)
@@ -346,11 +346,11 @@ def start_game(player_selected, name):
                     shop_group.add(shop)
             if spawn_chance >= 10 and spawn_chance < 55:
                 if len(enemy_group) < MAX_ENEMY:         
-                    enemy = Enemy('Swordsman', platform_x + platform_width/2, platform.rect.y - 85, 0.3, 5, screen, SIZE, player, platform_group, platform, score)
+                    enemy = Enemy('Swordsman', platform_x + platform_width/2, platform.rect.y - 65, 0.3, 5, screen, SIZE, player, platform_group, platform, score)
                     enemy_group.add(enemy)
             if spawn_chance >= 55 and spawn_chance < 95:
                 if len(enemy_group) < MAX_ENEMY:         
-                    enemy = Range_enemy('Archer', platform_x + platform_width/2, platform.rect.y - 85, 0.3, 5, screen, SIZE, player, platform_group, platform, score, arrow_group)
+                    enemy = Range_enemy('Archer', platform_x + platform_width/2, platform.rect.y - 65, 0.3, 5, screen, SIZE, player, platform_group, platform, score, arrow_group)
                     enemy_group.add(enemy)
             if spawn_chance >= 0:
                 if len(buff_group) < MAX_BUFF:
@@ -367,17 +367,24 @@ def start_game(player_selected, name):
 
         key = pygame.key.get_pressed()
         
+        platform_group.update(scroll)
+        platform_group.draw(screen)
         shop_group.draw(screen)
         shop_group.update(scroll)
         buff_group.draw(screen)
         buff_group.update(scroll)
         arrow_group.update(scroll)
+        # update enemy
+        for enemy in enemy_group:
+            enemy.draw_health_bar(enemy.hit_box.centerx - 50, enemy.hit_box.y -10) 
+            enemy.draw()
+            if enemy.update(scroll):
+                score += 25  + ( 25 * player.multiplier)
+                coin += coin_add_rate
         #draw player
         player.draw()
         scroll = player.update()
         player.draw_health_bar(50, 120)
-        platform_group.update(scroll)
-        platform_group.draw(screen)
         
         debuffQueue = player.getQueue()
         if debuffQueue.get_data():
@@ -402,7 +409,7 @@ def start_game(player_selected, name):
                 if round(dtimer) == 0:
                     dtimer = 0.00001
                     player.poison(score)
-                player.draw_debuff_bar(x_debuff, y_debuff, screen, dtimer * 30, 2)
+                player.draw_debuff_bar(x_debuff, y_debuff, screen, dtimer * 60, 2)
                 player.slow()
                 if dtimer > 5:
                     debuffArr = []
@@ -416,7 +423,7 @@ def start_game(player_selected, name):
                     dtimer = 0.00001
                     player.poison(score)
                 player.fat()
-                player.draw_debuff_bar(x_debuff, y_debuff, screen, dtimer * 30, 3)
+                player.draw_debuff_bar(x_debuff, y_debuff, screen, dtimer * 60, 3)
                 if dtimer > 5:
                     debuffArr = []
                     debuffQueue.dequeue()
@@ -469,13 +476,6 @@ def start_game(player_selected, name):
                     timerArr = []
                     buff_hit = False
                     buff_random = True
-        # update enemy
-        for enemy in enemy_group:
-            enemy.draw_health_bar(enemy.hit_box.centerx - 50, enemy.hit_box.y -10) 
-            enemy.draw()
-            if enemy.update(scroll):
-                score += 25  + ( 25 * player.multiplier)
-                coin += coin_add_rate
 
         # pygame.draw.line(screen, BLACK, (0,300),(WIDTH, 300))
         draw_text(name, font_big, BLACK, 50, 20)

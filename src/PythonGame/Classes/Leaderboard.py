@@ -57,6 +57,8 @@ class Leaderboard:
         
         sortedArr = self.quickSort(tempArr)
         if len(self.users) == 2:
+            
+            
             if type(self.users) is list:
                userList = self.users
             else:

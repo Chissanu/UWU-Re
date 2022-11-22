@@ -26,9 +26,6 @@ class Queue:
     def get_data(self):
         return self.queue
 
-    def get_rear(self):
-        return self.queue[-1]
-
     def get_front(self):
         return self.queue[0]
     
@@ -264,7 +261,6 @@ class Character(pygame.sprite.Sprite):
 
 
     def draw(self):
-        # pygame.draw.rect(self.screen, (255, 150, 100), self.hit_box)
         self.screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
         
     def draw_debuff_bar(self, x, y, screen, ratio, num):

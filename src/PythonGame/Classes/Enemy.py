@@ -102,7 +102,7 @@ class Enemy(Character):
             self.hit_box.y,
             self.attack_box_multiplier * self.hit_box.width,
             self.hit_box.height)
-            pygame.draw.rect(self.screen, (0, 255, 255), check_attack_rect)
+            #pygame.draw.rect(self.screen, (0, 255, 255), check_attack_rect)
             if not check_attack_rect.colliderect(self.target.hit_box):
                 self.move()
             else:
@@ -132,7 +132,7 @@ class Enemy(Character):
         self.hit_box.y, 
         self.attack_box_multiplier * self.hit_box.width, 
         self.hit_box.height)
-        pygame.draw.rect(self.screen, (0, 255, 0), attacking_rect)
+        #pygame.draw.rect(self.screen, (0, 255, 0), attacking_rect)
         if attacking_rect.colliderect(self.target.hit_box):
             self.target.health -= self.atk_damage
             self.target.hit = True

@@ -1,1 +1,1 @@
-score +=
+draw.rect
