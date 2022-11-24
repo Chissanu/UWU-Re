@@ -1,0 +1,59 @@
+Required Libs:
+pygame, os, sys, random, pygame_gui, time,json
+
+
+File Explanations:
+main.py
+- Contain screen creation codes
+- Contain setup codes
+- Import classes to create character as well as shop and Leaderboard
+- Must run this program to start
+
+gameData.json
+- store name and score to JSON file after user lose
+
+Classes Explanations:
+BaseClass 
+- Queue code for debuff features
+- Character class for most ingame character that will display animation for their character
+- Some common stats and update functions like move/updateAnimation/draw HP Bar
+- Debuff functions for players
+
+Archer Class
+- Subclass of BaseClass that has overwrite updates/updateAnimation
+- Contain Arrow Class
+- Has unique archer attack
+
+Buff Class
+- Contain functions that interact with players stats
+- Contain draw buff duration Bar
+
+Button Class
+- Contain function that deal with states of buttons
+- Created for reusability
+
+Enemy Class
+- Inherited from BaseClass that is also base class for enemy character
+- Contain basic draw/attack functions
+
+Leaderboard Class
+- Contain sort and search functions
+- Read/Write data to JSON files
+- Sorting algorithm is done in this class
+
+Platform Class
+- Contain codes that create a platform that take randon sizes and update when it is no longer in screen
+
+Preview Class
+- Inherited from baseClass that are use in character selection screen
+
+Range_enemy Class
+- Inherited from Enemy baseclass that are for creating enemy archer
+
+Shop Class
+- Shop related functions
+- Contain upgrades/heal that interact with players
+
+Swordsman Class
+- Inherited from baseClass
+- Has unique attack for Swordsman
