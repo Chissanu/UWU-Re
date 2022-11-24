@@ -5,6 +5,8 @@ html
     script(type='text/javascript', src='http://code.jquery.com/jquery-latest.min.js')
     script(src='./js/bootstrap.min.js')
     script(src='./socket.io/socket.io.js')
+    script(src='https://kit.fontawesome.com/a076d05399.js')
+    i.fasfa-user-alt
     script
       include js/orderDrink.js
 
@@ -28,7 +30,8 @@ html
         #inner-rec
             input#searchBox(type='text', placeholder='Search')
             - var top=100
-            - var userID=userObj.userid
+            //- - var userID=userObj.userid
+            - var userID=10
             - for (var i = 0; i < drinks.length; ++i) {
             +drinkItems(drinks[i],i+1,top,userID)
             - top += 550

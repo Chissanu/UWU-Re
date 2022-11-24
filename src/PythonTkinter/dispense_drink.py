@@ -41,8 +41,8 @@ class DispenseDrink:
         print(drinkCommand)
     
 
-dis = DispenseDrink()
-dis.dispense(1,10)
+# dis = DispenseDrink()
+# dis.dispense(1,10)
 
 """
 =======================================================
@@ -80,7 +80,14 @@ def genRandomDrink(val):
         arr[index] += 1
     return arr
 
-print(sys.argv[1],sys.argv[2])
+
+def writeToFile(val1,val2):
+    data = {val1:val2}
+
+    with open("drinkTsest.json", 'w') as outfile:
+        json.dump(data, outfile, indent=4)
+    
+writeToFile(sys.argv[1],sys.argv[2])
 #sortDrink() 
 #print(genRandomDrink(10))
 # while True:

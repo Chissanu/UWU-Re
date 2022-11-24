@@ -37,11 +37,14 @@ app.use("/api", apiRoute);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-app.get('/', function(req, res, next) {
+app.get('/', async function(req, res, next) {
+    await queryDrinks()
+    await queryUsers()
     res.render('login', { title: 'Login' });
 });
 
-app.get('/browse', function(req, res, next) {
+app.get('/browse', async function(req, res, next) {
+    await queryDrinks()
     res.render('browse', { drinks: drinkList, userObj: user});
 });
 
@@ -61,74 +64,39 @@ app.get('/complete', function(req, res, next) {
     res.render('complete');
 });
 
-app.get('/test', function(req, res) {
-    var dataToSend;
+// Call Python functions
+function callDrinkPython(data) {
+    console.log(data['drinkID'])
     var path = require('path');
-    var x = path.join('src', 'PythonTkinter', 'dispense_drink.py');
+    var pythonPath = path.join('src', 'PythonTkinter', 'dispense_drink.py');
     // spawn new child process to call the python script
 
-    const python = spawn('python', [x, 14, "hello"]);
-    // collect data from script
-    python.stdout.on('data', function (data) {
-     console.log('Pipe data from python script ...');
-     dataToSend = data.toString();
-    });
-    // in close event we are sure that stream from child process is closed
-    python.on('close', (code) => {
-    console.log(`child process close all stdio with code ${code}`);
-    // send data to browser
-    res.send(dataToSend)
-    });
- 
-});
+    python = spawn('python', [pythonPath, data['drinkID'], data['userID']]);
+    // res.redirect('/')
 
-apiRoute.post("/test2", (req, res) => {
-    var dataToSend;
-    var path = require('path');
-    var x = path.join('src', 'PythonTkinter', 'dispense_drink.py');
-    // spawn new child process to call the python script
-
-    const python = spawn('python', [x, 14, "hello"]);
-    // collect data from script
-    python.stdout.on('data', function (data) {
-     console.log('Pipe data from python script ...');
-     dataToSend = data.toString();
-    });
-    // in close event we are sure that stream from child process is closed
-    python.on('close', (code) => {
-    console.log(`child process close all stdio with code ${code}`);
-    // send data to browser
-    console.log(res)
-    res.send(dataToSend)
-    });
-});
-
-const setDrinkList = (rows) => {
-    drinkList = rows;
 }
 
-const setUserList = (rows) => {
-    userList = rows;
-}
-
+// Database functions
 client.connect()
-client.query(`Select * from drink_tables`, (err, res) => {
-    if (!err) {
-        setDrinkList(res.rows);
-    } else {
-        console.log(err.message);
+async function queryDrinks() {
+    try {
+        const res = await client.query(`Select * from drink_tables`);
+        drinkList = res.rows
+        console.log("Successfully retrive data from DB")
+    } catch {
+        console.log("Error on getting drinks from DB")
     }
-    client.end;
-});
+}
 
-client.query(`Select * from users`, (err, res) => {
-    if (!err) {
-        setUserList(res.rows);
-    } else {
-        console.log(err.message);
+async function queryUsers() {
+    try {
+        const res = await client.query(`Select * from users`);
+        userList = res.rows
+        console.log("Successfully retrive users from DB")
+    } catch {
+        console.log("Error on getting users from DB")
     }
-    client.end;
-});
+}
 
 const insertUser = async(userName, userPass) => {
     try { // gets connection
@@ -144,6 +112,8 @@ const insertUser = async(userName, userPass) => {
     }
 };
 
+
+// API Functions
 apiRoute.post("/register", (req, res) => {
     const { username, userpass } = req.body;
     console.log("Registering with with this data")
@@ -163,7 +133,7 @@ apiRoute.post("/register", (req, res) => {
 apiRoute.post("/login", (req, res) => {
     const { username, userpass } = req.body;
     console.log("Loggin in with this data")
-        //console.log(userList.find)
+    queryUsers()
     if (!username || !userpass)
         return res.redirect("/?error=missing credentials");
 
@@ -180,6 +150,8 @@ apiRoute.get("/logout", (req, res) => {
     res.redirect("/");
 });
 
+
+// Socket setup
 var io = socket(server);
 io.on('connection', (socket) => {
     console.log('a user connected');
@@ -188,7 +160,8 @@ io.on('connection', (socket) => {
     });
 
     socket.on('order', function(data) {
-        console.log(data);
+        // console.log(data);
+        callDrinkPython(data);
     });
   });
 
