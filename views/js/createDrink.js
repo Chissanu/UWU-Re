@@ -17,10 +17,10 @@ function goBrowse() {
     window.location.replace("/browse");
 }
 
-function randomRecipe() {
-    socket.emit('randomRecipe')
+function randomRecipe(drinkID,userID) {
+    socket.emit('randomRecipe', { drinkID: drinkID, userID:userID})
 }
 
-function randomDrink() {
-    socket.emit('randomDrink')
+function randomDrink(drinkID,userID) {
+    socket.emit('randomDrink', { drinkID: drinkID, userID:userID})
 }

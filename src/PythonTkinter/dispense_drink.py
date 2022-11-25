@@ -10,9 +10,20 @@ class DispenseDrink:
     def __init__(self):
         self.db = Database()
         self.drinkList = self.db.queryDrinkDB()
-        
-        # for drink in self.drinkList:
-        #     print(drink)
+    
+    def handler(self,mode,drinkID,userID):
+        #Print file for testing
+        if mode == '0':
+            self.writeToFile(drinkID,userID)
+        #Dispense drink
+        if mode == '1':
+            self.dispense(drinkID,userID)
+        #Random recipe
+        if mode == '2':
+            self.randomRecipe(userID)
+        #Random drink
+        if mode == '3':
+            self.genRandomDrink(10,userID)
         
     def dispense(self,drinkID,userID):
         drinkData = list(self.db.getDrinkFromID(drinkID)[0])
@@ -39,57 +50,40 @@ class DispenseDrink:
         drinkCommand = "0" + drinkCommand
         #Result  
         print(drinkCommand)
-    
-
-# dis = DispenseDrink()
-# dis.dispense(1,10)
-
-"""
-=======================================================
-            This code will sort input datas
-            to match pump order in drinkList.json
-=======================================================
-"""
-# def sortDrink():
-#     f = open ('./src/PythonTkinter/Database/drinkList.json', "r")
-#     drinkOrder = json.loads(f.read())
-#     drinks = []
-#     sortedDrink = []
-    
-#     #Insert json drink to dict
-#     for drink in drinkOrder.keys():
-#         drinkDict = {}
-#         drinkDict["name"] = drink
-#         drinkDict["amountLeft"] = drinkOrder[drink]
-#         drinks.append(drinkDict)
-    
-#     #Nested loop to sort the item
-#     for drink in drinks:
-#         for data in dummyData:
-#             if data["drinkName"] == drink["name"]:
-#                 sortedDrink.append(data)
-#                 break
-    
-#     return sortedDrink
         
+    def writeToFile(self,val1,val2):
+        data = {val1:val2}
 
-def genRandomDrink(val):
-    arr = [0,0,0,0,0,0]
-    for i in range(val):
-        index = random.randrange(0,6)
-        arr[index] += 1
-    return arr
-
-
-def writeToFile(val1,val2):
-    data = {val1:val2}
-
-    with open("drinkTest.json", 'w') as outfile:
-        json.dump(data, outfile, indent=4)
+        with open("drinkTest.json", 'w') as outfile:
+            json.dump(data, outfile, indent=4)
     
-writeToFile(sys.argv[1],sys.argv[2])
-#sortDrink() 
-#print(genRandomDrink(10))
-# while True:
-#     drink.dispense()
+    def randomRecipe(self,userID):
+        randomRecipe = self.db.getRandomRecipe()
+        self.dispense(randomRecipe[1],userID)
+        self.writeToFile(randomRecipe[1],userID)
     
+    def genRandomDrink(self,val,userID):
+        pumpArr = self.db.getPumpList()
+        drinkCommand = ""
+        #Take 30 THB
+        err = self.db.takeMoney(userID,30)
+        print(err)
+        #Generate pump string 31 22 12 means Pump3:1push and so on
+        if err == None:
+            arr = [0,0,0,0,0,0]
+            #Random nums
+            for i in range(val):
+                index = random.randrange(0,6)
+                arr[index] += 1
+            
+            for i in range(6):
+                drinkCommand += str(i + 1) + str(arr[i])
+            
+            drinkCommand = "0" + drinkCommand
+            print(drinkCommand)
+            return arr
+
+uwu = DispenseDrink()
+# print(uwu.genRandomDrink(10,10))
+uwu.handler(sys.argv[1],sys.argv[2],sys.argv[3])
+

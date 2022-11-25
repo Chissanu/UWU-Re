@@ -7,6 +7,8 @@ const cookieParser = require("cookie-parser");
 const { spawn } = require('child_process');
 var socket = require('socket.io');
 const fs = require('fs');
+var path = require('path');
+var pythonPath = path.join('src', 'PythonTkinter', 'dispense_drink.py');
 
 const client = new Client({
     host: "localhost",
@@ -75,17 +77,18 @@ app.get('/register', function(req, res, next) {
 });
 
 app.get('/create', function(req, res, next) {
-    res.render('create');
+    fs.readFile('user.json', (err, data) => {
+        if (err) throw err;
+        let user = JSON.parse(data);
+        res.render('create', { userObj: user});
+    });
 });
 
 // Call Python functions
 function callDrinkPython(data) {
-    console.log(data['drinkID'])
-    var path = require('path');
-    var pythonPath = path.join('src', 'PythonTkinter', 'dispense_drink.py');
     // spawn new child process to call the python script
 
-    python = spawn('python', [pythonPath, data['drinkID'], data['userID']]);
+    python = spawn('python', [pythonPath, 0,data['drinkID'], data['userID']]);
 
     for (let i = 0; i < userList.length; i++) {
         if (userList[i].userID == data['userID']) {
@@ -94,7 +97,6 @@ function callDrinkPython(data) {
     }
     console.log("Completed")
     // res.redirect('/')
-
 }
 
 
@@ -229,12 +231,15 @@ io.on('connection', (socket) => {
         insertFavDrink(data['userID'],data['drinkID'])
     });
 
-    socket.on('randomRecipe', function() {
+    socket.on('randomRecipe', function(data) {
         console.log("User chose Random Recipe");
+
+        python = spawn('python', [pythonPath, 2,data['drinkID'], data['userID']]);
     });
 
-    socket.on('randomDrink', function() {
+    socket.on('randomDrink', function(data) {
         console.log("User chose Random Drink");
+        python = spawn('python', [pythonPath, 3,data['drinkID'], data['userID']]);
     });
   });
 
