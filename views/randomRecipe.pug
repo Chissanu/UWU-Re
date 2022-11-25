@@ -2,7 +2,9 @@ doctype html
 html
   head
     title UwU:Re
-    
+    script(src='./socket.io/socket.io.js')
+    script
+      include js/recipe.js
   body
     #main-rec
       h1#drinknameLabel=drink[0]
@@ -14,7 +16,7 @@ html
         h2=drink[4][3] + ": " + drink[5][3] * 30 + 'ml'
         h2=drink[4][4] + ": " + drink[5][4] * 30 + 'ml'
         h2=drink[4][5] + ": " + drink[5][5] * 30 + 'ml'
-        button#uwu_button UwU Time!
+        button#uwu_button(onClick='uwu()') UwU Time!
         button#homeBtn Home
 
     style.
