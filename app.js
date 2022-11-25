@@ -18,7 +18,6 @@ const client = new Client({
 
 let drinkList;
 let userList;
-let favdrinks = [];
 let users = [];
 const apiRoute = express.Router();
 var app = express();
@@ -57,11 +56,13 @@ app.get('/browse', async function(req, res, next) {
 });
 
 app.get('/favorite', async function(req, res, next) {
-    fs.readFile('user.json', (err, data) => {
+    let user;
+    let favdrinks;
+    getFavDrinks()
+    fs.readFile('fav.json', (err, data) => {
         if (err) throw err;
-        let user = JSON.parse(data);
-        getFavDrinks()
-        res.render('favorite', { drinks: favdrinks, userObj: user});
+        data = JSON.parse(data);
+        res.render('favorite', { drinks: data['drinks'], userObj: data['user']}),2000;
     });
 });
 
@@ -73,8 +74,8 @@ app.get('/register', function(req, res, next) {
     res.render('register');
 });
 
-app.get('/complete', function(req, res, next) {
-    res.render('complete');
+app.get('/create', function(req, res, next) {
+    res.render('create');
 });
 
 // Call Python functions
@@ -100,18 +101,25 @@ function callDrinkPython(data) {
 // Database functions
 client.connect()
 
-async function getFavDrinks(drinkIDArr) {
+async function getFavDrinks() {
+    let tempArr = []
+    fs.readFile('user.json', (err, data) => {
+        if (err) throw err;
+        let user = JSON.parse(data);
+    });
     try {
-        for (let i = 0; i < drinkIDArr.length; i++) {
-            sql = `select * from drink_tables where drinkid = ${drinkIDArr[i]};`
+        for (let i = 0; i < user.favdrinkid.length; i++) {
+            sql = `select * from drink_tables where drinkid = ${user.favdrinkid[i]};`
             const res = await client.query(sql);
-            favdrinks.push(res.rows[0])
+            tempArr.push(res.rows[0])
         }
+        var combinedData = { 'user' : user,
+                             'drinks': tempArr}
+        console.log(combinedData)
+        const data = JSON.stringify(combinedData,null,4);
+        fs.writeFileSync('fav.json', data);
     } catch {
         console.log("Error on getting favorite drinks from DB")
-    } finally {
-        console.log("Completed")
-        console.log(favdrinks)
     }
 }
 
@@ -140,6 +148,7 @@ const insertFavDrink = async(userID, drinkID) => {
     // console.log(sql)
     try { // gets connection
         await client.query(sql); // sends queries
+        getFavDrinks()
         return true;
     } catch (error) {
         console.error(error.stack);
@@ -190,10 +199,10 @@ apiRoute.post("/login", (req, res) => {
         }
     }
     if (!user) return res.redirect("/?error=invalid credentials");
-    const data = JSON.stringify(user);
+
+    const data = JSON.stringify(user,null,4);
     fs.writeFileSync('user.json', data);
-    console.log(data.favdrinkid)
-    getFavDrinks(data.favdrinkid)
+    getFavDrinks()
     res.redirect("/home");
 });
 
@@ -218,6 +227,14 @@ io.on('connection', (socket) => {
     socket.on('fav', function(data) {
         console.log(data);
         insertFavDrink(data['userID'],data['drinkID'])
+    });
+
+    socket.on('randomRecipe', function() {
+        console.log("User chose Random Recipe");
+    });
+
+    socket.on('randomDrink', function() {
+        console.log("User chose Random Drink");
     });
   });
 
