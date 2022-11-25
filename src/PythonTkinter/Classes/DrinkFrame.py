@@ -4,11 +4,11 @@ from PIL import Image,ImageTk
 from Database.DB import Database
 
 class DrinkFrame(tk.Frame):
-    def __init__(self, parent,drink):
+    def __init__(self, parent,drink, color):
         super().__init__(parent)
         self.drink = drink
         # Create your widgets
-        self.canvas = tk.Canvas(self,width=800,height=118,background="#FF8787",highlightthickness=0)
+        self.canvas = tk.Canvas(self,width=800,height=118,background=color,highlightthickness=0)
         
         #Name
         self.canvas.create_text(25, 60, text=drink["drinkName"], fill="white", font=('Helvetica 30 bold'),anchor="w")
@@ -22,7 +22,7 @@ class DrinkFrame(tk.Frame):
         #Fav btn
         self.icon = ImageTk.PhotoImage(Image.open("src\\PythonTkinter\\assets\\heart.png").resize((20,20),Image.ANTIALIAS))
         button=  ctk.CTkButton(self.canvas, image=self.icon,width=5,height=5,text="",command= self.favorite,
-        borderwidth=0,fg_color="#FF8787",hover_color="#FF8787")
+        borderwidth=0,fg_color = color, hover_color = color)
         button.place(x=680,y=82)
         
         #Fav Text
