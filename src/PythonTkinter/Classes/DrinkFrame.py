@@ -10,11 +10,14 @@ class DrinkFrame(tk.Frame):
         # Create your widgets
         self.canvas = tk.Canvas(self,width=800,height=118,background=color,highlightthickness=0)
         
+        # Sample output
+        #('CustomDrink1', 1, 55, 'Unknown', ['Juice', 'Tea', 'Coffee', 'Cider', 'Sodar', 'Water'], [1, 2, 1, 3, 4, 3])
+        
         #Name
-        self.canvas.create_text(25, 60, text=drink["drinkName"], fill="white", font=('Helvetica 30 bold'),anchor="w")
+        self.canvas.create_text(25, 60, text=drink[0], fill="white", font=('Helvetica 30 bold'),anchor="w")
         
         #Price
-        self.canvas.create_text(780, 30, text=("THB " + str(drink["price"])), fill="white", font=('Helvetica 20 bold'),anchor="e")
+        self.canvas.create_text(780, 30, text=("THB " + str(drink[2])), fill="white", font=('Helvetica 20 bold'),anchor="e")
         
         #Buy Btn
         self.button = ctk.CTkButton(self.canvas,text="Order",bg="#058ED9",width=30,command=self.order).place(x=720,y=80)
@@ -33,7 +36,7 @@ class DrinkFrame(tk.Frame):
         self.canvas.grid()
         
     def order(self):
-        print("Order for drink", self.drink["drinkID"]) 
+        print("Order for drink", self.drink[1]) 
         
     def favorite(self,userID,drinkID):
         db = Database()

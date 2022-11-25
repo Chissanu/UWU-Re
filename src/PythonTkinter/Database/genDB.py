@@ -41,5 +41,5 @@ def genIngredients():
         con.commit()
     con.close()
 # genUser()
-# genDrink()
+genDrink()
 # genIngredients()

@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from PIL import ImageTk, Image
 from Classes.DrinkFrame import DrinkFrame
-
+from Database.DB import Database
 
 ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 ctk.set_default_color_theme("dark-blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -14,49 +14,19 @@ ctk.set_default_color_theme("dark-blue")  # Themes: "blue" (standard), "green", 
 #C:\Users\@USER\Documents\UWU-Re
 MAIN_DIR = str(os.path.normpath(os.getcwd() + os.sep))
 
+
 #Color Pallete
 BLUE_BG = "#859FFD"
 ALL_BG = "#FFF89A"
 FAV_BG = "#FFB2A6"
 RAND_BG = "#9ADCFF"
 
+db = Database()
+browseData = list(db.queryDrinkDB())
 
-dummyData = [{"drinkName": "CustomDrink1",
-        "drinkID": 1,
-        "price": 55,
-        "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
-        "timesPressed": [1,2,1,3,4,3]
-        },
-        {"drinkName": "CustomDrink2",
-        "drinkID": 2,
-        "price": 55,
-        "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
-        "timesPressed": [1,2,1,3,4,3]
-        },
-        {"drinkName": "CustomDrink3",
-        "drinkID": 3,
-        "price": 55,
-        "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
-        "timesPressed": [1,2,1,3,4,3]
-        },
-        {"drinkName": "CustomDrink4",
-        "drinkID": 4,
-        "price": 55,
-        "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
-        "timesPressed": [1,2,1,3,4,3]
-        },
-        {"drinkName": "CustomDrink5",
-        "drinkID": 5,
-        "price": 55,
-        "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
-        "timesPressed": [1,2,1,3,4,3]
-        },
-        {"drinkName": "CustomDrink5",
-        "drinkID": 5,
-        "price": 55,
-        "drinkList": ["Juice","Tea","Coffee","Cider","Sodar","Water"],
-        "timesPressed": [1,2,1,3,4,3]
-        }]
+#To do open user.json and send userID to a function
+#favData = db.getFavData(userID)
+
 
 class App(ctk.CTk):
     # def __init__(self,name,coin):
@@ -223,7 +193,7 @@ class App(ctk.CTk):
         x = 30
         y = 20
         altura = 0
-        for drink in dummyData:
+        for drink in browseData:
             altura = altura + 150
             frame = DrinkFrame(second_frame,drink, "#FF8787").place(x=x,y=y)
             y += 150
@@ -293,7 +263,7 @@ class App(ctk.CTk):
         x = 30
         y = 20
         altura = 0
-        for drink in dummyData:
+        for drink in browseData:
             altura = altura + 150
             frame = DrinkFrame(second_frame_fav,drink, "#554994").place(x=x,y=y)
             y += 150
