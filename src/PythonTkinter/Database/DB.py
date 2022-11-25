@@ -51,8 +51,7 @@ class Database:
          for fav in tempArr:
             sql = "SELECT * from drink_tables where drinkid = {drinkID}".format(drinkID = fav)
             cur.execute(sql)
-            favDrinkArr.append(cur.fetchall())
-            
+            favDrinkArr.append(cur.fetchall()[0]) 
       return favDrinkArr
       
       
@@ -131,4 +130,3 @@ class Database:
       sql = "UPDATE pump_list set leftovers = leftovers - {amount} WHERE name like '{pumpID}';".format(amount = val,pumpID = name)
       cur.execute(sql)
       con.commit()
-

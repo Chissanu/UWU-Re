@@ -19,7 +19,6 @@ function goBrowse() {
 
 function randomRecipe(drinkID,userID) {
     window.location.replace("/recipe");
-    socket.emit('randomRecipe', { drinkID: drinkID, userID:userID})
 }
 
 function randomDrink(drinkID,userID) {
