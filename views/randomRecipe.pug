@@ -4,8 +4,127 @@ html
     title UwU:Re
   body
     #main-rec
-      h1#drinknameLabel RandomRecipe
+      h1#drinknameLabel=drink[0]
       #inner-rec
-        .item
-          h1#name Name
-          button#uwu_button UwU Time!
+        h1 Ingredients:
+        h2=drink[4][0] + ": " + drink[5][0] * 30 + 'ml'
+        h2=drink[4][1] + ": " + drink[5][1] * 30 + 'ml'
+        h2=drink[4][2] + ": " + drink[5][2] * 30 + 'ml'
+        h2=drink[4][3] + ": " + drink[5][3] * 30 + 'ml'
+        h2=drink[4][4] + ": " + drink[5][4] * 30 + 'ml'
+        h2=drink[4][5] + ": " + drink[5][5] * 30 + 'ml'
+        button#uwu_button UwU Time!
+        button#homeBtn Home
+
+    style.
+      @media screen and (max-width: 1000px) {
+      body {
+      background: #859FFD;
+      }
+      #main-rec {
+      position: absolute;
+      left: 4.34%;
+      right: 4.25%;
+      top: 13.61%;
+      bottom: 17.28%;
+      background: #9ADCFF;
+      border-radius: 10px;
+      }
+      h1 {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 80px;
+        line-height: 60px;
+        /* identical to box height */
+        text-align: center;
+        letter-spacing: 0.0em;
+        color: #000000;
+      }
+      h2 {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 68px;
+        line-height: 60px;
+        /* identical to box height */
+        text-align: left;
+        margin-left: 50px;
+        letter-spacing: 0.0em;
+        color: #000000;
+      }
+      #inner-rec {
+      position: absolute;
+      left: 2.54%;
+      right: 2.41%;
+      top: 10%;
+      bottom: 5%;
+      background: #FFFFFF;
+      border-radius: 10px;
+      }
+      #drinknameLabel {
+      /* Browse */
+      position: absolute;
+      display: inline-block;
+      width: 180px;
+      height: 60px;
+      left: 150px;
+      top: -10px;
+      font-family: 'Poppins';
+      font-style: normal;
+      font-weight: 600;
+      font-size: 80px;
+      line-height: 60px;
+      /* identical to box height */
+      text-align: center;
+      letter-spacing: 0.0em;
+      color: #000000;
+      }
+      #searchBox {
+      position: absolute;
+      width: 350px;
+      height: 50px;
+      font-size: 40px;
+      top: 20px;
+      left: 200px;
+      border: none;
+      border-radius: 20px;
+      }
+      #uwu_button {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 5px 20px;
+      gap: 10px;
+      width: 250px;
+      height: 75px;
+      left: 300px;
+      top: 1000px;
+      background: #FF4D4D;
+      color: white;
+      font-size: 30px;
+      border: 20px;
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+      border-radius: 20px;
+      }
+      #homeBtn {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 5px 20px;
+      gap: 10px;
+      width: 250px;
+      height: 75px;
+      left: 300px;
+      top: 1150px;
+      background: cyan;
+      color: white;
+      font-size: 30px;
+      border: 20px;
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+      border-radius: 20px;
+      }

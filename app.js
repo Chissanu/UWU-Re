@@ -24,6 +24,7 @@ let users = [];
 const apiRoute = express.Router();
 var app = express();
 var user;
+let currentRandom;
 
 var server = app.listen(4000, function() {
     console.log('listening for requests on port 4000,');
@@ -84,10 +85,17 @@ app.get('/create', function(req, res, next) {
     });
 });
 
+app.get('/recipe', function(req, res, next) {
+    fs.readFile('DRINK.json', (err, data) => {
+        if (err) throw err;
+        let drink = JSON.parse(data);
+        res.render('randomRecipe',{drink:drink['drink'][0]});
+    });
+});
+
 // Call Python functions
 function callDrinkPython(data) {
     // spawn new child process to call the python script
-
     python = spawn('python', [pythonPath, 0,data['drinkID'], data['userID']]);
 
     for (let i = 0; i < userList.length; i++) {
@@ -102,7 +110,6 @@ function callDrinkPython(data) {
 
 // Database functions
 client.connect()
-
 async function getFavDrinks() {
     let tempArr = []
     fs.readFile('user.json', (err, data) => {
@@ -233,7 +240,6 @@ io.on('connection', (socket) => {
 
     socket.on('randomRecipe', function(data) {
         console.log("User chose Random Recipe");
-
         python = spawn('python', [pythonPath, 2,data['drinkID'], data['userID']]);
     });
 

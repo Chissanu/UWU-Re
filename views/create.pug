@@ -8,7 +8,7 @@ html
       h1#createLabel(font='') Create
       #inner-rec
         .item
-          button#randomrecipe_button(onClick='create(' + '"' + 0 + '"' + ',' + '"' + userObj.userid + '"' + ')') Create
+          button#createBtn(onClick='create(' + '"' + 0 + '"' + ',' + '"' + userObj.userid + '"' + ')') Create
           button#randomrecipe_button(onClick='randomRecipe(' + '"' + 0 + '"' + ',' + '"' + userObj.userid + '"' + ')') Random Recipe
           button#randomdrink_button(onClick='randomDrink(' + '"' + 0 + '"' + ',' + '"' + userObj.userid + '"' + ')') Random Drink
     button#favoriteBtn(onClick='goFavorite()') Favorite
@@ -92,6 +92,25 @@ html
       border: 20px;
       box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
       border-radius: 20px;
+      }
+      .item #createBtn {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 5px 20px;
+        gap: 10px;
+        width: 700px;
+        height: 120px;
+        left: 75px;
+        top: 220px;
+        background: #000000;
+        color: white;
+        font-size: 80px;
+        border: 20px;
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+        border-radius: 20px;
       }
       #createLabel {
       /* Create */

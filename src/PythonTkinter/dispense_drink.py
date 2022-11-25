@@ -51,10 +51,12 @@ class DispenseDrink:
         #Result  
         print(drinkCommand)
         
-    def writeToFile(self,val1,val2):
-        data = {val1:val2}
+    def writeToFile(self,drinkID,userID):
+        info = self.db.getDrinkFromID(drinkID)
+        data = {'user' : userID,
+                'drink': info}
 
-        with open("drinkTest.json", 'w') as outfile:
+        with open("DRINK.json", 'w') as outfile:
             json.dump(data, outfile, indent=4)
     
     def randomRecipe(self,userID):
