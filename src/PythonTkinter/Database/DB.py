@@ -40,6 +40,21 @@ class Database:
          print("Could not find drink with that name")
       else:
          return(data)
+   
+   def getFavData(self,userID):
+      favDrinkArr = []
+      arrSQL = "SELECT favdrinkid FROM users where userid = {userID}".format(userID = userID)
+      cur = con.cursor()
+      cur.execute(arrSQL)
+      tempArr = cur.fetchall()[0][0]
+      if tempArr:
+         for fav in tempArr:
+            sql = "SELECT * from drink_tables where drinkid = {drinkID}".format(drinkID = fav)
+            cur.execute(sql)
+            favDrinkArr.append(cur.fetchall())
+            
+      return favDrinkArr
+      
       
    def getRandomRecipe(self):
       drinkList = self.queryDrinkDB()
