@@ -58,20 +58,26 @@ int calibrate(String axis, Stepper x_stepper, Stepper z_stepper){
   int zMaxSteps = 0;
   
   if (axis == "x"){
-    Serial.println("Calibrating X Axis");
-    
+        Serial.println("Calibrating X Axis");
     // x - axis
     x_min = digitalRead(xMinPin);
-    while (x_min != 1){
-      x_stepper.step(-1); // go left until the endstop is pressed
+    while (x_min != 0){
+      x_stepper.step(1); // go left until the endstop is pressed
       x_min = digitalRead(xMinPin);
     }
+    x_stepper.step(0);
+    delay(5000);
     x_max = digitalRead(xMaxPin);
-    while (x_max != 1){
-      x_stepper.step(1);
+    while (x_max != 0){
+      x_stepper.step(-1);
       xMaxSteps += 1;
+      x_max = digitalRead(xMaxPin);
     }
-    x_stepper.step(-xMaxSteps); // to not push button
+    x_stepper.step(0);
+    delay(5000);
+    z_stepper.step(xMaxSteps); // to not push button
+    Serial.println("X calibration complete");
+    Serial.println(xMaxSteps);
     return xMaxSteps;
     
   } else if (axis = "z"){
@@ -93,7 +99,7 @@ int calibrate(String axis, Stepper x_stepper, Stepper z_stepper){
     z_stepper.step(0);
     delay(5000);
     z_stepper.step(zMaxSteps); // to not push button
-    Serial.println("z calibration complete");
+    Serial.println("Z calibration complete");
     Serial.println(zMaxSteps);
     return zMaxSteps;
   }
