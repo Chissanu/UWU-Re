@@ -1,0 +1,185 @@
+doctype html
+html
+  head
+    title UwU:Re
+    script(src='./socket.io/socket.io.js')
+  body
+    #main-rec
+      h1#createLabel(font='') Create
+      #inner-rec
+        .item
+          button#randomrecipe_button(onClick='create(' + '"' + 0 + '"' + ',' + '"' + userObj.userid + '"' + ')') Create
+          button#randomrecipe_button(onClick='randomRecipe(' + '"' + 0 + '"' + ',' + '"' + userObj.userid + '"' + ')') Random Recipe
+          button#randomdrink_button(onClick='randomDrink(' + '"' + 0 + '"' + ',' + '"' + userObj.userid + '"' + ')') Random Drink
+    button#favoriteBtn(onClick='goFavorite()') Favorite
+    button#homeBtn(onClick='goHome()') Home
+    button#browseBtn(onClick='goBrowse()') Browse
+    script
+      include js/createDrink.js
+    style.
+      @media screen and (max-width: 1000px) {
+      body {
+      background: #859FFD;
+      }
+      #main-rec {
+      position: absolute;
+      left: 4.34%;
+      right: 4.25%;
+      top: 13.61%;
+      bottom: 17.28%;
+      background: #9ADCFF;
+      border-radius: 10px;
+      }
+      #inner-rec {
+      position: absolute;
+      left: 2.54%;
+      right: 2.41%;
+      top: 10%;
+      bottom: 5%;
+      background: #85BEDC;
+      border-radius: 10px;
+      }
+      .item #name {
+      position: absolute;
+      font-size: 40px;
+      left: 30px;
+      top: -10px;
+      color: white;
+      }
+      .item #subtext {
+      position: absolute;
+      align-items: left;
+      font-size: 30px;
+      left: 30px;
+      top: 50px;
+      font-weight: normal;
+      color: white;
+      }
+      .item #randomrecipe_button {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 5px 20px;
+      gap: 10px;
+      width: 700px;
+      height: 120px;
+      left: 75px;
+      top: 430px;
+      background: #000000;
+      color: white;
+      font-size: 80px;
+      border: 20px;
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+      border-radius: 20px;
+      }
+      .item #randomdrink_button {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 5px 20px;
+      gap: 10px;
+      width: 700px;
+      height: 120px;
+      left: 75px;
+      top: 630px;
+      background: #000000;
+      color: white;
+      font-size: 80px;
+      border: 20px;
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+      border-radius: 20px;
+      }
+      #createLabel {
+      /* Create */
+      position: absolute;
+      width: 156px;
+      height: 60px;
+      left: 330px;
+      top: 0px;
+      font-family: 'Poppins';
+      font-style: normal;
+      font-weight: 600;
+      font-size: 80px;
+      line-height: 60px;
+      /* identical to box height */
+      text-align: center;
+      letter-spacing: 0.04em;
+      color: #000000;
+      }
+      #browseBtn {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          padding: 13px 58px;
+          gap: 10px;
+          position: absolute;
+          width: 300px;
+          height: 200px;
+          left: 20px;
+          top: 1850px;
+          background: #FFB2A6;
+          box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+          border-radius: 80px;
+          font-family: 'Inter';
+          font-style: normal;
+          font-weight: 700;
+          font-size: 64px;
+          line-height: 77px;
+          text-align: center;
+          color: black;
+          border: 0px;
+      }
+      #favoriteBtn {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          padding: 13px 58px;
+          gap: 10px;
+          position: absolute;
+          width: 300px;
+          height: 200px;
+          left: 340px;
+          top: 1850px;
+          background: #9ADCFF;
+          box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+          border-radius: 80px;
+          font-family: 'Inter';
+          font-style: normal;
+          font-weight: 700;
+          font-size: 64px;
+          line-height: 77px;
+          text-align: center;
+          color: black;
+          border: 0px;
+      }
+      #homeBtn {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          padding: 13px 58px;
+          gap: 10px;
+          position: absolute;
+          width: 300px;
+          height: 200px;
+          left: 660px;
+          top: 1850px;
+          background: #D35BAA;
+          box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+          border-radius: 80px;
+          font-family: 'Inter';
+          font-style: normal;
+          font-weight: 700;
+          font-size: 64px;
+          line-height: 77px;
+          text-align: center;
+          color: black;
+          border: 0px;
+      }
+      }

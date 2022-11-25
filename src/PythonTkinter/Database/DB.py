@@ -1,4 +1,4 @@
-import psycopg2
+import psycopg2,random
 
 command = """ INSERT INTO drink_tables(drinkName,ingredientList,timepressed) VALUES(%s,%s,%s) """
 #establishing the connection
@@ -40,6 +40,12 @@ class Database:
          print("Could not find drink with that name")
       else:
          return(data)
+      
+   def getRandomRecipe(self):
+      drinkList = self.queryDrinkDB()
+      num = random.randrange(0,len(drinkList) + 1)
+      return drinkList[num]
+      
       
    def containIngredients(self,name):
       cur = con.cursor()
@@ -111,5 +117,3 @@ class Database:
       cur.execute(sql)
       con.commit()
 
-db = Database()
-db.takeMoney(2,10)

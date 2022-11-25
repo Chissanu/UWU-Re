@@ -1,12 +1,14 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-var logger = require('morgan');
 const { Client } = require('pg')
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const { spawn } = require('child_process');
 var socket = require('socket.io');
+const fs = require('fs');
+var path = require('path');
+var pythonPath = path.join('src', 'PythonTkinter', 'dispense_drink.py');
 
 const client = new Client({
     host: "localhost",
@@ -27,6 +29,9 @@ var server = app.listen(4000, function() {
     console.log('listening for requests on port 4000,');
 });
 
+queryDrinks()
+queryUsers()
+
 
 // API
 app.use(cookieParser());
@@ -40,16 +45,27 @@ app.set('view engine', 'pug');
 app.get('/', async function(req, res, next) {
     await queryDrinks()
     await queryUsers()
-    res.render('login', { title: 'Login' });
+    res.render('login');
 });
 
 app.get('/browse', async function(req, res, next) {
     await queryDrinks()
-    res.render('browse', { drinks: drinkList, userObj: user});
+    fs.readFile('user.json', (err, data) => {
+        if (err) throw err;
+        let user = JSON.parse(data);
+        res.render('browse', { drinks: drinkList, userObj: user});
+    });
 });
 
-app.get('/favorite', function(req, res, next) {
-    res.render('favorite');
+app.get('/favorite', async function(req, res, next) {
+    let user;
+    let favdrinks;
+    getFavDrinks()
+    fs.readFile('fav.json', (err, data) => {
+        if (err) throw err;
+        data = JSON.parse(data);
+        res.render('favorite', { drinks: data['drinks'], userObj: data['user']}),2000;
+    });
 });
 
 app.get('/home', function(req, res, next) {
@@ -60,35 +76,60 @@ app.get('/register', function(req, res, next) {
     res.render('register');
 });
 
-app.get('/complete', function(req, res, next) {
-    res.render('complete');
+app.get('/create', function(req, res, next) {
+    fs.readFile('user.json', (err, data) => {
+        if (err) throw err;
+        let user = JSON.parse(data);
+        res.render('create', { userObj: user});
+    });
 });
 
 // Call Python functions
 function callDrinkPython(data) {
-    console.log(data['drinkID'])
-    var path = require('path');
-    var pythonPath = path.join('src', 'PythonTkinter', 'dispense_drink.py');
     // spawn new child process to call the python script
 
-    python = spawn('python', [pythonPath, data['drinkID'], data['userID']]);
+    python = spawn('python', [pythonPath, 0,data['drinkID'], data['userID']]);
 
-    for (let i = 0; i < userList.lgenth; i++) {
+    for (let i = 0; i < userList.length; i++) {
         if (userList[i].userID == data['userID']) {
             user = userList[i]
         }
     }
+    console.log("Completed")
     // res.redirect('/')
-
 }
+
 
 // Database functions
 client.connect()
+
+async function getFavDrinks() {
+    let tempArr = []
+    fs.readFile('user.json', (err, data) => {
+        if (err) throw err;
+        let user = JSON.parse(data);
+    });
+    try {
+        for (let i = 0; i < user.favdrinkid.length; i++) {
+            sql = `select * from drink_tables where drinkid = ${user.favdrinkid[i]};`
+            const res = await client.query(sql);
+            tempArr.push(res.rows[0])
+        }
+        var combinedData = { 'user' : user,
+                             'drinks': tempArr}
+        console.log(combinedData)
+        const data = JSON.stringify(combinedData,null,4);
+        fs.writeFileSync('fav.json', data);
+    } catch {
+        console.log("Error on getting favorite drinks from DB")
+    }
+}
+
 async function queryDrinks() {
     try {
         const res = await client.query(`Select * from drink_tables`);
         drinkList = res.rows
-        console.log("Successfully retrive data from DB")
+        console.log("Successfully retrieve data from DB")
     } catch {
         console.log("Error on getting drinks from DB")
     }
@@ -98,11 +139,24 @@ async function queryUsers() {
     try {
         const res = await client.query(`Select * from users`);
         userList = res.rows
-        console.log("Successfully retrive users from DB")
+        console.log("Successfully retrieve users from DB")
     } catch {
         console.log("Error on getting users from DB")
     }
 }
+
+const insertFavDrink = async(userID, drinkID) => {
+    let sql = `UPDATE users SET favdrinkid = array_append(favdrinkid,${drinkID}) where userid = ${userID}`
+    // console.log(sql)
+    try { // gets connection
+        await client.query(sql); // sends queries
+        getFavDrinks()
+        return true;
+    } catch (error) {
+        console.error(error.stack);
+        return false;
+    }
+};
 
 const insertUser = async(userName, userPass) => {
     try { // gets connection
@@ -113,8 +167,6 @@ const insertUser = async(userName, userPass) => {
     } catch (error) {
         console.error(error.stack);
         return false;
-    } finally {
-        await client.end(); // closes connection
     }
 };
 
@@ -149,6 +201,10 @@ apiRoute.post("/login", (req, res) => {
         }
     }
     if (!user) return res.redirect("/?error=invalid credentials");
+
+    const data = JSON.stringify(user,null,4);
+    fs.writeFileSync('user.json', data);
+    getFavDrinks()
     res.redirect("/home");
 });
 
@@ -168,6 +224,22 @@ io.on('connection', (socket) => {
     socket.on('order', function(data) {
         // console.log(data);
         callDrinkPython(data);
+    });
+
+    socket.on('fav', function(data) {
+        console.log(data);
+        insertFavDrink(data['userID'],data['drinkID'])
+    });
+
+    socket.on('randomRecipe', function(data) {
+        console.log("User chose Random Recipe");
+
+        python = spawn('python', [pythonPath, 2,data['drinkID'], data['userID']]);
+    });
+
+    socket.on('randomDrink', function(data) {
+        console.log("User chose Random Drink");
+        python = spawn('python', [pythonPath, 3,data['drinkID'], data['userID']]);
     });
   });
 
