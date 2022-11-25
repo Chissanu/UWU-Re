@@ -25,7 +25,8 @@ db = Database()
 browseData = list(db.queryDrinkDB())
 
 #To do open user.json and send userID to a function
-#favData = db.getFavData(userID)
+favData = list(db.getFavData(6))
+print(favData)
 
 
 class App(ctk.CTk):
@@ -197,7 +198,6 @@ class App(ctk.CTk):
             altura = altura + 150
             frame = DrinkFrame(second_frame,drink, "#FF8787").place(x=x,y=y)
             y += 150
-        print(altura)
         second_frame.configure(height=altura)
         
         #Frame Label
@@ -263,11 +263,10 @@ class App(ctk.CTk):
         x = 30
         y = 20
         altura = 0
-        for drink in browseData:
+        for drink in favData:
             altura = altura + 150
             frame = DrinkFrame(second_frame_fav,drink, "#554994").place(x=x,y=y)
             y += 150
-        print(altura)
         second_frame_fav.configure(height=altura)
         
         #Frame Label
@@ -302,10 +301,10 @@ class App(ctk.CTk):
         self.randomCanvas.create_image(1790,20,anchor=tk.NW,image=img)
         self.randomCanvas.create_text(1750, 50, text=self.profileName, fill="black",anchor='e', font=('Inter 30 bold'))
         self.randomCanvas.create_text(1750, 100, text=self.coin, fill="black",anchor='e', font=('Inter 30 bold'))
-       
-        #Item List Frame
-        self.randomItemFrame = ctk.CTkFrame(self.randomCanvas,width=1250,height=900,fg_color=RAND_BG,highlightthickness=0)
-        self.randomItemFrame.place(x=50,y=80)
+
+        #Choice box canvas
+        self.randomChoice = ctk.CTkFrame(self.randomCanvas,width=1250,height=900,fg_color=RAND_BG,highlightthickness=0)
+        self.randomChoice.place(x=50,y=80)
         
         #button
         self.button(200, 80, "All", self.randomCanvas, self.randomFrame, "browse")
@@ -314,6 +313,66 @@ class App(ctk.CTk):
         #Frame Label
         favoriteLab = ctk.CTkLabel(self.favoriteItemFrame,text="Random",text_font=("Inter",40),text_color="black")
         favoriteLab.place(x=800,y=30)
+        
+        #button to change canvas
+        self.button(400, 400, "Random Recipe", self.randomCanvas, self.randomFrame, "random recipe")
+        self.button(400, 600, "Random Drink", self.randomCanvas, self.randomFrame, "random drink")
+
+        """
+        ============== Random Recipe ==============
+        """
+        #Frame & Canvas creation
+        self.RecipeFrame = ctk.CTkFrame(self,width=WIDTH,height=HEIGHT,fg_color=BLUE_BG)
+        self.RecipeCanvas = ctk.CTkCanvas(self.RecipeFrame,width=WIDTH,height=HEIGHT,bg=BLUE_BG,highlightthickness=0)
+
+        #Profile
+        img = ImageTk.PhotoImage(Image.open(self.profileIconPath).resize((110,110)))
+        profile.append(img)
+        self.RecipeCanvas.create_image(1790,20,anchor=tk.NW,image=img)
+        self.RecipeCanvas.create_text(1750, 50, text=self.profileName, fill="black",anchor='e', font=('Inter 30 bold'))
+        self.RecipeCanvas.create_text(1750, 100, text=self.coin, fill="black",anchor='e', font=('Inter 30 bold'))
+
+        #Random Recipe box canvas
+        self.Recipe = ctk.CTkFrame(self.RecipeCanvas,width=1250,height=900,fg_color=RAND_BG,highlightthickness=0)
+        self.Recipe.place(x=50,y=80)
+
+        #UwU time btn
+        self.button(1400, 400, "UwU Time!", self.RecipeCanvas, self.RecipeFrame, "main")
+
+        """
+        ============== Random Drink ==============
+        """
+        #Frame & Canvas creation
+        self.DrinkFrame = ctk.CTkFrame(self,width=WIDTH,height=HEIGHT,fg_color=BLUE_BG)
+        self.DrinkCanvas = ctk.CTkCanvas(self.DrinkFrame,width=WIDTH,height=HEIGHT,bg=BLUE_BG,highlightthickness=0)
+
+        #Profile
+        img = ImageTk.PhotoImage(Image.open(self.profileIconPath).resize((110,110)))
+        profile.append(img)
+        self.DrinkCanvas.create_image(1790,20,anchor=tk.NW,image=img)
+        self.DrinkCanvas.create_text(1750, 50, text=self.profileName, fill="black",anchor='e', font=('Inter 30 bold'))
+        self.DrinkCanvas.create_text(1750, 100, text=self.coin, fill="black",anchor='e', font=('Inter 30 bold'))
+
+        #Random Recipe box canvas
+        self.Drink = ctk.CTkFrame(self.DrinkCanvas,width=1250,height=900,fg_color=RAND_BG,highlightthickness=0)
+        self.Drink.place(x=50,y=80)
+
+        #UwU time btn
+        self.button(1400, 400, "UwU Time!", self.DrinkCanvas, self.DrinkFrame, "main")
+
+        # Search bar
+        entry = ctk.CTkEntry(master=self.DrinkFrame,
+                               placeholder_text="Put drink name here",
+                               width=300,
+                               height=40,
+                               fg_color="white",
+                               text_color="black",
+                               border_width=2,
+                               text_font=("inter", 15),
+                               corner_radius=10)
+        
+        entry.place(x=1450, y=300)
+
 
         """
         ======================================
@@ -339,7 +398,12 @@ class App(ctk.CTk):
         elif newFrame == "random":
             self.randomFrame.pack(fill="both", expand=1)
             self.randomCanvas.pack(fill="both", expand=1)
-        print(newFrame)
+        elif newFrame == "random recipe":
+            self.RecipeFrame.pack(fill="both", expand=1)
+            self.RecipeCanvas.pack(fill="both", expand=1)
+        elif newFrame == "random drink":
+            self.DrinkFrame.pack(fill="both", expand=1)
+            self.DrinkCanvas.pack(fill="both", expand=1)
 
     def button(self, x_co, y_co, name, canvas, old_frame, new_frame):
         Btn = ctk.CTkButton(canvas,
@@ -368,7 +432,6 @@ class App(ctk.CTk):
             name = input("Drink name? >")
             ml = int(input("Drink ML? >"))
             self.drinkList[name] = ml
-        print(self.drinkList)
         json_object = json.dumps(self.drinkList, indent=4)
         with open("./src/PythonTkinter/Database/drinkList.json", "w") as outfile:
             outfile.write(json_object)
