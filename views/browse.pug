@@ -3,10 +3,14 @@ html
   head
     title Browse
     script(type='text/javascript', src='http://code.jquery.com/jquery-latest.min.js')
-    script(src='./js/bootstrap.min.js')
     script(src='./socket.io/socket.io.js')
-    script(src='https://kit.fontawesome.com/a076d05399.js')
-    i.fasfa-user-alt
+    link(rel='stylesheet', href='https://css.gg/profile.css')
+    i.gg-profile
+    .profile
+      h1= userObj.username
+      h1= "Coins: " + userObj.usercoins
+      //- h1 Test User
+      //- h1= "Coins: " + 100
     script
       include js/orderDrink.js
 
@@ -23,19 +27,21 @@ html
             h2.h2(style='top:270px')="Ingredient 4: " + drinkData.ingredientlist[3]
             h2.h2(style='top:320px')="Ingredient 5: " + drinkData.ingredientlist[4]
             h2.h2(style='top:370px')="Ingredient 6: " + drinkData.ingredientlist[5]
-            //- button(id="order" + itemID onClick='orderDrink('+ itemID +')') Order
             button(id="order" + itemID type="submit" onClick='orderDrink(' + '"' + itemID + '"' + ',' + '"' + userID + '"' + ')') Order
     #main-rec
         h1#browseLabel Browse
         #inner-rec
             input#searchBox(type='text', placeholder='Search')
             - var top=100
-            //- - var userID=userObj.userid
-            - var userID=10
+            - var userID=userObj.userid
+            //- - var userID=10
             - for (var i = 0; i < drinks.length; ++i) {
             +drinkItems(drinks[i],i+1,top,userID)
             - top += 550
             - }
+        button#favoriteBtn(onClick='goFavorite()') Favorite
+        button#createBtn(onClick='goCreate()') Create
+        button#homeBtn(onClick='goHome()') Home
 
     style.
       @media screen and (max-width: 1000px) {
@@ -124,6 +130,78 @@ html
       letter-spacing: 0.04em;
       color: #000000;
       }
+      #favoriteBtn {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          padding: 13px 58px;
+          gap: 10px;
+          position: absolute;
+          width: 300px;
+          height: 200px;
+          left: -20px;
+          top: 1550px;
+          background: #FFB2A6;
+          box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+          border-radius: 80px;
+          font-family: 'Inter';
+          font-style: normal;
+          font-weight: 700;
+          font-size: 64px;
+          line-height: 77px;
+          text-align: center;
+          color: black;
+          border: 0px;
+      }
+      #createBtn {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          padding: 13px 58px;
+          gap: 10px;
+          position: absolute;
+          width: 300px;
+          height: 200px;
+          left: 300px;
+          top: 1550px;
+          background: #9ADCFF;
+          box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+          border-radius: 80px;
+          font-family: 'Inter';
+          font-style: normal;
+          font-weight: 700;
+          font-size: 64px;
+          line-height: 77px;
+          text-align: center;
+          color: black;
+          border: 0px;
+      }
+      #homeBtn {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          padding: 13px 58px;
+          gap: 10px;
+          position: absolute;
+          width: 300px;
+          height: 200px;
+          left: 620px;
+          top: 1550px;
+          background: #D35BAA;
+          box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+          border-radius: 80px;
+          font-family: 'Inter';
+          font-style: normal;
+          font-weight: 700;
+          font-size: 64px;
+          line-height: 77px;
+          text-align: center;
+          color: black;
+          border: 0px;
+      }
       #searchBox {
       position: absolute;
       width: 350px;
@@ -134,9 +212,49 @@ html
       border: none;
       border-radius: 15px;
       }
+      .profile {
+        position: absolute;
+        left: 600px;
+        top: 35px;
       }
-
-script. 
-  - function orderDrink() {
-
-  }
+      .profile h1 {
+        font-size: 45px;
+        font-family: 'Poppins';
+        color: white;
+        line-height: 30px;
+        text-align: right;
+      }
+      .gg-profile,
+      .gg-profile::after,
+      .gg-profile::before {
+          display: block;
+          box-sizing: border-box;
+          border: 2px solid;
+          border-radius: 100px
+      }
+      .gg-profile {
+          overflow: hidden;
+          transform: scale(var(--ggs,6));
+          width: 22px;
+          height: 22px;
+          top:80px;
+          left: 850px;
+          position: relative
+      }
+      .gg-profile::after,
+      .gg-profile::before {
+          content: "";
+          position: absolute;
+          top: 2px;
+          left: 5px;
+          width: 8px;
+          height: 8px
+      }
+      .gg-profile::after {
+          border-radius: 200px;
+          top: 11px;
+          left: 0px;
+          width: 18px;
+          height: 18px
+      }
+      }

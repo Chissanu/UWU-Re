@@ -53,7 +53,7 @@ app.get('/favorite', function(req, res, next) {
 });
 
 app.get('/home', function(req, res, next) {
-    res.render('index', { drinksName: drinkList.drinkname });
+    res.render('index');
 });
 
 app.get('/register', function(req, res, next) {
@@ -72,6 +72,12 @@ function callDrinkPython(data) {
     // spawn new child process to call the python script
 
     python = spawn('python', [pythonPath, data['drinkID'], data['userID']]);
+
+    for (let i = 0; i < userList.lgenth; i++) {
+        if (userList[i].userID == data['userID']) {
+            user = userList[i]
+        }
+    }
     // res.redirect('/')
 
 }
