@@ -1,12 +1,12 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-var logger = require('morgan');
 const { Client } = require('pg')
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const { spawn } = require('child_process');
 var socket = require('socket.io');
+const fs = require('fs');
 
 const client = new Client({
     host: "localhost",
@@ -18,6 +18,7 @@ const client = new Client({
 
 let drinkList;
 let userList;
+let favdrinks = [];
 let users = [];
 const apiRoute = express.Router();
 var app = express();
@@ -26,6 +27,9 @@ var user;
 var server = app.listen(4000, function() {
     console.log('listening for requests on port 4000,');
 });
+
+queryDrinks()
+queryUsers()
 
 
 // API
@@ -40,16 +44,25 @@ app.set('view engine', 'pug');
 app.get('/', async function(req, res, next) {
     await queryDrinks()
     await queryUsers()
-    res.render('login', { title: 'Login' });
+    res.render('login');
 });
 
 app.get('/browse', async function(req, res, next) {
     await queryDrinks()
-    res.render('browse', { drinks: drinkList, userObj: user});
+    fs.readFile('user.json', (err, data) => {
+        if (err) throw err;
+        let user = JSON.parse(data);
+        res.render('browse', { drinks: drinkList, userObj: user});
+    });
 });
 
-app.get('/favorite', function(req, res, next) {
-    res.render('favorite');
+app.get('/favorite', async function(req, res, next) {
+    fs.readFile('user.json', (err, data) => {
+        if (err) throw err;
+        let user = JSON.parse(data);
+        getFavDrinks()
+        res.render('favorite', { drinks: favdrinks, userObj: user});
+    });
 });
 
 app.get('/home', function(req, res, next) {
@@ -73,22 +86,40 @@ function callDrinkPython(data) {
 
     python = spawn('python', [pythonPath, data['drinkID'], data['userID']]);
 
-    for (let i = 0; i < userList.lgenth; i++) {
+    for (let i = 0; i < userList.length; i++) {
         if (userList[i].userID == data['userID']) {
             user = userList[i]
         }
     }
+    console.log("Completed")
     // res.redirect('/')
 
 }
 
+
 // Database functions
 client.connect()
+
+async function getFavDrinks(drinkIDArr) {
+    try {
+        for (let i = 0; i < drinkIDArr.length; i++) {
+            sql = `select * from drink_tables where drinkid = ${drinkIDArr[i]};`
+            const res = await client.query(sql);
+            favdrinks.push(res.rows[0])
+        }
+    } catch {
+        console.log("Error on getting favorite drinks from DB")
+    } finally {
+        console.log("Completed")
+        console.log(favdrinks)
+    }
+}
+
 async function queryDrinks() {
     try {
         const res = await client.query(`Select * from drink_tables`);
         drinkList = res.rows
-        console.log("Successfully retrive data from DB")
+        console.log("Successfully retrieve data from DB")
     } catch {
         console.log("Error on getting drinks from DB")
     }
@@ -98,11 +129,23 @@ async function queryUsers() {
     try {
         const res = await client.query(`Select * from users`);
         userList = res.rows
-        console.log("Successfully retrive users from DB")
+        console.log("Successfully retrieve users from DB")
     } catch {
         console.log("Error on getting users from DB")
     }
 }
+
+const insertFavDrink = async(userID, drinkID) => {
+    let sql = `UPDATE users SET favdrinkid = array_append(favdrinkid,${drinkID}) where userid = ${userID}`
+    // console.log(sql)
+    try { // gets connection
+        await client.query(sql); // sends queries
+        return true;
+    } catch (error) {
+        console.error(error.stack);
+        return false;
+    }
+};
 
 const insertUser = async(userName, userPass) => {
     try { // gets connection
@@ -113,8 +156,6 @@ const insertUser = async(userName, userPass) => {
     } catch (error) {
         console.error(error.stack);
         return false;
-    } finally {
-        await client.end(); // closes connection
     }
 };
 
@@ -149,6 +190,10 @@ apiRoute.post("/login", (req, res) => {
         }
     }
     if (!user) return res.redirect("/?error=invalid credentials");
+    const data = JSON.stringify(user);
+    fs.writeFileSync('user.json', data);
+    console.log(data.favdrinkid)
+    getFavDrinks(data.favdrinkid)
     res.redirect("/home");
 });
 
@@ -168,6 +213,11 @@ io.on('connection', (socket) => {
     socket.on('order', function(data) {
         // console.log(data);
         callDrinkPython(data);
+    });
+
+    socket.on('fav', function(data) {
+        console.log(data);
+        insertFavDrink(data['userID'],data['drinkID'])
     });
   });
 

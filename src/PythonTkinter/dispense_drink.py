@@ -84,7 +84,7 @@ def genRandomDrink(val):
 def writeToFile(val1,val2):
     data = {val1:val2}
 
-    with open("drinkTsest.json", 'w') as outfile:
+    with open("drinkTest.json", 'w') as outfile:
         json.dump(data, outfile, indent=4)
     
 writeToFile(sys.argv[1],sys.argv[2])
