@@ -88,7 +88,7 @@ class DispenseDrink:
             print(drinkCommand)
             return arr
 
-# uwu = DispenseDrink()
+uwu = DispenseDrink()
 # # print(uwu.genRandomDrink(10,10))
-# uwu.handler(sys.argv[1],sys.argv[2],sys.argv[3])
+uwu.handler(sys.argv[1],sys.argv[2],sys.argv[3])
 

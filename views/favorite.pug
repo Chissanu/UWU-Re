@@ -7,8 +7,8 @@ html
     link(rel='stylesheet', href='https://css.gg/profile.css')
     i.gg-profile
     .profile
-      h1= userObj.username
-      h1= "Coins: " + userObj.usercoins
+      h1#username= userObj.username
+      h1#userpass= "Coins: " + userObj.usercoins
       //- h1 Test User
       //- h1= "Coins: " + 100
     script
@@ -16,10 +16,10 @@ html
 
   body
     mixin drinkItems(drinkData,itemID,top,userID)
-        .item(id="item" + itemID style="top:" + top + "px")
+        .item(id=drinkData.drinkname style="top:" + top + "px")
             form(action='/api/orderDrink' method='post')
             h1.h1=drinkData.drinkname
-            h1.h1(style='left:590px')="THB:" + drinkData.price
+            h1.h1(style='margin-left:140px')="THB:" + drinkData.price
             h2.h2="Created by:" + drinkData.creator
             h2.h2(style='top:120px')="Ingredient 1: " + drinkData.ingredientlist[0]
             h2.h2(style='top:170px')="Ingredient 2: " + drinkData.ingredientlist[1] 
@@ -27,6 +27,7 @@ html
             h2.h2(style='top:270px')="Ingredient 4: " + drinkData.ingredientlist[3]
             h2.h2(style='top:320px')="Ingredient 5: " + drinkData.ingredientlist[4]
             h2.h2(style='top:370px')="Ingredient 6: " + drinkData.ingredientlist[5]
+            button(id="fav" type="submit" style='margin-left:450px' onClick='favDrink(' + '"' + itemID + '"' + ',' + '"' + userID + '"' + ')') Favorite
             button(id="order" + itemID type="submit" onClick='orderDrink(' + '"' + itemID + '"' + ',' + '"' + userID + '"' + ')') Order
     #main-rec
         h1#browseLabel Favorite
@@ -48,169 +49,215 @@ html
       body {
       background: #859FFD;
       }
+      #username {
+        position: absolute;
+        font-size: 60px;
+      }
+      #userpass {
+        position: absolute;
+        font-size: 50px;
+        top: 50px;
+        left:-77px;
+        text-align: right;
+        white-space: nowrap;
+      }
       #main-rec {
-      position: absolute;
-      left: 4.34%;
-      right: 4.25%;
-      top: 13.61%;
-      bottom: 17.28%;
-      background: #FFB2A6;
-      border-radius: 10px;
+        position: absolute;
+        left: 4.34%;
+        right: 4.25%;
+        top: 13.61%;
+        bottom: 17.28%;
+        background: #FFB2A6;
+        border-radius: 10px;
       }
       #inner-rec {
-      position: absolute;
-      left: 2.54%;
-      right: 2.41%;
-      top: 10%;
-      bottom: 5%;
-      background: #E29D93;
-      border-radius: 10px;
-      overflow: hidden;
-      overflow-y: scroll;
+        position: absolute;
+        left: 2.54%;
+        right: 2.41%;
+        top: 10%;
+        bottom: 5%;
+        background: #E29D93;
+        border-radius: 10px;
+        overflow: hidden;
+        overflow-y: scroll;
       }
       .item {
-      position: absolute;
-      width: 810px;
-      height: 500px;
-      left: 20px;
-      top: 100px;
-      background: #9747FF;
-      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
-      border-radius: 20px;
+        position: flex;
+        width: 810px;
+        height: 520px;
+        left: 20px;
+        top: 100px;
+        background: #9747FF;
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+        border-radius: 20px;
+        margin-left: 20px;
+        margin-bottom: 30px;
+        margin-top: 20px;
       }
       .item h1 {
-      position: absolute;
-      font-size: 60px;
-      left: 30px;
-      top: -20px;
-      color: white;
+        position: flex;
+        font-size: 60px;
+        left: 30px;
+        top: -20px;
+        color: white;
+        margin-left:20px;
+        line-height: 10px;
+        display: inline-block;
       }
       .item h2 {
-      position: absolute;
-      align-items: left;
-      font-size: 50px;
-      left: 30px;
-      top: 50px;
-      font-weight: normal;
-      color: white;
+        position: flex;
+        align-items: left;
+        font-size: 50px;
+        left: 30px;
+        top: 20px;
+        font-weight: normal;
+        color: white;
+        margin-left:20px;
+        margin-top:10px;
+        line-height: 10px;
       }
       .item button {
-      position: absolute;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 5px 20px;
-      gap: 10px;
-      width: 140px;
-      height: 50px;
-      left: 650px;
-      top: 430px;
-      background: #058ED9;
-      color: white;
-      font-size: 30px;
-      border: 20px;
-      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
-      border-radius: 20px;
+        position: flex;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 5px 20px;
+        gap: 10px;
+        width: 140px;
+        height: 50px;
+        left: 650px;
+        top: 430px;
+        background: #058ED9;
+        color: white;
+        font-size: 30px;
+        border: 20px;
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+        border-radius: 20px;
+        margin-left: 50px;
+        margin-top: -250px;
+        display: inline-block;
+      }
+      .item #fav {
+        position: flex;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 5px 20px;
+        gap: 10px;
+        width: 140px;
+        height: 50px;
+        left: 500px;
+        top: 430px;
+        background:red;
+        color: white;
+        font-size: 30px;
+        border: 20px;
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+        border-radius: 20px;
+        display: inline-block;
       }
       #browseLabel {
-      /* Browse */
-      position: absolute;
-      width: 156px;
-      height: 60px;
-      left: 330px;
-      top: 0px;
-      font-family: 'Poppins';
-      font-style: normal;
-      font-weight: 600;
-      font-size: 80px;
-      line-height: 60px;
-      /* identical to box height */
-      text-align: center;
-      letter-spacing: 0.04em;
-      color: #000000;
+        /* Browse */
+        position: absolute;
+        width: 156px;
+        height: 60px;
+        left: 330px;
+        top: 0px;
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 80px;
+        line-height: 60px;
+        /* identical to box height */
+        text-align: center;
+        letter-spacing: 0.04em;
+        color: #000000;
       }
       #favoriteBtn {
-          display: flex;
-          flex-direction: row;
-          justify-content: center;
-          align-items: center;
-          padding: 13px 58px;
-          gap: 10px;
-          position: absolute;
-          width: 300px;
-          height: 200px;
-          left: -20px;
-          top: 1550px;
-          background: #FFB2A6;
-          box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
-          border-radius: 80px;
-          font-family: 'Inter';
-          font-style: normal;
-          font-weight: 700;
-          font-size: 64px;
-          line-height: 77px;
-          text-align: center;
-          color: black;
-          border: 0px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 13px 58px;
+        gap: 10px;
+        position: absolute;
+        width: 300px;
+        height: 200px;
+        left: -20px;
+        top: 1550px;
+        background: #FFF89A;
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+        border-radius: 80px;
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 64px;
+        line-height: 77px;
+        text-align: center;
+        color: black;
+        border: 0px;
       }
       #createBtn {
-          display: flex;
-          flex-direction: row;
-          justify-content: center;
-          align-items: center;
-          padding: 13px 58px;
-          gap: 10px;
-          position: absolute;
-          width: 300px;
-          height: 200px;
-          left: 300px;
-          top: 1550px;
-          background: #9ADCFF;
-          box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
-          border-radius: 80px;
-          font-family: 'Inter';
-          font-style: normal;
-          font-weight: 700;
-          font-size: 64px;
-          line-height: 77px;
-          text-align: center;
-          color: black;
-          border: 0px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 13px 58px;
+        gap: 10px;
+        position: absolute;
+        width: 300px;
+        height: 200px;
+        left: 300px;
+        top: 1550px;
+        background: #9ADCFF;
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+        border-radius: 80px;
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 64px;
+        line-height: 77px;
+        text-align: center;
+        color: black;
+        border: 0px;
       }
       #homeBtn {
-          display: flex;
-          flex-direction: row;
-          justify-content: center;
-          align-items: center;
-          padding: 13px 58px;
-          gap: 10px;
-          position: absolute;
-          width: 300px;
-          height: 200px;
-          left: 620px;
-          top: 1550px;
-          background: #D35BAA;
-          box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
-          border-radius: 80px;
-          font-family: 'Inter';
-          font-style: normal;
-          font-weight: 700;
-          font-size: 64px;
-          line-height: 77px;
-          text-align: center;
-          color: black;
-          border: 0px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 13px 58px;
+        gap: 10px;
+        position: absolute;
+        width: 300px;
+        height: 200px;
+        left: 620px;
+        top: 1550px;
+        background: #D35BAA;
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+        border-radius: 80px;
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 64px;
+        line-height: 77px;
+        text-align: center;
+        color: black;
+        border: 0px;
       }
       #searchBox {
-      position: absolute;
-      width: 350px;
-      height: 50px;
-      font-size: 40px;
-      top: 20px;
-      left: 25px;
-      border: none;
-      border-radius: 15px;
+        position: flex;
+        width: 350px;
+        height: 50px;
+        font-size: 40px;
+        top: 20px;
+        left: 25px;
+        border: none;
+        border-radius: 15px;
+        margin-left: 20px;
+        margin-top: 15px;
       }
       .profile {
         position: absolute;
@@ -227,34 +274,49 @@ html
       .gg-profile,
       .gg-profile::after,
       .gg-profile::before {
-          display: block;
-          box-sizing: border-box;
-          border: 2px solid;
-          border-radius: 100px
+        display: block;
+        box-sizing: border-box;
+        border: 2px solid;
+        border-radius: 100px
       }
       .gg-profile {
-          overflow: hidden;
-          transform: scale(var(--ggs,6));
-          width: 22px;
-          height: 22px;
-          top:80px;
-          left: 850px;
-          position: relative
+        overflow: hidden;
+        transform: scale(var(--ggs,6));
+        width: 22px;
+        height: 22px;
+        top:80px;
+        left: 850px;
+        position: relative
       }
       .gg-profile::after,
       .gg-profile::before {
-          content: "";
-          position: absolute;
-          top: 2px;
-          left: 5px;
-          width: 8px;
-          height: 8px
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 5px;
+        width: 8px;
+        height: 8px
       }
       .gg-profile::after {
-          border-radius: 200px;
-          top: 11px;
-          left: 0px;
-          width: 18px;
-          height: 18px
+        border-radius: 200px;
+        top: 11px;
+        left: 0px;
+        width: 18px;
+        height: 18px
       }
       }
+
+script.
+  document.getElementById('searchBox').addEventListener('keyup', () => search())
+  function search() {
+    let input = document.getElementById('searchBox').value
+    let itemList = document.getElementById('inner-rec').getElementsByTagName('div')
+    //- console.log(itemList[0].id)
+    for (let i = 0; i < itemList.length; i++) {
+      if ((itemList[i].id).includes(input)) {
+        itemList[i].style.display = "block"
+      } else {
+        itemList[i].style.display = "none"
+      }
+    }
+  }

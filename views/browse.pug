@@ -7,8 +7,8 @@ html
     link(rel='stylesheet', href='https://css.gg/profile.css')
     i.gg-profile
     .profile
-      h1= userObj.username
-      h1= "Coins: " + userObj.usercoins
+      h1#username= userObj.username
+      h1#userpass= "Coins: " + userObj.usercoins
       //- h1 Test User
       //- h1= "Coins: " + 100
     script
@@ -16,10 +16,10 @@ html
 
   body
     mixin drinkItems(drinkData,itemID,top,userID)
-        .item(id="item" + itemID style="top:" + top + "px")
+        .item(id=drinkData.drinkname style="top:" + top + "px")
             form(action='/api/orderDrink' method='post')
             h1.h1=drinkData.drinkname
-            h1.h1(style='left:590px')="THB:" + drinkData.price
+            h1.h1(style='margin-left:140px')="THB:" + drinkData.price
             h2.h2="Created by:" + drinkData.creator
             h2.h2(style='top:120px')="Ingredient 1: " + drinkData.ingredientlist[0]
             h2.h2(style='top:170px')="Ingredient 2: " + drinkData.ingredientlist[1] 
@@ -27,7 +27,7 @@ html
             h2.h2(style='top:270px')="Ingredient 4: " + drinkData.ingredientlist[3]
             h2.h2(style='top:320px')="Ingredient 5: " + drinkData.ingredientlist[4]
             h2.h2(style='top:370px')="Ingredient 6: " + drinkData.ingredientlist[5]
-            button(id="fav" type="submit" onClick='favDrink(' + '"' + itemID + '"' + ',' + '"' + userID + '"' + ')') Favorite
+            button(id="fav" type="submit" style='margin-left:450px' onClick='favDrink(' + '"' + itemID + '"' + ',' + '"' + userID + '"' + ')') Favorite
             button(id="order" + itemID type="submit" onClick='orderDrink(' + '"' + itemID + '"' + ',' + '"' + userID + '"' + ')') Order
     #main-rec
         h1#browseLabel Browse
@@ -48,6 +48,18 @@ html
       @media screen and (max-width: 1000px) {
       body {
       background: #859FFD;
+      }
+      #username {
+        position: absolute;
+        font-size: 60px;
+      }
+      #userpass {
+        position: absolute;
+        font-size: 50px;
+        top: 50px;
+        left:-120px;
+        text-align: right;
+        white-space: nowrap;
       }
       #main-rec {
       position: absolute;
@@ -70,33 +82,42 @@ html
       overflow-y: scroll;
       }
       .item {
-      position: absolute;
+      position: flex;
       width: 810px;
-      height: 500px;
+      height: 520px;
       left: 20px;
       top: 100px;
       background: #FF8787;
       box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
       border-radius: 20px;
+      margin-left: 20px;
+      margin-bottom: 30px;
+      margin-top: 20px;
       }
       .item h1 {
-      position: absolute;
+      position: flex;
       font-size: 60px;
       left: 30px;
       top: -20px;
       color: white;
+      margin-left:20px;
+      line-height: 10px;
+      display: inline-block;
       }
       .item h2 {
-      position: absolute;
+      position: flex;
       align-items: left;
       font-size: 50px;
       left: 30px;
-      top: 50px;
+      top: 20px;
       font-weight: normal;
       color: white;
+      margin-left:20px;
+      margin-top:10px;
+      line-height: 10px;
       }
       .item button {
-      position: absolute;
+      position: flex;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -113,9 +134,12 @@ html
       border: 20px;
       box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
       border-radius: 20px;
+      margin-left: 50px;
+      margin-top: -250px;
+      display: inline-block;
       }
       .item #fav {
-        position: absolute;
+        position: flex;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -132,6 +156,7 @@ html
         border: 20px;
         box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
         border-radius: 20px;
+        display: inline-block;
       }
       #browseLabel {
       /* Browse */
@@ -223,7 +248,7 @@ html
           border: 0px;
       }
       #searchBox {
-      position: absolute;
+      position: flex;
       width: 350px;
       height: 50px;
       font-size: 40px;
@@ -231,6 +256,8 @@ html
       left: 25px;
       border: none;
       border-radius: 15px;
+      margin-left: 20px;
+      margin-top: 15px;
       }
       .profile {
         position: absolute;
@@ -278,3 +305,18 @@ html
           height: 18px
       }
       }
+
+script.
+  document.getElementById('searchBox').addEventListener('keyup', () => search())
+  function search() {
+    let input = document.getElementById('searchBox').value
+    let itemList = document.getElementById('inner-rec').getElementsByTagName('div')
+    //- console.log(itemList[0].id)
+    for (let i = 0; i < itemList.length; i++) {
+      if ((itemList[i].id).includes(input)) {
+        itemList[i].style.display = "block"
+      } else {
+        itemList[i].style.display = "none"
+      }
+    }
+  }

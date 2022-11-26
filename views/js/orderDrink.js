@@ -26,3 +26,7 @@ function goFavorite() {
 function goBrowse() {
     window.location.replace("/browse");
 }
+
+function searchItem() {
+    console.log(document.getElementById("item1").value)
+}

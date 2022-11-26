@@ -60,7 +60,6 @@ class Database:
       num = random.randrange(0,len(drinkList))
       return drinkList[num]
       
-      
    def containIngredients(self,name):
       cur = con.cursor()
       sql = "select * from drink_tables where '{ingrName}'=any(ingredientlist);".format(ingrName = name)

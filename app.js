@@ -241,11 +241,14 @@ io.on('connection', (socket) => {
     socket.on('randomRecipe', function(data) {
         console.log("User chose Random Recipe");
         python = spawn('python', [pythonPath, 2,data['drinkID'], data['userID']]);
+        console.log(data)
+        console.log("Completed")
     });
 
     socket.on('randomDrink', function(data) {
         console.log("User chose Random Drink");
         python = spawn('python', [pythonPath, 3,data['drinkID'], data['userID']]);
+        console.log("Completed")
     });
   });
 

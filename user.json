@@ -2,11 +2,13 @@
     "username": "1",
     "userpass": "1",
     "userid": "10",
-    "usercoins": 1855,
+    "usercoins": 1415,
     "favdrinkid": [
         2,
         1,
         3,
-        4
+        4,
+        8,
+        1
     ]
 }
