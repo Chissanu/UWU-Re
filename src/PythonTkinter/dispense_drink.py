@@ -68,8 +68,11 @@ class DispenseDrink:
         pumpArr = self.db.getPumpList()
         drinkCommand = ""
         #Take 30 THB
-        err = self.db.takeMoney(userID,30)
-        print(err)
+        # err = self.db.takeMoney(userID,30)
+        # print(err)
+        
+        err = None
+
         #Generate pump string 31 22 12 means Pump3:1push and so on
         if err == None:
             arr = [0,0,0,0,0,0]
@@ -85,7 +88,7 @@ class DispenseDrink:
             print(drinkCommand)
             return arr
 
-uwu = DispenseDrink()
-# print(uwu.genRandomDrink(10,10))
-uwu.handler(sys.argv[1],sys.argv[2],sys.argv[3])
+# uwu = DispenseDrink()
+# # print(uwu.genRandomDrink(10,10))
+# uwu.handler(sys.argv[1],sys.argv[2],sys.argv[3])
 

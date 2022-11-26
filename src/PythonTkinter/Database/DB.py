@@ -57,7 +57,7 @@ class Database:
       
    def getRandomRecipe(self):
       drinkList = self.queryDrinkDB()
-      num = random.randrange(0,len(drinkList) + 1)
+      num = random.randrange(0,len(drinkList))
       return drinkList[num]
       
       
