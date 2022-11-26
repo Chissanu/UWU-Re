@@ -24,6 +24,17 @@ int z_max;
 int x_max_steps;
 int z_max_steps;
 
+// Initiate ratio coordinates
+int dis1Ratio = 0;
+int dis2Ratio = 0;
+int dis3Ratio = 0;
+int dis4Ratio = 0;
+int dis5Ratio = 0;
+int dis6Ratio = 0;
+
+// Initiate Current Coordinate
+int currentX = 0;
+
 void setup(){
   // set serial port to 9600
   Serial.begin(9600);
@@ -46,8 +57,15 @@ void loop(){
     input.trim();
     if (input.substring(0, 1) == "c"){
       Serial.println("Calibrating...");
-      //x_max_steps = calibrate("x", x_stepper, z_stepper);
+      x_max_steps = calibrate("x", x_stepper, z_stepper);
       z_max_steps = calibrate("z", x_stepper, z_stepper);
+      // initiate the coordinates of dispenser
+      dispenser1 = x_max_steps * dis1Ratio
+      dispenser2 = x_max_steps * dis2Ratio
+      dispenser3 = x_max_steps * dis3Ratio
+      dispenser4 = x_max_steps * dis4Ratio
+      dispenser5 = x_max_steps * dis5Ratio
+      dispenser6 = x_max_steps * dis6Ratio
     }
   }
 }
@@ -104,3 +122,14 @@ int calibrate(String axis, Stepper x_stepper, Stepper z_stepper){
     return zMaxSteps;
   }
 }
+
+void dispense(int currentCoords, int dispenserCoords, int xMaxStep, Stepper x_stepper, Stepper z_stepper){
+  int distanceLeft = currentCoords - dispenserCoords;
+  x_stepper.step(distanceLeft);
+  while (z_max != 0){
+    
+  }
+  currentCoords = dispenserCoords;
+  
+  
+ }
