@@ -32,6 +32,9 @@ int dis4Ratio = 0;
 int dis5Ratio = 0;
 int dis6Ratio = 0;
 
+//Initiate dispenser array
+int dispenser[6];
+
 // Initiate Current Coordinate
 int currentX = 0;
 
@@ -60,12 +63,9 @@ void loop(){
       x_max_steps = calibrate("x", x_stepper, z_stepper);
       z_max_steps = calibrate("z", x_stepper, z_stepper);
       // initiate the coordinates of dispenser
-      dispenser1 = x_max_steps * dis1Ratio
-      dispenser2 = x_max_steps * dis2Ratio
-      dispenser3 = x_max_steps * dis3Ratio
-      dispenser4 = x_max_steps * dis4Ratio
-      dispenser5 = x_max_steps * dis5Ratio
-      dispenser6 = x_max_steps * dis6Ratio
+      dispenser[6] = ((x_max_steps * dis1Ratio), (x_max_steps * dis2Ratio), (x_max_steps * dis3Ratio), (x_max_steps * dis4Ratio), (x_max_steps * dis5Ratio), (x_max_steps * dis6Ratio));
+    } else if (input.substring(0, 1) == "d"){
+      dispense(currentX, dispenser[input.substring(1, 2).toInt()], x_max_steps, x_stepper, z_stepper);
     }
   }
 }
@@ -127,9 +127,9 @@ void dispense(int currentCoords, int dispenserCoords, int xMaxStep, Stepper x_st
   int distanceLeft = currentCoords - dispenserCoords;
   x_stepper.step(distanceLeft);
   while (z_max != 0){
-    
+    z_stepper.step(-1); // push the dispenser until the platform hits the dispenser
   }
+  delay(5000);
+  z_stepper.step(1000); // go to the initial level
   currentCoords = dispenserCoords;
-  
-  
  }
