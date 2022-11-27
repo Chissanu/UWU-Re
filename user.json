@@ -1,11 +1,9 @@
 {
     "username": "1",
     "userpass": "1",
-    "userid": "11",
+    "userid": "6",
     "usercoins": 0,
     "favdrinkid": [
-        1,
-        2,
-        3
+        1
     ]
 }
