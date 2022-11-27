@@ -61,7 +61,7 @@ class DispenseDrink:
     
     def randomRecipe(self,userID):
         randomRecipe = self.db.getRandomRecipe()
-        self.dispense(randomRecipe[1],userID)
+        # self.dispense(randomRecipe[1],userID)
         self.writeToFile(randomRecipe[1],userID)
     
     def genRandomDrink(self,val,userID):
@@ -88,14 +88,12 @@ class DispenseDrink:
             #print(drinkCommand)
             data = {
                 "user" : userID,
-                "drink": arr
+                "drink": (pumpArr,arr)
             }
             with open("DRINK.json", 'w') as outfile:
                 json.dump(data, outfile, indent=4)
             return arr
 
 uwu = DispenseDrink()
-# # print(uwu.genRandomDrink(10,10))
-# uwu.handler(sys.argv[1],sys.argv[2],sys.argv[3])
-uwu.genRandomDrink(10,10)
+uwu.handler(sys.argv[1],sys.argv[2],sys.argv[3])
 

@@ -2,18 +2,61 @@
     "user": {
         "username": "1",
         "userpass": "1",
-        "userid": "10",
-        "usercoins": 1415,
+        "userid": "11",
+        "usercoins": 0,
         "favdrinkid": [
+            1,
+            1,
             2,
             1,
-            3,
-            4,
-            8,
-            1
+            3
         ]
     },
     "drinks": [
+        {
+            "drinkname": "CustomDrink1",
+            "drinkid": "1",
+            "price": 55,
+            "creator": "Unknown",
+            "ingredientlist": [
+                "Juice",
+                "Tea",
+                "Coffee",
+                "Cider",
+                "Sodar",
+                "Water"
+            ],
+            "timespressed": [
+                1,
+                2,
+                1,
+                3,
+                4,
+                3
+            ]
+        },
+        {
+            "drinkname": "CustomDrink1",
+            "drinkid": "1",
+            "price": 55,
+            "creator": "Unknown",
+            "ingredientlist": [
+                "Juice",
+                "Tea",
+                "Coffee",
+                "Cider",
+                "Sodar",
+                "Water"
+            ],
+            "timespressed": [
+                1,
+                2,
+                1,
+                3,
+                4,
+                3
+            ]
+        },
         {
             "drinkname": "CustomDrink2",
             "drinkid": "2",
@@ -61,72 +104,6 @@
         {
             "drinkname": "CustomDrink3",
             "drinkid": "3",
-            "price": 55,
-            "creator": "Unknown",
-            "ingredientlist": [
-                "Juice",
-                "Tea",
-                "Coffee",
-                "Cider",
-                "Sodar",
-                "Water"
-            ],
-            "timespressed": [
-                1,
-                2,
-                1,
-                3,
-                4,
-                3
-            ]
-        },
-        {
-            "drinkname": "CustomDrink4",
-            "drinkid": "4",
-            "price": 55,
-            "creator": "Unknown",
-            "ingredientlist": [
-                "Juice",
-                "Tea",
-                "Coffee",
-                "Cider",
-                "Sodar",
-                "Water"
-            ],
-            "timespressed": [
-                1,
-                2,
-                1,
-                3,
-                4,
-                3
-            ]
-        },
-        {
-            "drinkname": "CustomDrink3",
-            "drinkid": "8",
-            "price": 55,
-            "creator": "Unknown",
-            "ingredientlist": [
-                "Juice",
-                "Tea",
-                "Coffee",
-                "Cider",
-                "Sodar",
-                "Water"
-            ],
-            "timespressed": [
-                1,
-                2,
-                1,
-                3,
-                4,
-                3
-            ]
-        },
-        {
-            "drinkname": "CustomDrink1",
-            "drinkid": "1",
             "price": 55,
             "creator": "Unknown",
             "ingredientlist": [

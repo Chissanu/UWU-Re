@@ -9,8 +9,6 @@ html
     .profile
       h1#username= userObj.username
       h1#userpass= "Coins: " + userObj.usercoins
-      //- h1 Test User
-      //- h1= "Coins: " + 100
     script
       include js/orderDrink.js
 
@@ -27,7 +25,6 @@ html
             h2.h2(style='top:270px')="Ingredient 4: " + drinkData.ingredientlist[3]
             h2.h2(style='top:320px')="Ingredient 5: " + drinkData.ingredientlist[4]
             h2.h2(style='top:370px')="Ingredient 6: " + drinkData.ingredientlist[5]
-            button(id="fav" type="submit" style='margin-left:450px' onClick='favDrink(' + '"' + itemID + '"' + ',' + '"' + userID + '"' + ')') Favorite
             button(id="order" + itemID type="submit" onClick='orderDrink(' + '"' + itemID + '"' + ',' + '"' + userID + '"' + ')') Order
     #main-rec
         h1#browseLabel Favorite
@@ -134,7 +131,7 @@ html
         border: 20px;
         box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
         border-radius: 20px;
-        margin-left: 50px;
+        margin-left: 620px;
         margin-top: -250px;
         display: inline-block;
       }
