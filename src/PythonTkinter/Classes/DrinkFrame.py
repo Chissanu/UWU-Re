@@ -23,27 +23,27 @@ class DrinkFrame(tk.Frame):
         self.canvas.create_text(780, 30, text=("THB " + str(drink[2])), fill="white", font=('Helvetica 20 bold'),anchor="e")
         
         #Buy Btn
-        self.button = ctk.CTkButton(self.canvas,text="Order",bg="#058ED9",width=30,command=self.order).place(x=720,y=80)
+        self.button = ctk.CTkButton(self.canvas,text="UwU Time!",fg_color="red",width=50,height=40, text_font=('Helvetica 15 bold'), command=lambda : self.order).place(x=680,y=60)
         
         #Fav btn
         if fav == False:
             self.icon = ImageTk.PhotoImage(Image.open(os.path.join(ASSETS_PATH, "FavHeartInactive.png")).resize((20,20),Image.ANTIALIAS))
             button=  ctk.CTkButton(self.canvas, image=self.icon,width=5,height=5,text="",command= lambda: self.favorite_add(self.drink[1],2),
             borderwidth=0,fg_color = color, hover_color = color)
-            button.place(x=680,y=82)
+            button.place(x=640,y=70)
         else:
             self.icon = ImageTk.PhotoImage(Image.open(os.path.join(ASSETS_PATH, "FavHeartActive.png")).resize((20,20),Image.ANTIALIAS))
             button=  ctk.CTkButton(self.canvas, image=self.icon,width=5,height=5,text="",command= lambda: self.favorite_remove(self.drink[1],2, self.canvas),
             borderwidth=0,fg_color = color, hover_color = color)
-            button.place(x=680,y=82)
+            button.place(x=640,y=70)
         
         #Fav Text
-        self.canvas.create_text(675, 92, text="Favorite", fill="white", font=('Helvetica 15'),anchor="e")
+        self.canvas.create_text(630, 80, text="Favorite", fill="white", font=('Helvetica 15'),anchor="e")
 
         #preview button
         previewBtn = ctk.CTkButton(self.canvas,
-                            width=200,
-                            height=50,
+                            width=210,
+                            height=118,
                             text="Preview",
                             text_font=("Inter",20),
                             text_color="black",
@@ -51,7 +51,7 @@ class DrinkFrame(tk.Frame):
                             hover_color=("#ACACAC"),
                             fg_color="#E5E5E5",
                             command=lambda: self.preview(preview_canvas))
-        previewBtn.place(x=800,y=34)
+        previewBtn.place(x=820,y=0)
 
         #Pack Canvas
         self.canvas.grid()
@@ -89,30 +89,30 @@ class PumpFrame(tk.Frame):
         self.mainCanvas = mainCanvas
         self.amountText = text
         # Create your widgets
-        self.canvas = tk.Canvas(self,width=1000,height=118,background=color,highlightthickness=0)
+        self.canvas = tk.Canvas(self,width=1150,height=118,background=color,highlightthickness=0)
         
         # Sample output
         #('coffee', 10, 1)
         
         #Name
-        self.canvas.create_text(25, 60, text=drink[0], fill="white", font=('Helvetica 30 bold'),anchor="w")
+        self.canvas.create_text(25, 60, text=drink[0], fill="black", font=('Helvetica 40 bold'),anchor="w")
         
         #Remaining
-        self.remaining = self.canvas.create_text(780, 30, text=("Remaining: " + str(self.amount_remaining)), fill="white", font=('Helvetica 20 bold'),anchor="e")
+        self.remaining = self.canvas.create_text(1080, 30, text=("Remaining: " + str(self.amount_remaining)), fill="black", font=('Helvetica 20 bold'),anchor="e")
         #amount need
-        self.need = self.canvas.create_text(690, 80, text=(str(self.amount_need)), fill="white", font=('Helvetica 30 bold'),anchor="e")
+        self.need = self.canvas.create_text(990, 80, text=(str(self.amount_need)), fill="black", font=('Helvetica 30 bold'),anchor="e")
         
         #incrase btn
         self.icon = ImageTk.PhotoImage(Image.open(os.path.join(ASSETS_PATH, "increase_btn.png")).resize((51,56),Image.ANTIALIAS))
         button=  ctk.CTkButton(self.canvas, image=self.icon,width=5,height=5,text="",command=lambda: self.increase(),
         borderwidth=0,fg_color = color, hover_color = color)
-        button.place(x=730,y=50)
+        button.place(x=1030,y=50)
 
         #incrase btn
         self.icon = ImageTk.PhotoImage(Image.open(os.path.join(ASSETS_PATH, "decrease_btn.png")).resize((50,63),Image.ANTIALIAS))
         button=  ctk.CTkButton(self.canvas, image=self.icon,width=5,height=5,text="",command=lambda: self.decrease(),
         borderwidth=0,fg_color = color, hover_color = color)
-        button.place(x=580,y=46)
+        button.place(x=880,y=46)
 
         #Pack Canvas
         self.canvas.grid()
@@ -126,7 +126,7 @@ class PumpFrame(tk.Frame):
             self.total += 1
             self.amount_remaining -= 1
             self.canvas.itemconfig(self.need, text = str(self.amount_need))
-            self.canvas.itemconfig(self.remaining, text = "Remaining: " + str(self.amount_remaining), fill = "white")
+            self.canvas.itemconfig(self.remaining, text = "Remaining: " + str(self.amount_remaining), fill = "black")
 
             txt = self.mainCanvas.itemcget(self.amountText,'text')
             print(txt)
@@ -141,11 +141,47 @@ class PumpFrame(tk.Frame):
             self.total -= 1
             self.amount_remaining += 1
             self.canvas.itemconfig(self.need, text = str(self.amount_need))
-            self.canvas.itemconfig(self.remaining, text = "Remaining: " + str(self.amount_remaining), fill = "white")
+            self.canvas.itemconfig(self.remaining, text = "Remaining: " + str(self.amount_remaining), fill = "black")
         elif self.amount_remaining > self.drink[1]:
             self.amount_remaining = self.drink[1]
-            self.canvas.itemconfig(self.remaining, text = "Remaining: " + str(self.amount_remaining), fill = "white")
+            self.canvas.itemconfig(self.remaining, text = "Remaining: " + str(self.amount_remaining), fill = "black")
 
     def get_total(self):
         return self.total
+
+class DrinkSetting(tk.Frame):
+    def __init__(self, parent, drink, color):
+        super().__init__(parent)
+        self.drink = drink
+        # Create your widgets
+        self.canvas = tk.Canvas(self,width=1150,height=118,background=color,highlightthickness=0)
+        
+        # Sample output
+        #('coffee', 10, 1)
+
+        #Name
+        self.canvas.create_text(25, 60, text=drink[0], fill="white", font=('Helvetica 40 bold'),anchor="w")
+        
+        #Pump index Btn 1-6
+        x = 530
+        for i in range (6):
+            self.button = ctk.CTkButton(self.canvas, width=70, height=50, text=i + 1, text_color="black",text_font=("Inter",15), fg_color="white",command=lambda: self.order()).place(x=x,y=45)
+            x += 100
+        
+        #Fav Text
+        self.canvas.create_text(880, 20, text="Times left: " + str(drink[1]), fill="white", font=('Helvetica 15'),anchor="e")
+
+        #Pack Canvas
+        self.canvas.grid()       
+    
+    def order(self):
+        print("Order for drink", self.drink[1]) 
+        
+    def favorite_add(self,userID,drinkID):
+        db = Database()
+        db.addFavorite(userID,drinkID)
+        print("I like that shit")
+
+    def favorite_remove(self, userID, drinkID, canvas):
+        print("I don't like that")
     
