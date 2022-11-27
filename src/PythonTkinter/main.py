@@ -647,7 +647,7 @@ class App(ctk.CTk):
                             corner_radius=30,
                             hover_color=("#ACACAC"),
                             fg_color="#E5E5E5",
-                            command=lambda :self.change_frame_random(self.completeFrame, "main"))
+                            command=lambda :self.change_frame(self.completeFrame, "main"))
         save_btn.place(x=200,y=750)
 
         #input name bar
@@ -695,8 +695,8 @@ class App(ctk.CTk):
             self.mainFrame.pack(fill="both", expand=1)
             self.mainCanvas.pack(fill="both", expand=1)
         elif newFrame == "create":
-            self.completeFrame.pack(fill="both", expand=1)
-            self.completeCanvas.pack(fill="both", expand=1)
+            self.createFrame.pack(fill="both", expand=1)
+            self.createCanvas.pack(fill="both", expand=1)
         elif newFrame == "setting":
             self.settingFrame.pack(fill="both", expand=1)
             self.settingCanvas.pack(fill="both", expand=1)
