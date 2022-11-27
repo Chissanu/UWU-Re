@@ -179,10 +179,12 @@ class App(ctk.CTk):
         x = 30
         y = 20
         altura = 0
+        self.browse_list = []
         for drink in browseData:
             altura = altura + 150
-            frame = DrinkFrame(second_frame_browse,drink, "#FF8787", self.browseIngredientCanvas)
-            frame.place(x=x,y=y)
+            browse_drink_frame = DrinkFrame(second_frame_browse,drink, "#FF8787", self.browseIngredientCanvas, False)
+            self.browse_list.append(browse_drink_frame)
+            browse_drink_frame.place(x=x,y=y)
             y += 150
         second_frame_browse.configure(height=altura)
         
@@ -266,10 +268,12 @@ class App(ctk.CTk):
         x = 30
         y = 20
         altura = 0
+        self.favorite_list = []
         for drink in favData:
             altura = altura + 150
-            frame = DrinkFrame(second_frame_favorite,drink, "#554994", self.favoriteIngredientCanvas)
-            frame.place(x=x,y=y)
+            fav_drink_frame = DrinkFrame(second_frame_favorite,drink, "#554994", self.favoriteIngredientCanvas, True)
+            self.favorite_list.append(fav_drink_frame)
+            fav_drink_frame.place(x=x,y=y)
             y += 150
         second_frame_favorite.configure(height=altura)
         
@@ -327,7 +331,7 @@ class App(ctk.CTk):
                             command=lambda :self.change_frame_random(self.randomFrame, "random recipe"))
         Recipe_btn.place(x=400,y=400)
         
-        Recipe_btn = ctk.CTkButton(self.randomChoice,
+        Drink_btn = ctk.CTkButton(self.randomChoice,
                             width=200,
                             height=80,
                             text="Random Drink",
@@ -337,7 +341,7 @@ class App(ctk.CTk):
                             hover_color=("#ACACAC"),
                             fg_color="#E5E5E5",
                             command=lambda :self.change_frame_random(self.randomFrame, "random drink"))
-        Recipe_btn.place(x=400,y=600)
+        Drink_btn.place(x=400,y=600)
 
         home_button =  ctk.CTkButton(self.randomCanvas, image=self.home_icon,width=5,height=5,text="",command=lambda :self.change_frame(self.randomFrame, "main"),
         borderwidth=0,fg_color = BLUE_BG, hover_color = BLUE_BG)
@@ -371,8 +375,19 @@ class App(ctk.CTk):
         
 
         #button
-        self.button(1400, 400, "UwU Time!", self.RecipeCanvas, self.RecipeFrame, "main")
+        self.UwU_timeBtn(1400, 400, self.RecipeCanvas)
         self.button(1400, 600, "back!", self.RecipeCanvas, self.RecipeFrame, "random")
+        Recipe_btn = ctk.CTkButton(self.RecipeCanvas,
+                            width=200,
+                            height=80,
+                            text="Random Recipe",
+                            text_font=("Inter",50),
+                            text_color="black",
+                            corner_radius=30,
+                            hover_color=("#ACACAC"),
+                            fg_color="#E5E5E5",
+                            command=lambda :self.change_frame_random(self.RecipeFrame, "random recipe"))
+        Recipe_btn.place(x=1400,y=600)
         home_button =  ctk.CTkButton(self.RecipeCanvas, image=self.home_icon,width=5,height=5,text="",command=lambda :self.change_frame(self.RecipeFrame, "main"),
         borderwidth=0,fg_color = BLUE_BG, hover_color = BLUE_BG)
         home_button.place(x=1750,y=970)
@@ -398,8 +413,19 @@ class App(ctk.CTk):
         self.DrinkInside.place(x=50, y=200)
 
         #button
-        self.button(1400, 400, "UwU Time!", self.DrinkCanvas, self.DrinkFrame, "main")
+        self.UwU_timeBtn(1400, 400, self.DrinkCanvas)
         self.button(1400, 600, "back", self.DrinkCanvas, self.DrinkFrame, "random")
+        Drink_btn = ctk.CTkButton(self.DrinkCanvas,
+                            width=200,
+                            height=80,
+                            text="Random Drink",
+                            text_font=("Inter",50),
+                            text_color="black",
+                            corner_radius=30,
+                            hover_color=("#ACACAC"),
+                            fg_color="#E5E5E5",
+                            command=lambda :self.change_frame_random(self.DrinkFrame, "random drink"))
+        Drink_btn.place(x=1400,y=600)                    
         home_button =  ctk.CTkButton(self.DrinkCanvas, image=self.home_icon,width=5,height=5,text="",command=lambda :self.change_frame(self.DrinkFrame, "main"),
         borderwidth=0,fg_color = BLUE_BG, hover_color = BLUE_BG)
         home_button.place(x=1750,y=970)
@@ -413,7 +439,7 @@ class App(ctk.CTk):
         randomDrinkName.place(x=100, y=100)
         self.DrinkInside.create_text(50, 50, text = "ingredient", fill="black",anchor='w', font=('Inter 30 bold'))
 
-        # Search bar
+        #input name bar
         entry = ctk.CTkEntry(master=self.DrinkFrame,
                                placeholder_text="Put drink name here",
                                width=300,
@@ -485,20 +511,35 @@ class App(ctk.CTk):
         self.createItemCanvas.create_window((0,0), window=second_frame_create, anchor="nw")
 
         #button
-        self.button(50, 250, "UwU Time!", self.createAmountCanvas, self.createFrame, "main")
+        # self.UwU_timeBtn(50, 250, self.createAmountCanvas) 
         home_button =  ctk.CTkButton(self.createCanvas, image=self.home_icon,width=5,height=5,text="",command=lambda :self.change_frame(self.createFrame, "main"),
         borderwidth=0,fg_color = BLUE_BG, hover_color = BLUE_BG)
         home_button.place(x=1750,y=970)
         
+        self.totalAmount = self.createAmountCanvas.create_text(250, 100, text='0', fill="black",anchor='e', font=('Inter 50 bold'))
         x = 30
         y = 20
         altura = 0
+        arr = []
         for drink in pumpData:
             altura = altura + 150
-            frame = PumpFrame(second_frame_create, drink, "#554994")
+            frame = PumpFrame(second_frame_create, drink, "#554994",self.createAmountCanvas,self.totalAmount)
+            arr.append(frame)
             frame.place(x=x,y=y)
             y += 150
         second_frame_create.configure(height=altura)
+
+        UwUBtn = ctk.CTkButton(self.createAmountCanvas,
+                    width=200,
+                    height=80,
+                    text="UwU Time!!",
+                    text_font=("Inter",50), 
+                    text_color="black",
+                    corner_radius=30,
+                    hover_color=("#ACACAC"),
+                    fg_color="#E5E5E5",
+                    command=lambda :self.getDrink(arr))
+        UwUBtn.place(x=50,y=250)  
         
         #Frame Label
         settingLab = ctk.CTkLabel(self.createItemFrame,text="Create",text_font=("Inter",40, "bold"),text_color="black")
@@ -553,19 +594,74 @@ class App(ctk.CTk):
         borderwidth=0,fg_color = BLUE_BG, hover_color = BLUE_BG)
         home_button.place(x=1750,y=970)
         
-        x = 30
-        y = 20
-        altura = 0
-        for drink in pumpData:
-            altura = altura + 150
-            frame = PumpFrame(second_frame_setting, drink, "#554994")
-            frame.place(x=x,y=y)
-            y += 150
-        second_frame_setting.configure(height=altura)
+        # x = 30
+        # y = 20
+        # altura = 0
+        # for drink in pumpData:
+        #     altura = altura + 150
+        #     frame = PumpFrame(second_frame_setting, drink, "#554994")
+        #     frame.place(x=x,y=y)
+        #     y += 150
+        # second_frame_setting.configure(height=altura)
         
         #Frame Label
         settingLab = ctk.CTkLabel(self.settingItemFrame,text="Setting",text_font=("Inter",40, "bold"),text_color="black")
         settingLab.place(x=50,y=10)
+
+        """
+        ======================================
+                    Complete Frame
+        ======================================
+        """
+        #Frame & Canvas creation
+        self.completeFrame = ctk.CTkFrame(self,width=WIDTH,height=HEIGHT,fg_color=BLUE_BG)
+        self.completeCanvas = ctk.CTkCanvas(self.completeFrame,width=WIDTH,height=HEIGHT,bg=BLUE_BG,highlightthickness=0)
+
+        #Bg
+        self.completeBg = ctk.CTkCanvas(self.completeCanvas,width=1000,height=900,bg="white",highlightthickness=0)
+        self.completeBg.place(x=450,y=80)
+        
+        #Profile
+        img = ImageTk.PhotoImage(Image.open(self.profileIconPath).resize((110,110)))
+        profile.append(img)
+        self.completeBg.create_image(500,100,anchor="center",image=img)
+        self.completeBg.create_text(500, 200, text=self.profileName, fill="black",anchor="center", font=('Inter 30 bold'))
+        self.completeBg.create_text(500, 250, text=self.coin, fill="black",anchor="center", font=('Inter 30 bold'))
+
+        self.completeBg.create_text(500, 350, text="How was the Drink?", fill="black",anchor="center", font=('Inter 60 bold'))
+        
+        # #Frame Label
+        # randomLab = ctk.CTkLabel(self.randomChoice,text="Random",text_font=("Inter",40, "bold"),text_color="black")
+        # randomLab.place(x=850,y=30)
+
+        #button
+        self.button(600, 750, "discard", self.completeBg, self.completeFrame, "main")
+        
+        #save button
+        save_btn = ctk.CTkButton(self.completeBg,
+                            width=200,
+                            height=80,
+                            text="Save",
+                            text_font=("Inter",50),
+                            text_color="black",
+                            corner_radius=30,
+                            hover_color=("#ACACAC"),
+                            fg_color="#E5E5E5",
+                            command=lambda :self.change_frame(self.completeFrame, "main"))
+        save_btn.place(x=200,y=750)
+
+        #input name bar
+        entry = ctk.CTkEntry(master=self.completeBg,
+                               placeholder_text="Put drink name here",
+                               width=400,
+                               height=60,
+                               fg_color="white",
+                               text_color="black",
+                               border_width=2,
+                               text_font=("inter", 15),
+                               corner_radius=10)
+        
+        entry.place(x=300, y=600)
 
         """
         ======================================
@@ -579,7 +675,7 @@ class App(ctk.CTk):
         self.settingItemCanvas.bind_all("<MouseWheel>",self._on_mouse_wheel)
         # self.mainCanvas.pack(fill="both", expand=1)
         # self.mainFrame.pack(fill="both", expand=1)
-        
+
     def button(self, x_co, y_co, name, canvas, old_frame, new_frame):
         Btn = ctk.CTkButton(canvas,
                             width=200,
@@ -657,6 +753,29 @@ class App(ctk.CTk):
             for amount in drink_list:
                 self.DrinkInside.create_text(200, y, text = amount, fill="black",anchor='w', font=('Inter 30'))
                 y += 60
+
+    def UwU_timeBtn(self, x_co, y_co, canvas):
+        UwUBtn = ctk.CTkButton(canvas,
+                            width=200,
+                            height=80,
+                            text="UwU Time!!",
+                            text_font=("Inter",50),
+                            text_color="black",
+                            corner_radius=30,
+                            hover_color=("#ACACAC"),
+                            fg_color="#E5E5E5",
+                            command=lambda :self.dispense_drink())
+        UwUBtn.place(x=x_co,y=y_co)
+    
+    def getDrink(self,arr):
+        total = 0
+        tempArr = []
+        for item in arr:
+            total += item.get_total()
+            tempArr.append(item.get_total())
+
+    def dispense_drink(self):
+        pass
 
     def signin(self):
         print("button pressed")
