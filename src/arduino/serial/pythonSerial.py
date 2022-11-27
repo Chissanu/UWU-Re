@@ -1,7 +1,10 @@
-#!/usr/bin/env python3
+"""
+# !/usr/bin/env python3
+"""
 import serial
 import time
-from src.PythonTkinter.dispense_drink import DispenseDrink
+from Classes.dispense_drink import DispenseDrink
+
 
 
 if __name__ == '__main__':
