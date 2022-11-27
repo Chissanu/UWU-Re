@@ -1,0 +1,53 @@
+{
+    "pumpList": [
+        {
+            "name": "juice",
+            "leftovers": 8,
+            "pumpid": 2
+        },
+        {
+            "name": "tea",
+            "leftovers": 6,
+            "pumpid": 3
+        },
+        {
+            "name": "coffee",
+            "leftovers": 8,
+            "pumpid": 1
+        },
+        {
+            "name": "cider",
+            "leftovers": 4,
+            "pumpid": 4
+        },
+        {
+            "name": "sodar",
+            "leftovers": 2,
+            "pumpid": 5
+        },
+        {
+            "name": "water",
+            "leftovers": 4,
+            "pumpid": 6
+        }
+    ],
+    "drinks": [
+        2,
+        3,
+        1,
+        1,
+        2,
+        1
+    ],
+    "user": {
+        "username": "1",
+        "userpass": "1",
+        "userid": "11",
+        "usercoins": 0,
+        "favdrinkid": [
+            1,
+            2,
+            3
+        ]
+    }
+}

@@ -20,6 +20,7 @@ const client = new Client({
 
 let drinkList;
 let userList;
+let pumpList;
 let users = [];
 const apiRoute = express.Router();
 var app = express();
@@ -31,6 +32,7 @@ var server = app.listen(4000, function() {
 
 queryDrinks()
 queryUsers()
+queryPump()
 setInterval(updateUser, 2000);
 // API
 app.use(cookieParser());
@@ -52,7 +54,6 @@ app.get('/browse', async function(req, res, next) {
     fs.readFile('user.json', (err, data) => {
         if (err) throw err;
         let user = JSON.parse(data);
-        console.log(user)
         res.render('browse', { drinks: drinkList, userObj: user });
     });
 });
@@ -73,11 +74,6 @@ app.get('/favorite', async function(req, res, next) {
         }
         res.render('favorite', { drinks: favdrinks, userObj: user });
     });
-    // fs.readFile('fav.json', (err, data) => {
-    //     if (err) throw err;
-    //     data = JSON.parse(data);
-    //     res.render('favorite', { drinks: data['drinks'], userObj: data['user'] }), 2000;
-    // });
 });
 
 app.get('/home', function(req, res, next) {
@@ -100,16 +96,38 @@ app.get('/recipe', function(req, res, next) {
     fs.readFile('DRINK.json', (err, data) => {
         if (err) throw err;
         let drink = JSON.parse(data);
+        console.log(drink)
         res.render('randomRecipe', { drink: drink['drink'][0] });
     });
 });
 
-app.get('/custom', function(req, res, next) {
-    fs.readFile('DRINK.json', (err, data) => {
+app.get('/randomDrink', async function(req, res, next) {
+    await queryPump()
+    tempArr = [0, 0, 0, 0, 0, 0]
+    pumpArr = []
+    for (let i = 0; i < 10; i++) {
+        let num = randomIntFromInterval(0, 5)
+        tempArr[num]++
+    }
+    fs.readFile('user.json', (err, data) => {
+        if (err) throw err;
+        let user = JSON.parse(data);
+        randoData = {
+            'pumpList': pumpList,
+            'drinks': tempArr,
+            'user': user
+        }
+        let save = JSON.stringify(randoData, null, 4);
+        fs.writeFileSync('random.json', save);
+        res.render('randomDrink', { drink: randoData });
+    });
+});
+
+app.get('/save', function(req, res, next) {
+    fs.readFile('random.json', (err, data) => {
         if (err) throw err;
         let drink = JSON.parse(data);
-        console.log(drink['drink'][1])
-        res.render('randomDrink', { drink: drink['drink'] });
+        res.render('complete', { drink: drink });
     });
 });
 
@@ -121,9 +139,12 @@ app.get('/complete', function(req, res, next) {
     });
 });
 
+function randomIntFromInterval(min, max) { // min and max included 
+    return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
 // Database functions
 client.connect()
-
 async function updateUser() {
     let user;
     let cur;
@@ -190,6 +211,16 @@ async function queryUsers() {
         console.log("Successfully retrieve users from DB")
     } catch {
         console.log("Error on getting users from DB")
+    }
+}
+
+async function queryPump() {
+    try {
+        const res = await client.query(`Select * from pump_list where pumpid is not null`);
+        pumpList = res.rows
+        console.log("Successfully retrieve data from DB")
+    } catch {
+        console.log("Error on getting pumps from DB")
     }
 }
 
@@ -281,7 +312,6 @@ io.on('connection', (socket) => {
         python = spawn('python', [pythonPath, 0, data['drinkID'], data['userID']]);
         python.on('exit', function() {
             socket.emit('done')
-            process.exit()
         })
     });
 
@@ -304,6 +334,12 @@ io.on('connection', (socket) => {
     socket.on('uwuTime', function(data) {
         console.log("UwU");
         python = spawn('python', [pythonPath, 1, data['drinkID'], data['userID']]);
+        console.log("Completed")
+    });
+
+    socket.on('save', function(data) {
+        console.log("save");
+        console.log(data)
         console.log("Completed")
     });
 });

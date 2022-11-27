@@ -2,26 +2,44 @@
     "user": "11",
     "drink": [
         [
-            "CustomDrink4",
-            4,
-            55,
-            "Unknown",
             [
-                "Juice",
-                "Tea",
-                "Coffee",
-                "Cider",
-                "Sodar",
-                "Water"
+                "juice",
+                8,
+                2
             ],
             [
-                1,
-                2,
-                1,
-                3,
-                4,
+                "tea",
+                6,
                 3
+            ],
+            [
+                "coffee",
+                8,
+                1
+            ],
+            [
+                "cider",
+                4,
+                4
+            ],
+            [
+                "sodar",
+                2,
+                5
+            ],
+            [
+                "water",
+                4,
+                6
             ]
+        ],
+        [
+            0,
+            2,
+            3,
+            0,
+            3,
+            2
         ]
     ]
 }

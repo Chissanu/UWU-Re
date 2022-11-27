@@ -4,10 +4,10 @@ html
     title UwU:Re
     script(src='./socket.io/socket.io.js')
     script
-      include js/random.js
+      include js/recipe.js
   body
     #main-rec
-      h1#drinknameLabel Random Drink
+      h1#drinknameLabel Completed!
       #inner-rec
         h1 Ingredients:
         h2=drink['pumpList'][0]['name'] + ": " + drink['drinks'][0] * 30 + 'ml'
@@ -16,7 +16,8 @@ html
         h2=drink['pumpList'][3]['name'] + ": " + drink['drinks'][3] * 30 + 'ml'
         h2=drink['pumpList'][4]['name'] + ": " + drink['drinks'][4] * 30 + 'ml'
         h2=drink['pumpList'][5]['name'] + ": " + drink['drinks'][5] * 30 + 'ml'
-        button#uwu_button(onClick='uwu()') UwU Time!
+        input#nameBox(type='text', placeholder='Enter a name')
+        button#save_button(onClick='save(' + drink['user'].username + ')') Save
         button#homeBtn(onClick='goHome()') Home
 
     style.
@@ -83,17 +84,17 @@ html
       letter-spacing: 0.0em;
       color: #000000;
       }
-      #searchBox {
+      #nameBox {
       position: absolute;
       width: 350px;
       height: 50px;
       font-size: 40px;
-      top: 20px;
-      left: 200px;
-      border: none;
+      top: 920px;
+      left: 260px;
+      border: 3px solid #ccc;
       border-radius: 20px;
       }
-      #uwu_button {
+      #save_button {
       position: absolute;
       display: flex;
       flex-direction: column;

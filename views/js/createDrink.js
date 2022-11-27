@@ -24,5 +24,5 @@ function randomRecipe(drinkID, userID) {
 
 function randomDrink(drinkID, userID) {
     socket.emit('randomDrink', { drinkID: drinkID, userID: userID })
-    window.location.replace("/custom");
+    window.location.replace("/randomDrink");
 }

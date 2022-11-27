@@ -9,15 +9,12 @@ html
     .profile
       h1#username= userObj.username
       h1#userpass= "Coins: " + userObj.usercoins
-      //- h1 Test User
-      //- h1= "Coins: " + 100
     script
       include js/orderDrink.js
 
   body
     mixin drinkItems(drinkData,itemID,top,userID)
         .item(id=drinkData.drinkname style="top:" + top + "px")
-            form(action='/api/orderDrink' method='post')
             h1.h1=drinkData.drinkname
             h1.h1(style='margin-left:140px')="THB:" + drinkData.price
             h2.h2="Created by:" + drinkData.creator
