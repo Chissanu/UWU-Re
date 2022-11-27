@@ -1,10 +1,11 @@
-import random
+import random, os
 import tkinter as tk
 import customtkinter as ctk
 from PIL import Image,ImageTk
 from Database.DB import Database
 
-
+CURRENT_PATH = os.getcwd()
+ASSETS_PATH = os.path.join(CURRENT_PATH, "src", "PythonTkinter", "assets")
 class DrinkFrame(tk.Frame):
     def __init__(self, parent, drink, color, preview_canvas, fav):
         super().__init__(parent)
@@ -26,12 +27,12 @@ class DrinkFrame(tk.Frame):
         
         #Fav btn
         if fav == False:
-            self.icon = ImageTk.PhotoImage(Image.open("src\\PythonTkinter\\assets\\FavHeartInactive.png").resize((20,20),Image.ANTIALIAS))
+            self.icon = ImageTk.PhotoImage(Image.open(os.path.join(ASSETS_PATH, "FavHeartInactive.png")).resize((20,20),Image.ANTIALIAS))
             button=  ctk.CTkButton(self.canvas, image=self.icon,width=5,height=5,text="",command= lambda: self.favorite_add(self.drink[1],2),
             borderwidth=0,fg_color = color, hover_color = color)
             button.place(x=680,y=82)
         else:
-            self.icon = ImageTk.PhotoImage(Image.open("src\\PythonTkinter\\assets\\FavHeartActive.png").resize((20,20),Image.ANTIALIAS))
+            self.icon = ImageTk.PhotoImage(Image.open(os.path.join(ASSETS_PATH, "FavHeartActive.png")).resize((20,20),Image.ANTIALIAS))
             button=  ctk.CTkButton(self.canvas, image=self.icon,width=5,height=5,text="",command= lambda: self.favorite_remove(self.drink[1],2, self.canvas),
             borderwidth=0,fg_color = color, hover_color = color)
             button.place(x=680,y=82)
@@ -102,13 +103,13 @@ class PumpFrame(tk.Frame):
         self.need = self.canvas.create_text(690, 80, text=(str(self.amount_need)), fill="white", font=('Helvetica 30 bold'),anchor="e")
         
         #incrase btn
-        self.icon = ImageTk.PhotoImage(Image.open("src\\PythonTkinter\\assets\\increase_btn.png").resize((51,56),Image.ANTIALIAS))
+        self.icon = ImageTk.PhotoImage(Image.open(os.path.join(ASSETS_PATH, "increase_btn.png")).resize((51,56),Image.ANTIALIAS))
         button=  ctk.CTkButton(self.canvas, image=self.icon,width=5,height=5,text="",command=lambda: self.increase(),
         borderwidth=0,fg_color = color, hover_color = color)
         button.place(x=730,y=50)
 
         #incrase btn
-        self.icon = ImageTk.PhotoImage(Image.open("src\\PythonTkinter\\assets\\decrease_btn.png").resize((50,63),Image.ANTIALIAS))
+        self.icon = ImageTk.PhotoImage(Image.open(os.path.join(ASSETS_PATH, "decrease_btn.png")).resize((50,63),Image.ANTIALIAS))
         button=  ctk.CTkButton(self.canvas, image=self.icon,width=5,height=5,text="",command=lambda: self.decrease(),
         borderwidth=0,fg_color = color, hover_color = color)
         button.place(x=580,y=46)

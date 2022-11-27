@@ -42,8 +42,8 @@ class App(ctk.CTk):
         self.config(bg="#6482EB")
         self.attributes('-fullscreen',True)
         CURRENT_PATH = os.getcwd()
-        self.profileIconPath = os.path.join(CURRENT_PATH, "src", "PyThonTkinter", "assets", "profilePic.png")
-        ASSETS_PATH = os.path.join(CURRENT_PATH, "src", "PyThonTkinter", "assets")
+        self.profileIconPath = os.path.join(CURRENT_PATH, "src", "PythonTkinter", "assets", "profilePic.png")
+        ASSETS_PATH = os.path.join(CURRENT_PATH, "src", "PythonTkinter", "assets")
         self.home_icon = ImageTk.PhotoImage(Image.open(os.path.join(ASSETS_PATH, "Home_Btn.png")).resize((70,63)))
         # self.profileName = name
         # self.coin = coin
@@ -562,7 +562,7 @@ class App(ctk.CTk):
         self.settingCanvas.create_text(1750, 100, text=self.coin, fill="black",anchor='e', font=('Inter 30 bold'))
 
         #gear icon
-        gear_icon = ImageTk.PhotoImage(Image.open(os.path.join(ASSETS_PATH, "Gear.png")).resize((297,308),Image.Resampling.LANCZOS))
+        gear_icon = ImageTk.PhotoImage(Image.open(os.path.join(ASSETS_PATH, "Gear.png")).resize((297,308)))
         profile.append(gear_icon)
         self.settingCanvas.create_image(1495,300,anchor=tk.NW,image=gear_icon)
         
