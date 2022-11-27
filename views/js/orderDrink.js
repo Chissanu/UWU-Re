@@ -25,3 +25,7 @@ function goFavorite() {
 function goBrowse() {
     window.location.replace("/browse");
 }
+
+socket.on('done', function(data) {
+    window.location.replace("/complete");
+});

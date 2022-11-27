@@ -110,27 +110,17 @@ app.get('/complete', function(req, res, next) {
     });
 });
 
-// Call Python functions
-// function callDrinkPython(data) {
-//     // spawn new child process to call the python script
-//     python = spawn('python', [pythonPath, 0, data['drinkID'], data['userID']]);
-
-//     for (let i = 0; i < userList.length; i++) {
-//         if (userList[i].userID == data['userID']) {
-//             user = userList[i]
-//         }
-//     }
-// }
-
-
 // Database functions
 client.connect()
 async function getFavDrinks() {
+    console.log("FAVORITE LOADED")
     let tempArr = []
+    let user
     fs.readFile('user.json', (err, data) => {
         if (err) throw err;
-        let user = JSON.parse(data);
-    });
+        user = JSON.parse(data);
+    })
+    console.log(user)
     try {
         for (let i = 0; i < user.favdrinkid.length; i++) {
             sql = `select * from drink_tables where drinkid = ${user.favdrinkid[i]};`
@@ -141,11 +131,10 @@ async function getFavDrinks() {
             'user': user,
             'drinks': tempArr
         }
-        console.log(combinedData)
         const data = JSON.stringify(combinedData, null, 4);
         fs.writeFileSync('fav.json', data);
-    } catch {
-        console.log("Error on getting favorite drinks from DB")
+    } catch (err) {
+        console.log(err)
     }
 }
 
@@ -228,7 +217,7 @@ apiRoute.post("/login", (req, res) => {
 
     const data = JSON.stringify(user, null, 4);
     fs.writeFileSync('user.json', data);
-    getFavDrinks()
+    getFavDrinks
     res.redirect("/home");
 });
 
@@ -248,6 +237,7 @@ io.on('connection', (socket) => {
     socket.on('order', function(data) {
         python = spawn('python', [pythonPath, 0, data['drinkID'], data['userID']]);
         python.on('exit', function() {
+            socket.emit('done')
             process.exit()
         })
     });
