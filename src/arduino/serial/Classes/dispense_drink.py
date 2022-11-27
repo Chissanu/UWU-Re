@@ -94,6 +94,6 @@ class DispenseDrink:
                 json.dump(data, outfile, indent=4)
             return arr
 
-uwu = DispenseDrink()
-uwu.handler(sys.argv[1],sys.argv[2],sys.argv[3])
+# uwu = DispenseDrink()
+# uwu.handler(sys.argv[1],sys.argv[2],sys.argv[3])
 

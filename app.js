@@ -8,7 +8,8 @@ const { spawn } = require('child_process');
 var socket = require('socket.io');
 const fs = require('fs');
 var path = require('path');
-var pythonPath = path.join('src', 'PythonTkinter', 'dispense_drink.py');
+var pythonPath = path.join('src', 'arduino', 'serial', 'pythonSerial.py');
+console.log(pythonPath)
 
 const client = new Client({
     host: "localhost",
