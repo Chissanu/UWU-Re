@@ -7,7 +7,7 @@ from pathlib import Path
 from PIL import ImageTk, Image
 from Classes.DrinkFrame import DrinkFrame, PumpFrame
 from Database.DB import Database
-from dispense_drink import DispenseDrink
+from tkinter_dispenser import TkinterDispenser
 
 ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 ctk.set_default_color_theme("dark-blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -621,7 +621,7 @@ class App(ctk.CTk):
             self.RecipeFrame.pack(fill="both", expand=1)
             self.RecipeCanvas.pack(fill="both", expand=1)
         elif newFrame == "random drink":
-            dd = DispenseDrink()
+            dd = TkinterDispenser()
             random_drink = dd.genRandomDrink(10, 1)
             self.preview(self.DrinkInside, None, random_drink)
             self.DrinkFrame.pack(fill="both", expand=1)
