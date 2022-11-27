@@ -3,5 +3,9 @@
     "userpass": "1",
     "userid": "11",
     "usercoins": 0,
-    "favdrinkid": null
+    "favdrinkid": [
+        1,
+        1,
+        2
+    ]
 }
