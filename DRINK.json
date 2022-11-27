@@ -1,9 +1,16 @@
 {
-    "user": "10",
+    "user": [
+        2,
+        1,
+        1,
+        1,
+        2,
+        3
+    ],
     "drink": [
         [
-            "CustomDrink2",
-            2,
+            "CustomDrink5",
+            10,
             55,
             "Unknown",
             [

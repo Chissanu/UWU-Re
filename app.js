@@ -54,7 +54,7 @@ app.get('/browse', async function(req, res, next) {
     fs.readFile('user.json', (err, data) => {
         if (err) throw err;
         let user = JSON.parse(data);
-        res.render('browse', { drinks: drinkList, userObj: user});
+        res.render('browse', { drinks: drinkList, userObj: user });
     });
 });
 
@@ -65,7 +65,7 @@ app.get('/favorite', async function(req, res, next) {
     fs.readFile('fav.json', (err, data) => {
         if (err) throw err;
         data = JSON.parse(data);
-        res.render('favorite', { drinks: data['drinks'], userObj: data['user']}),2000;
+        res.render('favorite', { drinks: data['drinks'], userObj: data['user'] }), 2000;
     });
 });
 
@@ -81,7 +81,7 @@ app.get('/create', function(req, res, next) {
     fs.readFile('user.json', (err, data) => {
         if (err) throw err;
         let user = JSON.parse(data);
-        res.render('create', { userObj: user});
+        res.render('create', { userObj: user });
     });
 });
 
@@ -89,14 +89,22 @@ app.get('/recipe', function(req, res, next) {
     fs.readFile('DRINK.json', (err, data) => {
         if (err) throw err;
         let drink = JSON.parse(data);
-        res.render('randomRecipe',{drink:drink['drink'][0]});
+        res.render('randomRecipe', { drink: drink['drink'][0] });
+    });
+});
+
+app.get('/custom', function(req, res, next) {
+    fs.readFile('DRINK.json', (err, data) => {
+        if (err) throw err;
+        let drink = JSON.parse(data);
+        res.render('randomDrink', { drink: drink['drink'][0] });
     });
 });
 
 // Call Python functions
 function callDrinkPython(data) {
     // spawn new child process to call the python script
-    python = spawn('python', [pythonPath, 0,data['drinkID'], data['userID']]);
+    python = spawn('python', [pythonPath, 0, data['drinkID'], data['userID']]);
 
     for (let i = 0; i < userList.length; i++) {
         if (userList[i].userID == data['userID']) {
@@ -104,7 +112,7 @@ function callDrinkPython(data) {
         }
     }
     console.log("Completed")
-    // res.redirect('/')
+        // res.redirect('/')
 }
 
 
@@ -122,10 +130,12 @@ async function getFavDrinks() {
             const res = await client.query(sql);
             tempArr.push(res.rows[0])
         }
-        var combinedData = { 'user' : user,
-                             'drinks': tempArr}
+        var combinedData = {
+            'user': user,
+            'drinks': tempArr
+        }
         console.log(combinedData)
-        const data = JSON.stringify(combinedData,null,4);
+        const data = JSON.stringify(combinedData, null, 4);
         fs.writeFileSync('fav.json', data);
     } catch {
         console.log("Error on getting favorite drinks from DB")
@@ -154,7 +164,7 @@ async function queryUsers() {
 
 const insertFavDrink = async(userID, drinkID) => {
     let sql = `UPDATE users SET favdrinkid = array_append(favdrinkid,${drinkID}) where userid = ${userID}`
-    // console.log(sql)
+        // console.log(sql)
     try { // gets connection
         await client.query(sql); // sends queries
         getFavDrinks()
@@ -209,7 +219,7 @@ apiRoute.post("/login", (req, res) => {
     }
     if (!user) return res.redirect("/?error=invalid credentials");
 
-    const data = JSON.stringify(user,null,4);
+    const data = JSON.stringify(user, null, 4);
     fs.writeFileSync('user.json', data);
     getFavDrinks()
     res.redirect("/home");
@@ -225,7 +235,7 @@ var io = socket(server);
 io.on('connection', (socket) => {
     console.log('a user connected');
     socket.on('disconnect', () => {
-      console.log('user disconnected');
+        console.log('user disconnected');
     });
 
     socket.on('order', function(data) {
@@ -235,21 +245,21 @@ io.on('connection', (socket) => {
 
     socket.on('fav', function(data) {
         console.log(data);
-        insertFavDrink(data['userID'],data['drinkID'])
+        insertFavDrink(data['userID'], data['drinkID'])
     });
 
     socket.on('randomRecipe', function(data) {
         console.log("User chose Random Recipe");
-        python = spawn('python', [pythonPath, 2,data['drinkID'], data['userID']]);
+        python = spawn('python', [pythonPath, 2, data['drinkID'], data['userID']]);
         console.log(data)
         console.log("Completed")
     });
 
     socket.on('randomDrink', function(data) {
         console.log("User chose Random Drink");
-        python = spawn('python', [pythonPath, 3,data['drinkID'], data['userID']]);
+        python = spawn('python', [pythonPath, 3, data['drinkID'], data['userID']]);
         console.log("Completed")
     });
-  });
+});
 
 module.exports = app;

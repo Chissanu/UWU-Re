@@ -85,10 +85,17 @@ class DispenseDrink:
                 drinkCommand += str(i + 1) + str(arr[i])
             
             drinkCommand = "0" + drinkCommand
-            print(drinkCommand)
+            #print(drinkCommand)
+            data = {
+                "user" : userID,
+                "drink": arr
+            }
+            with open("DRINK.json", 'w') as outfile:
+                json.dump(data, outfile, indent=4)
             return arr
 
 uwu = DispenseDrink()
 # # print(uwu.genRandomDrink(10,10))
-uwu.handler(sys.argv[1],sys.argv[2],sys.argv[3])
+# uwu.handler(sys.argv[1],sys.argv[2],sys.argv[3])
+uwu.genRandomDrink(10,10)
 
