@@ -25,9 +25,8 @@ RAND_BG = "#9ADCFF"
 
 db = Database()
 pumpData = list(db.getPumpList())
-print(pumpData)
 browseData = list(db.queryDrinkDB())
-favData = list(db.getFavData(6))
+favData = list(db.getFavData(2))
 
 class App(ctk.CTk):
     # def __init__(self,name,coin):
@@ -43,7 +42,8 @@ class App(ctk.CTk):
         self.config(bg="#6482EB")
         self.attributes('-fullscreen',True)
         self.profileIconPath = str(os.path.normpath(os.getcwd() + os.sep)) + "/src/PyThonTkinter/assets/profilePic.png"
-        self.home_icon = ImageTk.PhotoImage(Image.open("src\\PythonTkinter\\assets\\Home_btn.png").resize((70,63),Image.ANTIALIAS))
+        ASSETS_PATH = str(os.path.normpath(os.getcwd() + os.sep)) + "/src/PyThonTkinter/assets/"
+        self.home_icon = ImageTk.PhotoImage(Image.open(ASSETS_PATH + "Home_Btn.png").resize((70,63)))
         # self.profileName = name
         # self.coin = coin
         self.profileName = "Chissanu"
@@ -520,7 +520,7 @@ class App(ctk.CTk):
         self.settingCanvas.create_text(1750, 100, text=self.coin, fill="black",anchor='e', font=('Inter 30 bold'))
 
         #gear icon
-        gear_icon = ImageTk.PhotoImage(Image.open("src\\PythonTkinter\\assets\\Gear.png").resize((297,308),Image.ANTIALIAS))
+        gear_icon = ImageTk.PhotoImage(Image.open(ASSETS_PATH + "Gear.png").resize((297,308),Image.Resampling.LANCZOS))
         profile.append(gear_icon)
         self.settingCanvas.create_image(1495,300,anchor=tk.NW,image=gear_icon)
         

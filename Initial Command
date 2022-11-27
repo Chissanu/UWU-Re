@@ -4,6 +4,9 @@ psql -U admin -d uwure
 # Admin login password
 uwure
 
+# add favdrink
+update users set favdrinkid = array_append(favdrinkid, <DrinkID>) where userid = <UsersID>; 
+
 # To check table lists
 \dt
 

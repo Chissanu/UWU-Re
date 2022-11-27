@@ -25,7 +25,7 @@ class DrinkFrame(tk.Frame):
         
         #Fav btn
         self.icon = ImageTk.PhotoImage(Image.open("src\\PythonTkinter\\assets\\heart.png").resize((20,20),Image.ANTIALIAS))
-        button=  ctk.CTkButton(self.canvas, image=self.icon,width=5,height=5,text="",command= self.favorite,
+        button=  ctk.CTkButton(self.canvas, image=self.icon,width=5,height=5,text="",command= lambda: self.favorite(self.drink[1],2),
         borderwidth=0,fg_color = color, hover_color = color)
         button.place(x=680,y=82)
         
@@ -65,7 +65,7 @@ class DrinkFrame(tk.Frame):
         
     def favorite(self,userID,drinkID):
         db = Database()
-        #db.addFavorite(userID,drinkID)
+        db.addFavorite(userID,drinkID)
         print("I like that shit")
 
 
