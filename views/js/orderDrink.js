@@ -7,6 +7,7 @@ function orderDrink(drinkID, userID) {
 }
 
 function favDrink(drinkID, userID) {
+    console.log(userID)
     socket.emit('fav', { drinkID: drinkID, userID: userID })
 }
 

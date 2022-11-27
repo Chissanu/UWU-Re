@@ -31,8 +31,7 @@ var server = app.listen(4000, function() {
 
 queryDrinks()
 queryUsers()
-
-
+setInterval(updateUser, 2000);
 // API
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -53,19 +52,32 @@ app.get('/browse', async function(req, res, next) {
     fs.readFile('user.json', (err, data) => {
         if (err) throw err;
         let user = JSON.parse(data);
+        console.log(user)
         res.render('browse', { drinks: drinkList, userObj: user });
     });
 });
 
 app.get('/favorite', async function(req, res, next) {
-    let user;
-    let favdrinks;
-    getFavDrinks()
-    fs.readFile('fav.json', (err, data) => {
+    await queryDrinks()
+    fs.readFile('user.json', (err, data) => {
         if (err) throw err;
-        data = JSON.parse(data);
-        res.render('favorite', { drinks: data['drinks'], userObj: data['user'] }), 2000;
+        let user = JSON.parse(data);
+        console.log(user['favdrinkid'])
+        let favdrinks = []
+        for (let i = 0; i < user['favdrinkid'].length; i++) {
+            for (let j = 0; j < drinkList.length; j++) {
+                if (user['favdrinkid'][i] == drinkList[j].drinkid) {
+                    favdrinks.push(drinkList[j])
+                }
+            }
+        }
+        res.render('favorite', { drinks: favdrinks, userObj: user });
     });
+    // fs.readFile('fav.json', (err, data) => {
+    //     if (err) throw err;
+    //     data = JSON.parse(data);
+    //     res.render('favorite', { drinks: data['drinks'], userObj: data['user'] }), 2000;
+    // });
 });
 
 app.get('/home', function(req, res, next) {
@@ -105,13 +117,37 @@ app.get('/complete', function(req, res, next) {
     fs.readFile('DRINK.json', (err, data) => {
         if (err) throw err;
         let drink = JSON.parse(data);
-        console.log(drink['drink'][0])
         res.render('display', { drink: drink['drink'][0] });
     });
 });
 
 // Database functions
 client.connect()
+
+async function updateUser() {
+    let user;
+    let cur;
+    await queryUsers()
+    fs.readFile('user.json', (err, data) => {
+            if (err) throw err;
+            user = JSON.parse(data);
+            for (let i = 0; i < userList.length; i++) {
+                if (user.username == userList[i].username) {
+                    cur = userList[i]
+                }
+            }
+            user = { 'name': cur }
+            let save = JSON.stringify(cur, null, 4);
+            fs.writeFileSync('user.json', save);
+        })
+        // console.log(user)
+        // for (let i = 0; i < userList.length; i++) {
+        //     console.log(userList.length)
+        // }
+}
+
+
+
 async function getFavDrinks() {
     console.log("FAVORITE LOADED")
     let tempArr = []
@@ -120,7 +156,6 @@ async function getFavDrinks() {
         if (err) throw err;
         user = JSON.parse(data);
     })
-    console.log(user)
     try {
         for (let i = 0; i < user.favdrinkid.length; i++) {
             sql = `select * from drink_tables where drinkid = ${user.favdrinkid[i]};`
@@ -201,10 +236,11 @@ apiRoute.post("/register", (req, res) => {
     res.redirect("/");
 });
 
-apiRoute.post("/login", (req, res) => {
+apiRoute.post("/login", async(req, res) => {
     const { username, userpass } = req.body;
     console.log("Loggin in with this data")
     queryUsers()
+    tempArr = []
     if (!username || !userpass)
         return res.redirect("/?error=missing credentials");
 
@@ -215,9 +251,16 @@ apiRoute.post("/login", (req, res) => {
     }
     if (!user) return res.redirect("/?error=invalid credentials");
 
-    const data = JSON.stringify(user, null, 4);
+
+    for (let i = 0; i < user['favdrinkid'].length; i++) {
+        sql = `select * from drink_tables where drinkid = ${user['favdrinkid'][i]};`
+        const res = await client.query(sql);
+        tempArr.push(res.rows[0])
+    }
+    user['favdrinkid'] = tempArr
+    var data = JSON.stringify(user, null, 4);
+
     fs.writeFileSync('user.json', data);
-    getFavDrinks
     res.redirect("/home");
 });
 

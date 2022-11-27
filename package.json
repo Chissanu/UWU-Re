@@ -5,6 +5,9 @@
     "scripts": {
         "serve": "nodemon app.js"
     },
+    "nodemonConfig": {
+        "ignore": ["*.json"]
+    },
     "dependencies": {
         "body-parser": "^1.20.1",
         "cookie-parser": "~1.4.4",
