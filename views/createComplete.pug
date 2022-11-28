@@ -1,0 +1,134 @@
+doctype html
+html
+  head
+    title UwU:Re
+    script(src='./socket.io/socket.io.js')
+    script
+      include js/recipe.js
+  body
+    #main-rec
+      h1#drinknameLabel Created Completed!
+      #inner-rec
+        h1 Ingredients:
+        h2=drink['pumpList'][0]['name'] + ": "
+        //- h2=drink['pumpList'][1]['name'] + ": " + drink['drinks'][1] * 30 + 'ml'
+        //- h2=drink['pumpList'][2]['name'] + ": " + drink['drinks'][2] * 30 + 'ml'
+        //- h2=drink['pumpList'][3]['name'] + ": " + drink['drinks'][3] * 30 + 'ml'
+        //- h2=drink['pumpList'][4]['name'] + ": " + drink['drinks'][4] * 30 + 'ml'
+        //- h2=drink['pumpList'][5]['name'] + ": " + drink['drinks'][5] * 30 + 'ml'
+        input#nameBox(type='text', placeholder='Enter a name')
+        button#save_button(onClick='save(' + drink['user'].username + ')') Save
+        button#homeBtn(onClick='goHome()') Home
+
+    style.
+      @media screen and (max-width: 1000px) {
+      body {
+      background: #859FFD;
+      }
+      #main-rec {
+      position: absolute;
+      left: 4.34%;
+      right: 4.25%;
+      top: 13.61%;
+      bottom: 17.28%;
+      background: #9ADCFF;
+      border-radius: 10px;
+      }
+      h1 {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 80px;
+        line-height: 60px;
+        /* identical to box height */
+        text-align: center;
+        letter-spacing: 0.0em;
+        color: #000000;
+      }
+      h2 {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 68px;
+        line-height: 60px;
+        /* identical to box height */
+        text-align: left;
+        margin-left: 50px;
+        letter-spacing: 0.0em;
+        color: #000000;
+      }
+      #inner-rec {
+      position: absolute;
+      left: 2.54%;
+      right: 2.41%;
+      top: 10%;
+      bottom: 5%;
+      background: #FFFFFF;
+      border-radius: 10px;
+      }
+      #drinknameLabel {
+      /* Browse */
+      position: absolute;
+      display: inline-block;
+      width: 600px;
+      height: 60px;
+      left: 170px;
+      top: -10px;
+      font-family: 'Poppins';
+      font-style: normal;
+      font-weight: 600;
+      font-size: 80px;
+      line-height: 60px;
+      /* identical to box height */
+      text-align: center;
+      letter-spacing: 0.0em;
+      color: #000000;
+      }
+      #nameBox {
+      position: absolute;
+      width: 350px;
+      height: 50px;
+      font-size: 40px;
+      top: 920px;
+      left: 260px;
+      border: 3px solid #ccc;
+      border-radius: 20px;
+      }
+      #save_button {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 5px 20px;
+      gap: 10px;
+      width: 250px;
+      height: 75px;
+      left: 300px;
+      top: 1000px;
+      background: #FF4D4D;
+      color: white;
+      font-size: 30px;
+      border: 20px;
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+      border-radius: 20px;
+      }
+      #homeBtn {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 5px 20px;
+      gap: 10px;
+      width: 250px;
+      height: 75px;
+      left: 300px;
+      top: 1150px;
+      background: cyan;
+      color: white;
+      font-size: 30px;
+      border: 20px;
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+      border-radius: 20px;
+      }

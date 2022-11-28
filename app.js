@@ -93,6 +93,20 @@ app.get('/create', function(req, res, next) {
     });
 });
 
+app.get('/custom', function(req, res, next) {
+    res.render('custom');
+});
+
+app.get('/createCustom', function(req, res, next) {
+    fs.readFile('random.json', (err, data) => {
+        if (err) throw err;
+        let drink = JSON.parse(data);
+        console.log(drink['pumpList'][0].name)
+        res.render('createComplete', { drink: drink });
+    });
+});
+
+
 app.get('/recipe', function(req, res, next) {
     fs.readFile('DRINK.json', (err, data) => {
         if (err) throw err;
@@ -342,6 +356,23 @@ io.on('connection', (socket) => {
         console.log("save");
         console.log(data)
         console.log("Completed")
+    });
+
+    socket.on('total', function(info) {
+        console.log(info['totalVal'])
+        fs.readFile('user.json', (err, data) => {
+            if (err) throw err;
+            let user = JSON.parse(data);
+            randoData = {
+                'pumpList': pumpList,
+                'drinks': info['totalVal'],
+                'user': user
+            }
+            console.log(randoData)
+            let save = JSON.stringify(randoData, null, 4);
+            fs.writeFileSync('random.json', save);
+
+        });
     });
 });
 

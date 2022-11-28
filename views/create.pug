@@ -8,7 +8,7 @@ html
       h1#createLabel(font='') Create
       #inner-rec
         .item
-          button#createBtn(onClick='create(' + '"' + 0 + '"' + ',' + '"' + userObj.userid + '"' + ')') Create
+          button#createBtn(onClick='goCreate()') Create
           button#randomrecipe_button(onClick='randomRecipe(' + '"' + 0 + '"' + ',' + '"' + userObj.userid + '"' + ')') Random Recipe
           button#randomdrink_button(onClick='randomDrink(' + '"' + 0 + '"' + ',' + '"' + userObj.userid + '"' + ')') Random Drink
     button#favoriteBtn(onClick='goFavorite()') Favorite

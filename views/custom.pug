@@ -1,0 +1,193 @@
+doctype html
+html
+  head
+    title UwU:Re
+    script(src='./socket.io/socket.io.js')
+  body
+    #main-rec
+        .pump(id='pump1')
+            h1#pump1Ingredient Ingredient 1
+            h2#pump1Val 0
+            button(onClick='increase(1)') +
+            button(style='left:60px;' onClick='decrease(1)') -
+        .pump(id='pump2' style="top:250px;")
+            h1#pump2Ingredient Ingredient 2
+            h2#pump2Val 0
+            button(onClick='increase(2)') +
+            button(style='left:60px;' onClick='decrease(2)') -
+        .pump(id='pump3' style="top:480px;")
+            h1#pump3Ingredient Ingredient 3
+            h2#pump3Val 0
+            button(onClick='increase(3)') +
+            button(style='left:60px;' onClick='decrease(3)') -
+        .pump(id='pump4' style="top:710px;")
+            h1#pump4Ingredient Ingredient 4
+            h2#pump4Val 0
+            button(onClick='increase(4)') +
+            button(style='left:60px;' onClick='decrease(4)') -
+        .pump(id='pump5' style="top:940px;")
+            h1#pump5Ingredient Ingredient 5
+            h2#pump5Val 0
+            button(onClick='increase(5)') +
+            button(style='left:60px;' onClick='decrease(5)') -
+        .pump(id='pump6' style="top:1170px;")
+            h1#pump6Ingredient Ingredient 6
+            h2#pump6Val 0
+            button(onClick='increase(6)') +
+            button(style='left:60px;' onClick='decrease(6)') -
+    h1#totalText Total
+    h1#totalMl(style="top:1620px") 0/10
+    button#uwu_button(onClick='getTotal()') UwU Time!
+    button#homeBtn(onClick='goHome()') Home
+    script
+      include js/custom.js
+
+    style.
+      @media screen and (max-width: 1000px) {
+      body {
+      background: #859FFD;
+      }
+      #main-rec {
+      position: absolute;
+      left: 4.34%;
+      right: 4.25%;
+      top: 8.61%;
+      bottom: 17.28%;
+      background: white;
+      border-radius: 10px;
+      }
+      h1 {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 80px;
+        line-height: 60px;
+        /* identical to box height */
+        text-align: center;
+        letter-spacing: 0.0em;
+        color: #000000;
+      }
+      h2 {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 68px;
+        line-height: 60px;
+        /* identical to box height */
+        text-align: left;
+        margin-left: 50px;
+        letter-spacing: 0.0em;
+        color: #000000;
+      }
+      .pump {
+        position: absolute;
+        background: #80D2FF;
+        width: 855px;
+        height: 200px;
+        left:20px;
+        top:20px;
+        border-radius: 30px;
+      }
+      .pump h1 {
+        position: absolute;
+        font-size:85px;
+        left:230px;
+        top:-40px;
+      }
+      .pump h2 {
+        position:absolute;
+        left: 360px;
+        top:40px;
+      }
+      .pump button {
+        position:absolute;
+        width: 50px;
+        height:50px;
+        font-size:40px;
+        left:750px;
+        top: 100px;
+      }
+      #totalText {
+        position:absolute;
+        left:400px;
+        top:1520px;
+      }
+      #totalMl {
+        position:absolute;  
+        left:430px;
+      }
+      #inner-rec {
+      position: absolute;
+      left: 2.54%;
+      right: 2.41%;
+      top: 10%;
+      bottom: 5%;
+      background: #FFFFFF;
+      border-radius: 10px;
+      }
+      #drinknameLabel {
+      /* Browse */
+      position: absolute;
+      display: inline-block;
+      width: 600px;
+      height: 60px;
+      left: 170px;
+      top: -10px;
+      font-family: 'Poppins';
+      font-style: normal;
+      font-weight: 600;
+      font-size: 80px;
+      line-height: 60px;
+      /* identical to box height */
+      text-align: center;
+      letter-spacing: 0.0em;
+      color: #000000;
+      }
+      #searchBox {
+      position: absolute;
+      width: 350px;
+      height: 50px;
+      font-size: 40px;
+      top: 20px;
+      left: 200px;
+      border: none;
+      border-radius: 20px;
+      }
+      #uwu_button {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 5px 20px;
+      gap: 10px;
+      width: 250px;
+      height: 75px;
+      left: 580px;
+      top: 1900px;
+      background: #FF4D4D;
+      color: black;
+      font-size: 40px;
+      border: 20px;
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+      border-radius: 20px;
+      }
+      #homeBtn {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 5px 20px;
+      gap: 10px;
+      width: 250px;
+      height: 75px;
+      left: 200px;
+      top: 1900px;
+      background: cyan;
+      color: black;
+      font-size: 40px;
+      border: 20px;
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+      border-radius: 20px;
+      }

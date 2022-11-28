@@ -129,3 +129,6 @@ class Database:
       sql = "UPDATE pump_list set leftovers = leftovers - {amount} WHERE name like '{pumpID}';".format(amount = val,pumpID = name)
       cur.execute(sql)
       con.commit()
+   
+   # def setPump(self,newPump,pumpID):
+   #    cur = con.cursor()

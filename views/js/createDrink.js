@@ -13,6 +13,10 @@ function goFavorite() {
     window.location.replace("/favorite");
 }
 
+function goCreate() {
+    window.location.replace("/custom");
+}
+
 function goBrowse() {
     window.location.replace("/browse");
 }
