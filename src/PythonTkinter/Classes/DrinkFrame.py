@@ -60,7 +60,7 @@ class DrinkFrame(tk.Frame):
         preview_canvas.delete('all')
         y = 20
         for i in self.drink[4]:
-            preview_canvas.create_text(10, y, text=i + str(random.randint(0, 20)), fill="black", font=('Helvetica 30'),anchor="w")
+            preview_canvas.create_text(10, y, text=i, fill="black", font=('Helvetica 30'),anchor="w")
             y += 70
         y = 20
         for j in self.drink[5]:
@@ -108,7 +108,7 @@ class PumpFrame(tk.Frame):
         borderwidth=0,fg_color = color, hover_color = color)
         button.place(x=1030,y=50)
 
-        #incrase btn
+        #Decrase btn
         self.icon = ImageTk.PhotoImage(Image.open(os.path.join(ASSETS_PATH, "decrease_btn.png")).resize((50,63),Image.ANTIALIAS))
         button=  ctk.CTkButton(self.canvas, image=self.icon,width=5,height=5,text="",command=lambda: self.decrease(),
         borderwidth=0,fg_color = color, hover_color = color)
@@ -120,34 +120,34 @@ class PumpFrame(tk.Frame):
     def order(self):
         print("Order for drink", self.drink[1]) 
         
-    def increase(self):
-        if self.total < 10 and self.remaining > 0:
-            self.amount_need += 1
-            self.total += 1
-            self.amount_remaining -= 1
-            self.canvas.itemconfig(self.need, text = str(self.amount_need))
-            self.canvas.itemconfig(self.remaining, text = "Remaining: " + str(self.amount_remaining), fill = "black")
+    # def increase(self):
+    #     if self.total < 10 and self.remaining > 0:
+    #         self.amount_need += 1
+    #         self.total += 1
+    #         self.amount_remaining -= 1
+    #         self.canvas.itemconfig(self.need, text = str(self.amount_need))
+    #         self.canvas.itemconfig(self.remaining, text = "Remaining: " + str(self.amount_remaining), fill = "black")
 
-            txt = self.mainCanvas.itemcget(self.amountText,'text')
-            print(txt)
-            self.mainCanvas.itemconfig(self.amountText, text=self.total)
-        elif self.amount_remaining <= 0:
-            self.amount_remaining = 0
-            self.canvas.itemconfig(self.remaining, text = "Remaining: " + str(self.amount_remaining), fill = "red")
+    #         txt = self.mainCanvas.itemcget(self.amountText,'text')
+    #         print(txt)
+    #         self.mainCanvas.itemconfig(self.amountText, text=self.total)
+    #     elif self.amount_remaining <= 0:
+    #         self.amount_remaining = 0
+    #         self.canvas.itemconfig(self.remaining, text = "Remaining: " + str(self.amount_remaining), fill = "red")
 
-    def decrease(self):
-        if self.total > 0 and self.remaining < self.drink[1]:
-            self.amount_need -= 1
-            self.total -= 1
-            self.amount_remaining += 1
-            self.canvas.itemconfig(self.need, text = str(self.amount_need))
-            self.canvas.itemconfig(self.remaining, text = "Remaining: " + str(self.amount_remaining), fill = "black")
-        elif self.amount_remaining > self.drink[1]:
-            self.amount_remaining = self.drink[1]
-            self.canvas.itemconfig(self.remaining, text = "Remaining: " + str(self.amount_remaining), fill = "black")
+    # def decrease(self):
+    #     if self.total > 0 and self.remaining < self.drink[1]:
+    #         self.amount_need -= 1
+    #         self.total -= 1
+    #         self.amount_remaining += 1
+    #         self.canvas.itemconfig(self.need, text = str(self.amount_need))
+    #         self.canvas.itemconfig(self.remaining, text = "Remaining: " + str(self.amount_remaining), fill = "black")
+    #     elif self.amount_remaining > self.drink[1]:
+    #         self.amount_remaining = self.drink[1]
+    #         self.canvas.itemconfig(self.remaining, text = "Remaining: " + str(self.amount_remaining), fill = "black")
 
-    def get_total(self):
-        return self.total
+    # def get_total(self):
+    #     return self.total
 
 class DrinkSetting(tk.Frame):
     def __init__(self, parent, drink, color):

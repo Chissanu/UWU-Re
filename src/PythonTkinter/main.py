@@ -8,6 +8,7 @@ from PIL import ImageTk, Image
 from Classes.DrinkFrame import DrinkFrame, PumpFrame, DrinkSetting
 from Database.DB import Database
 from tkinter_dispenser import TkinterDispenser
+from dispense_drink import DispenseDrink
 
 ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 ctk.set_default_color_theme("dark-blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -22,6 +23,7 @@ BLUE_BG = "#859FFD"
 ALL_BG = "#FFF89A"
 FAV_BG = "#FFB2A6"
 RAND_BG = "#9ADCFF"
+CREATE_BG = "#80D2FF"
 YELLOW = "#FDFD96"
 
 db = Database()
@@ -51,6 +53,7 @@ class App(ctk.CTk):
         self.profileName = "Chissanu"
         self.coin = "Coins:" + str(1000)
         self.drinkList = {}
+        self.drink_arr = ()
         # #random recipe starting list
         # random_recipe = db.getRandomRecipe()
 
@@ -227,20 +230,6 @@ class App(ctk.CTk):
         #Frame Label
         allLab = ctk.CTkLabel(self.browseItemFrame,text="All",text_font=("Inter",40, "bold"),text_color="black")
         allLab.place(x=100,y=30)
-        
-        #Search bar
-        entry = ctk.CTkEntry(master=self.browseItemFrame,
-                               placeholder_text="Search",
-                               width=300,
-                               height=40,
-                               fg_color="white",  
-                               text_color="black",
-                               border_width=2,
-                               text_font=("inter", 15),
-                               corner_radius=10)
-        
-        entry.place(x=30, y=120)
-        
 
         """
         ======================================
@@ -316,18 +305,6 @@ class App(ctk.CTk):
         #Frame Label
         favoriteLab = ctk.CTkLabel(self.favoriteItemFrame,text="Favorite",text_font=("Inter",40, "bold"),text_color="black")
         favoriteLab.place(x=430,y=30)
-
-        # Search bar
-        entry = ctk.CTkEntry(master=self.favoriteItemFrame,
-                               placeholder_text="Search",
-                               width=300,
-                               height=40,
-                               fg_color="white",
-                               text_color="black",
-                               border_width=2,
-                               text_font=("inter", 15),
-                               corner_radius=10)
-        entry.place(x=30, y=120)
 
         """
         ======================================
@@ -530,38 +507,139 @@ class App(ctk.CTk):
         second_frame_create = tk.Frame(self.createItemCanvas,bg="#554994",width=1250,height=900,highlightthickness=0)
         second_frame_create.place(x=0,y=0)
 
+        self.second_canvas = ctk.CTkCanvas(self.createItemCanvas,bg="#554994",width=1250,height=900,highlightthickness=0)
+        self.second_canvas.place(x=0,y=0)
+
         self.createItemCanvas.create_window((0,0), window=second_frame_create, anchor="nw")
 
         #button
-        # self.UwU_timeBtn(50, 250, self.createAmountCanvas) 
+        self.UwU_timeBtn(50, 250, self.createAmountCanvas) 
         home_button =  ctk.CTkButton(self.createCanvas, image=self.home_icon,width=5,height=5,text="",command=lambda :self.change_frame(self.createFrame, "main"),
         borderwidth=0,fg_color = BLUE_BG, hover_color = BLUE_BG)
         home_button.place(x=1750,y=970)
         
-        self.totalAmount = self.createAmountCanvas.create_text(220, 100, text='0', fill="black",anchor='e', font=('Inter 50 bold underline'))
+        self.total_txt= self.createAmountCanvas.create_text(220, 100, text='0', fill="black",anchor='e', font=('Inter 50 bold underline'))
+        self.increase_icon = ImageTk.PhotoImage(Image.open(os.path.join(ASSETS_PATH, "increase_btn.png")).resize((51,56),Image.ANTIALIAS))
+        self.decrease_icon = ImageTk.PhotoImage(Image.open(os.path.join(ASSETS_PATH, "decrease_btn.png")).resize((50,63),Image.ANTIALIAS))
         x = 30
         y = 20
+        y_name = 120
+        y1_frame = 50
+        y2_frame = 180
         altura = 0
-        arr = []
+        self.total = 0
+        self.p1 = 0
+        self.p2 = 0
+        self.p3 = 0
+        self.p4 = 0
+        self.p5 = 0
+        self.p6 = 0
+        self.remaining_p1 = pumpData[0][1]
+        self.remaining_p2 = pumpData[1][1]
+        self.remaining_p3 = pumpData[2][1]
+        self.remaining_p4 = pumpData[3][1]
+        self.remaining_p5 = pumpData[4][1]
+        self.remaining_p6 = pumpData[5][1]
+
         for drink in pumpData:
             altura = altura + 150
-            frame = PumpFrame(second_frame_create, drink, "#80D2FF",self.createAmountCanvas,self.totalAmount)
-            arr.append(frame)
-            frame.place(x=x,y=y)
-            y += 150
-        second_frame_create.configure(height=altura)
+            self.second_canvas.create_rectangle(50,y1_frame, 1180, y2_frame, fill = CREATE_BG)
+            #Name
+            self.second_canvas.create_text(100, y_name, text=drink[0], fill="black", font=('Helvetica 40 bold'),anchor="w")
+            y_name += 150
+            y1_frame += 150
+            y2_frame += 150
 
-        UwUBtn = ctk.CTkButton(self.createAmountCanvas,
-                    width=200,
-                    height=80,
-                    text="UwU Time!!",
-                    text_font=("Inter",50), 
-                    text_color="black",
-                    corner_radius=30,
-                    hover_color=("#ACACAC"),
-                    fg_color="#E5E5E5",
-                    command=lambda :self.getDrink(arr))
-        UwUBtn.place(x=50,y=250)  
+        #create increase Btn
+        increaseBtnP1 = ctk.CTkButton(self.second_canvas, image=self.increase_icon,width=5,height=5,text="",command=lambda: self.increase(1),
+        borderwidth=0,fg_color = CREATE_BG, hover_color = CREATE_BG)
+        increaseBtnP1.place(x=1100,y=110)
+        self.p1_txt = self.second_canvas.create_text(1040, 145, text=0, fill="black", font=('Helvetica 30 bold'),anchor="w")
+        self.rem_p1_txt = self.second_canvas.create_text(960, 80, text="Remaining: " + str(self.remaining_p1), fill="black", font=('Helvetica 20 bold'),anchor="w") 
+
+        increaseBtnP2 = ctk.CTkButton(self.second_canvas, image=self.increase_icon,width=5,height=5,text="",command=lambda: self.increase(2),
+        borderwidth=0,fg_color = CREATE_BG, hover_color = CREATE_BG)
+        increaseBtnP2.place(x=1100,y=260)
+        self.p2_txt = self.second_canvas.create_text(1040, 295, text=0, fill="black", font=('Helvetica 30 bold'),anchor="w")
+        self.rem_p2_txt = self.second_canvas.create_text(960, 230, text="Remaining: " + str(self.remaining_p2), fill="black", font=('Helvetica 20 bold'),anchor="w") 
+
+        increaseBtnP3 = ctk.CTkButton(self.second_canvas, image=self.increase_icon,width=5,height=5,text="",command=lambda: self.increase(3),
+        borderwidth=0,fg_color = CREATE_BG, hover_color = CREATE_BG)
+        increaseBtnP3.place(x=1100,y=410)
+        self.p3_txt = self.second_canvas.create_text(1040, 445, text=0, fill="black", font=('Helvetica 30 bold'),anchor="w")
+        self.rem_p3_txt = self.second_canvas.create_text(960, 380, text="Remaining: " + str(self.remaining_p3), fill="black", font=('Helvetica 20 bold'),anchor="w") 
+
+        increaseBtnP4 = ctk.CTkButton(self.second_canvas, image=self.increase_icon,width=5,height=5,text="",command=lambda: self.increase(4),
+        borderwidth=0,fg_color = CREATE_BG, hover_color = CREATE_BG)
+        increaseBtnP4.place(x=1100,y=560)
+        self.p4_txt = self.second_canvas.create_text(1040, 595, text=0, fill="black", font=('Helvetica 30 bold'),anchor="w")
+        self.rem_p4_txt = self.second_canvas.create_text(960, 550, text="Remaining: " + str(self.remaining_p4), fill="black", font=('Helvetica 20 bold'),anchor="w") 
+
+        increaseBtnP5 = ctk.CTkButton(self.second_canvas, image=self.increase_icon,width=5,height=5,text="",command=lambda: self.increase(5),
+        borderwidth=0,fg_color = CREATE_BG, hover_color = CREATE_BG)
+        increaseBtnP5.place(x=1100,y=710)
+        self.p5_txt = self.second_canvas.create_text(1040, 745, text=0, fill="black", font=('Helvetica 30 bold'),anchor="w")
+        self.rem_p5_txt = self.second_canvas.create_text(960, 700, text="Remaining: " + str(self.remaining_p5), fill="black", font=('Helvetica 20 bold'),anchor="w") 
+
+        increaseBtnP6 = ctk.CTkButton(self.second_canvas, image=self.increase_icon,width=5,height=5,text="",command=lambda: self.increase(6),
+        borderwidth=0,fg_color = CREATE_BG, hover_color = CREATE_BG)
+        increaseBtnP6.place(x=1100,y=860)
+        self.p6_txt = self.second_canvas.create_text(1040, 895, text=0, fill="black", font=('Helvetica 30 bold'),anchor="w")
+        self.rem_p6_txt = self.second_canvas.create_text(960, 850, text="Remaining: " + str(self.remaining_p6), fill="black", font=('Helvetica 20 bold'),anchor="w") 
+
+        #create decrease Btn
+        decreaseBtnP1 = ctk.CTkButton(self.second_canvas, image=self.decrease_icon,width=5,height=5,text="",command=lambda: self.decrease(1),
+        borderwidth=0,fg_color = CREATE_BG, hover_color = CREATE_BG)
+        decreaseBtnP1.place(x=950,y=106)
+
+        decreaseBtnP2 = ctk.CTkButton(self.second_canvas, image=self.decrease_icon,width=5,height=5,text="",command=lambda: self.decrease(2),
+        borderwidth=0,fg_color = CREATE_BG, hover_color = CREATE_BG)
+        decreaseBtnP2.place(x=950,y=256)
+
+        decreaseBtnP3 = ctk.CTkButton(self.second_canvas, image=self.decrease_icon,width=5,height=5,text="",command=lambda: self.decrease(3),
+        borderwidth=0,fg_color = CREATE_BG, hover_color = CREATE_BG)
+        decreaseBtnP3.place(x=950,y=406)
+
+        decreaseBtnP4 = ctk.CTkButton(self.second_canvas, image=self.decrease_icon,width=5,height=5,text="",command=lambda: self.decrease(4),
+        borderwidth=0,fg_color = CREATE_BG, hover_color = CREATE_BG)
+        decreaseBtnP4.place(x=950,y=556)
+
+        decreaseBtnP5 = ctk.CTkButton(self.second_canvas, image=self.decrease_icon,width=5,height=5,text="",command=lambda: self.decrease(5),
+        borderwidth=0,fg_color = CREATE_BG, hover_color = CREATE_BG)
+        decreaseBtnP5.place(x=950,y=706)
+
+        decreaseBtnP6 = ctk.CTkButton(self.second_canvas, image=self.decrease_icon,width=5,height=5,text="",command=lambda: self.decrease(6),
+        borderwidth=0,fg_color = CREATE_BG, hover_color = CREATE_BG)
+        decreaseBtnP6.place(x=950,y=856)
+
+        submitUwU = ctk.CTkButton(self.second_canvas, text="SUBMIT",width=50,height=50,command=lambda: self.decrease(6),
+        borderwidth=0,fg_color = CREATE_BG, hover_color = CREATE_BG)
+        submitUwU.place(x=950,y=856)
+        second_frame_create.configure(height=altura)
+        
+        # btn = ctk.CTkButton(self.createAmountCanvas,
+        #         width=200,
+        #         height=80,
+        #         text="+",
+        #         text_font=("Inter",50), 
+        #         text_color="black",
+        #         corner_radius=30,
+        #         hover_color=("#ACACAC"),
+        #         fg_color="#E5E5E5",
+        #         command=lambda :self.getDrink(arr))
+        # btn.place(x=50,y=250)
+
+        # UwUBtn = ctk.CTkButton(self.createAmountCanvas,
+        #             width=200,
+        #             height=80,
+        #             text="UwU Time!!",
+        #             text_font=("Inter",50), 
+        #             text_color="black",
+        #             corner_radius=30,
+        #             hover_color=("#ACACAC"),
+        #             fg_color="#E5E5E5",
+        #             command=lambda :self.getDrink(arr))
+        # UwUBtn.place(x=50,y=250)  
         
         #Frame Label
         settingLab = ctk.CTkLabel(self.createItemFrame,text="Create",text_font=("Inter",40, "bold"),text_color="black")
@@ -788,8 +866,8 @@ class App(ctk.CTk):
                             text_font=("Inter",50),
                             text_color="black",
                             corner_radius=30,
-                            hover_color=("#ACACAC"),
-                            fg_color="#E5E5E5",
+                            hover_color=("red"),
+                            fg_color="red",
                             command=lambda :self.dispense_drink())
         UwUBtn.place(x=x_co,y=y_co)
     
@@ -800,8 +878,86 @@ class App(ctk.CTk):
             total += item.get_total()
             tempArr.append(item.get_total())
 
+    def increase(self, pumpID):
+        if self.total < 10:
+            if pumpID == 1 and self.remaining_p1 > 0:
+                self.p1 += 1
+                self.remaining_p1 -= 1
+                self.second_canvas.itemconfig(self.p1_txt, text = str(self.p1))
+                self.second_canvas.itemconfig(self.rem_p1_txt, text = str("Remaining: " + str(self.remaining_p1)))
+            if pumpID == 2 and self.remaining_p2 > 0:
+                self.p2 += 1
+                self.remaining_p2 -= 1
+                self.second_canvas.itemconfig(self.p2_txt, text = str(self.p2))
+                self.second_canvas.itemconfig(self.rem_p2_txt, text = str("Remaining: " + str(self.remaining_p2)))
+            if pumpID == 3 and self.remaining_p3 > 0:
+                self.p3 += 1
+                self.remaining_p3 -= 1
+                self.second_canvas.itemconfig(self.p3_txt, text = str(self.p3))
+                self.second_canvas.itemconfig(self.rem_p3_txt, text = str("Remaining: " + str(self.remaining_p3)))
+            if pumpID == 4 and self.remaining_p4 > 0:
+                self.p4 += 1
+                self.remaining_p4 -= 1
+                self.second_canvas.itemconfig(self.p4_txt, text = str(self.p4))
+                self.second_canvas.itemconfig(self.rem_p4_txt, text = str("Remaining: " + str(self.remaining_p4)))
+            if pumpID == 5 and self.remaining_p5 > 0:
+                self.p5 += 1
+                self.remaining_p5 -= 1
+                self.second_canvas.itemconfig(self.p5_txt, text = str(self.p5))
+                self.second_canvas.itemconfig(self.rem_p5_txt, text = str("Remaining: " + str(self.remaining_p5)))
+            if pumpID == 6 and self.remaining_p6 > 0:
+                self.p6 += 1
+                self.remaining_p6 -= 1
+                self.second_canvas.itemconfig(self.p6_txt, text = str(self.p6))
+                self.second_canvas.itemconfig(self.rem_p6_txt, text = str("Remaining: " + str(self.remaining_p6)))
+            self.total = self.p1 + self.p2 + self.p3 + self.p4 + self.p5 + self.p6
+            self.createAmountCanvas.itemconfig(self.total_txt, text = str(self.total))
+
+    def decrease(self, pumpID):
+        if pumpID == 1:
+            if self.p1 > 0:
+                self.p1 -= 1
+                self.remaining_p1 += 1
+                self.second_canvas.itemconfig(self.p1_txt, text = str(self.p1))
+                self.second_canvas.itemconfig(self.rem_p1_txt, text = str("Remaining: " + str(self.remaining_p1)))
+        if pumpID == 2:
+            if self.p2 > 0:
+                self.p2 -= 1
+                self.remaining_p2 += 1
+                self.second_canvas.itemconfig(self.p2_txt, text = str(self.p2))
+                self.second_canvas.itemconfig(self.rem_p2_txt, text = str("Remaining: " + str(self.remaining_p2)))
+        if pumpID == 3:
+            if self.p3 > 0:
+                self.p3 -= 1
+                self.remaining_p3 += 1
+                self.second_canvas.itemconfig(self.p3_txt, text = str(self.p3))
+                self.second_canvas.itemconfig(self.rem_p3_txt, text = str("Remaining: " + str(self.remaining_p3)))
+        if pumpID == 4:
+            if self.p4 > 0:
+                self.p4 -= 1
+                self.remaining_p4 += 1
+                self.second_canvas.itemconfig(self.p4_txt, text = str(self.p4))
+                self.second_canvas.itemconfig(self.rem_p4_txt, text = str("Remaining: " + str(self.remaining_p4)))
+        if pumpID == 5:
+            if self.p5 > 0:
+                self.p5 -= 1
+                self.remaining_p5 += 1
+                self.second_canvas.itemconfig(self.p5_txt, text = str(self.p5))
+                self.second_canvas.itemconfig(self.rem_p5_txt, text = str("Remaining: " + str(self.remaining_p5)))
+        if pumpID == 6:
+            if self.p6 > 0:
+                self.p6 -= 1
+                self.remaining_p6 += 1
+                self.second_canvas.itemconfig(self.p6_txt, text = str(self.p6))
+                self.second_canvas.itemconfig(self.rem_p6_txt, text = str("Remaining: " + str(self.remaining_p6)))
+        self.total = self.p1 + self.p2 + self.p3 + self.p4 + self.p5 + self.p6
+        self.createAmountCanvas.itemconfig(self.total_txt, text = str(self.total))
+
     def dispense_drink(self):
-        pass
+        tempArr = [self.p1, self.p2, self.p3, self.p4, self.p5, self.p6]
+        uwu = DispenseDrink()
+        uwu.dispenseFromArr(tempArr)
+        print(tempArr)
 
     def signin(self):
         print("button pressed")

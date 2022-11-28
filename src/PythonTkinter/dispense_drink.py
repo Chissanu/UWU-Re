@@ -24,7 +24,19 @@ class DispenseDrink:
         #Random drink
         if mode == '3':
             self.genRandomDrink(10,userID)
-        
+    
+    def dispenseFromArr(self,arr):
+        drinkData = arr
+        pumpArr = self.db.getPumpList()
+        drinkCommand = ""
+        #Generate pump string 31 22 12 means Pump3:1push and so on
+        for i in range(6):
+            drinkCommand += str(i + 1) + str(arr[i])
+            
+        drinkCommand = "0" + drinkCommand
+        #Result  
+        print(drinkCommand)
+
     def dispense(self,drinkID,userID):
         drinkData = list(self.db.getDrinkFromID(drinkID)[0])
         pumpArr = self.db.getPumpList()
@@ -95,5 +107,4 @@ class DispenseDrink:
             return arr
 
 uwu = DispenseDrink()
-uwu.handler(sys.argv[1],sys.argv[2],sys.argv[3])
-
+uwu.dispenseFromArr([1,1,1,1,1,1])
