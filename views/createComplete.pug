@@ -3,23 +3,22 @@ html
   head
     title UwU:Re
     script(src='./socket.io/socket.io.js')
-    script
-      include js/recipe.js
   body
     #main-rec
       h1#drinknameLabel Created Completed!
       #inner-rec
         h1 Ingredients:
-        h2=drink['pumpList'][0]['name'] + ": "
-        //- h2=drink['pumpList'][1]['name'] + ": " + drink['drinks'][1] * 30 + 'ml'
-        //- h2=drink['pumpList'][2]['name'] + ": " + drink['drinks'][2] * 30 + 'ml'
-        //- h2=drink['pumpList'][3]['name'] + ": " + drink['drinks'][3] * 30 + 'ml'
-        //- h2=drink['pumpList'][4]['name'] + ": " + drink['drinks'][4] * 30 + 'ml'
-        //- h2=drink['pumpList'][5]['name'] + ": " + drink['drinks'][5] * 30 + 'ml'
+        h2=drink['pumpList'][0]['name'] + ": " + drink['drinks'][0] * 30 + 'ml'
+        h2=drink['pumpList'][1]['name'] + ": " + drink['drinks'][1] * 30 + 'ml'
+        h2=drink['pumpList'][2]['name'] + ": " + drink['drinks'][2] * 30 + 'ml'
+        h2=drink['pumpList'][3]['name'] + ": " + drink['drinks'][3] * 30 + 'ml'
+        h2=drink['pumpList'][4]['name'] + ": " + drink['drinks'][4] * 30 + 'ml'
+        h2=drink['pumpList'][5]['name'] + ": " + drink['drinks'][5] * 30 + 'ml'
         input#nameBox(type='text', placeholder='Enter a name')
         button#save_button(onClick='save(' + drink['user'].username + ')') Save
         button#homeBtn(onClick='goHome()') Home
-
+    script
+      include js/custom.js
     style.
       @media screen and (max-width: 1000px) {
       body {
@@ -70,9 +69,9 @@ html
       /* Browse */
       position: absolute;
       display: inline-block;
-      width: 600px;
+      width: 700px;
       height: 60px;
-      left: 170px;
+      left: 120px;
       top: -10px;
       font-family: 'Poppins';
       font-style: normal;

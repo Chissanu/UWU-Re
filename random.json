@@ -32,11 +32,20 @@
         }
     ],
     "drinks": [
+        4,
+        3,
+        2,
         0,
         1,
-        1,
-        0,
-        0,
         0
-    ]
+    ],
+    "user": {
+        "username": "1",
+        "userpass": "1",
+        "userid": "6",
+        "usercoins": 0,
+        "favdrinkid": [
+            1
+        ]
+    }
 }

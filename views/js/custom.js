@@ -91,6 +91,15 @@ function decrease(pumpID) {
 
 function getTotal() {
     data = [p1, p2, p3, p4, p5, p6]
-    window.location.replace("/createCustom");
     socket.emit('total', { totalVal: data })
+    window.location.replace("/createCustom");
+}
+
+function save(username) {
+    var name = document.getElementById('nameBox').value
+    socket.emit('save', { userID: username, name: name })
+}
+
+function goHome() {
+    window.location.replace("/home");
 }

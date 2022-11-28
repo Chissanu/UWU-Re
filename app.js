@@ -34,7 +34,7 @@ var server = app.listen(4000, function() {
 queryDrinks()
 queryUsers()
 queryPump()
-// API
+    // API
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api", apiRoute);
@@ -251,6 +251,17 @@ const insertFavDrink = async(userID, drinkID) => {
     }
 };
 
+const insertDrink = async(arr) => {
+    try { // gets connection
+        console.log(arr)
+        await client.query(`INSERT INTO drink_tables(drinkName,price,creator,ingredientList,timespressed) VALUES($1,$2,$3,$4,$5)`, [arr[0], arr[1], arr[2], arr[3], arr[4]]); // sends queries
+        return true;
+    } catch (error) {
+        console.error(error.stack);
+        return false;
+    }
+};
+
 const insertUser = async(userName, userPass) => {
     try { // gets connection
         await client.query(
@@ -305,7 +316,7 @@ apiRoute.post("/login", async(req, res) => {
             await client.end();
             user['favdrinkid'] = tempArr
             var data = JSON.stringify(user, null, 4);
-        
+
             fs.writeFileSync('user.json', data);
         }
     } catch {
@@ -356,10 +367,23 @@ io.on('connection', (socket) => {
         console.log("Completed")
     });
 
-    socket.on('save', function(data) {
-        console.log("save");
-        console.log(data)
-        console.log("Completed")
+    socket.on('save', async function(data) {
+        tempArr = []
+        let name = data['name']
+        fs.readFile('random.json', (err, data) => {
+            if (err) throw err;
+            let saves = JSON.parse(data);
+
+            for (let i = 0; i < saves['pumpList'].length; i++) {
+                tempArr.push(saves['pumpList'][i].name)
+            }
+            // file = 
+            saveData = [name, 55, saves['user'].username, tempArr, saves['drinks']]
+            var myJsonString = JSON.stringify(saveData);
+            fs.writeFileSync('random1.json', myJsonString);
+            insertDrink(saveData)
+                // console.log(saveData)
+        });
     });
 
     socket.on('total', function(info) {
