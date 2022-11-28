@@ -111,9 +111,44 @@ class App(ctk.CTk):
         self.nameLine = self.mainCanvas.create_line(500,500,1400,500, fill="white", width=10)
         
         #Buttons
-        self.button(150, 700, "Browse", self.mainCanvas, self.mainFrame, "browse", "#4BD960", 450, 150)
-        self.button(750, 700, "Create", self.mainCanvas, self.mainFrame, "create", "#A1D94B", 450, 150)
-        self.button(1350, 700, "Setting", self.mainCanvas, self.mainFrame, "setting", "#525252", 450, 150)
+        # self.button(150, 700, "Browse", self.mainCanvas, self.mainFrame, "browse", "#4BD960", 450, 150)
+        # self.button(750, 700, "Create", self.mainCanvas, self.mainFrame, "create", "#A1D94B", 450, 150)
+        # self.button(1350, 700, "Setting", self.mainCanvas, self.mainFrame, "setting", "#525252", 450, 150)
+        browseBtn = ctk.CTkButton(self.mainCanvas,
+                            width=450,
+                            height=150,
+                            text="Browse",
+                            text_font=("Inter",50, "bold"),
+                            text_color="black",
+                            corner_radius=30,
+                            hover_color= "#4BD960",
+                            fg_color="#4BD960",
+                            command=lambda :self.change_frame(self.mainFrame, "browse"))
+        browseBtn.place(x=150,y=700)
+
+        createBtn = ctk.CTkButton(self.mainCanvas,
+                            width=450,
+                            height=150,
+                            text="Create",
+                            text_font=("Inter",50, "bold"),
+                            text_color="black",
+                            corner_radius=30,
+                            hover_color= "#A1D94B",
+                            fg_color="#A1D94B",
+                            command=lambda :self.change_frame(self.mainFrame, "create"))
+        createBtn.place(x=750,y=700)  
+
+        browseBtn = ctk.CTkButton(self.mainCanvas,
+                            width=450,
+                            height=150,
+                            text="Setting",
+                            text_font=("Inter",50, "bold"),
+                            text_color="black",
+                            corner_radius=30,
+                            hover_color= "#939799",
+                            fg_color="#939799",
+                            command=lambda :self.change_frame(self.mainFrame, "setting"))
+        browseBtn.place(x=1350,y=700)
         
         #Pack Frame & Canvas
         self.mainCanvas.pack(fill="both", expand=1)
@@ -531,7 +566,7 @@ class App(ctk.CTk):
         #Frame Label
         settingLab = ctk.CTkLabel(self.createItemFrame,text="Create",text_font=("Inter",40, "bold"),text_color="black")
         settingLab.place(x=50,y=10)
-        ctk.CTkLabel(self.createItemFrame,text="your own drink >w<",text_font=("Inter",30),text_color="black").place(x=230,y=20)
+        ctk.CTkLabel(self.createItemFrame,text="your own drink >w<",text_font=("Inter",30),text_color="black").place(x=270,y=20)
         
         """
         ======================================
