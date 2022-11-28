@@ -34,7 +34,6 @@ var server = app.listen(4000, function() {
 queryDrinks()
 queryUsers()
 queryPump()
-setInterval(updateUser, 2000);
 // API
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -286,6 +285,7 @@ apiRoute.post("/login", async(req, res) => {
     const { username, userpass } = req.body;
     console.log("Loggin in with this data")
     queryUsers()
+    setInterval(updateUser, 2000);
     tempArr = []
     if (!username || !userpass)
         return res.redirect("/?error=missing credentials");
@@ -297,16 +297,20 @@ apiRoute.post("/login", async(req, res) => {
     }
     if (!user) return res.redirect("/?error=invalid credentials");
 
-
-    for (let i = 0; i < user['favdrinkid'].length; i++) {
-        sql = `select * from drink_tables where drinkid = ${user['favdrinkid'][i]};`
-        const res = await client.query(sql);
-        tempArr.push(res.rows[0])
+    try {
+        for (let i = 0; i < user['favdrinkid'].length; i++) {
+            sql = `select * from drink_tables where drinkid = ${user['favdrinkid'][i]};`
+            const res = await client.query(sql);
+            tempArr.push(res.rows[0])
+            await client.end();
+            user['favdrinkid'] = tempArr
+            var data = JSON.stringify(user, null, 4);
+        
+            fs.writeFileSync('user.json', data);
+        }
+    } catch {
+        console.log("here")
     }
-    user['favdrinkid'] = tempArr
-    var data = JSON.stringify(user, null, 4);
-
-    fs.writeFileSync('user.json', data);
     res.redirect("/home");
 });
 
